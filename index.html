@@ -308,14 +308,307 @@ var H = {
   blue: '#2563EB',
   orange: '#D97706'
 };
-function HorasProApp(_ref8) {
-  var onBack = _ref8.onBack,
-    _ref8$sharedDias = _ref8.sharedDias,
-    sharedDias = _ref8$sharedDias === void 0 ? [] : _ref8$sharedDias,
-    _ref8$addSharedDia = _ref8.addSharedDia,
-    addSharedDia = _ref8$addSharedDia === void 0 ? function () {} : _ref8$addSharedDia,
-    _ref8$removeSharedDia = _ref8.removeSharedDia,
-    removeSharedDia = _ref8$removeSharedDia === void 0 ? function () {} : _ref8$removeSharedDia;
+
+// ── FORM COMPONENT ISOLADO (evita re-render ao escrever) ────────────
+var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
+  var _projList$;
+  var onSave = _ref8.onSave,
+    onClose = _ref8.onClose,
+    tipos = _ref8.tipos,
+    projList = _ref8.projList,
+    calcHoras = _ref8.calcHoras,
+    H = _ref8.H;
+  var _React$useState = React.useState('Spleisser'),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    tipo = _React$useState2[0],
+    setTipo = _React$useState2[1];
+  var _React$useState3 = React.useState(((_projList$ = projList[0]) === null || _projList$ === void 0 ? void 0 : _projList$.name) || 'POP GREN04'),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    proj = _React$useState4[0],
+    setProj = _React$useState4[1];
+  var _React$useState5 = React.useState('07:00'),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    hi = _React$useState6[0],
+    setHi = _React$useState6[1];
+  var _React$useState7 = React.useState('12:00'),
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    hf = _React$useState8[0],
+    setHf = _React$useState8[1];
+  var moradaRef = React.useRef(null);
+  var horas = calcHoras(hi, hf);
+  var projs = projList.map(function (p) {
+    return p.name;
+  });
+  var guardar = function guardar() {
+    var _moradaRef$current;
+    if (horas <= 0) return;
+    var morada = (((_moradaRef$current = moradaRef.current) === null || _moradaRef$current === void 0 ? void 0 : _moradaRef$current.value) || '').trim();
+    onSave({
+      tipo: tipo,
+      proj: proj,
+      hi: hi,
+      hf: hf,
+      horas: horas,
+      morada: morada
+    });
+  };
+  var inputStyle = {
+    width: '100%',
+    background: H.surface2,
+    border: "1px solid ".concat(H.border),
+    borderRadius: 12,
+    padding: '12px 14px',
+    color: H.text,
+    fontSize: 15,
+    outline: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'inherit'
+  };
+  var labelStyle = {
+    color: H.muted,
+    fontSize: 10,
+    fontWeight: 700,
+    textTransform: 'uppercase',
+    letterSpacing: '0.6px',
+    marginBottom: 5,
+    display: 'block'
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 500,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-end'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: onClose,
+    style: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0,0,0,0.55)'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      background: H.surface,
+      borderRadius: '24px 24px 0 0',
+      border: "2px solid ".concat(H.gold),
+      borderBottom: 'none',
+      padding: '24px 20px 40px',
+      boxShadow: '0 -12px 40px rgba(0,0,0,0.25)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 40,
+      height: 4,
+      background: H.border,
+      borderRadius: 2,
+      margin: '-12px auto 20px'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: H.gold,
+      fontWeight: 900,
+      fontSize: 18
+    }
+  }, "Novo registo"), /*#__PURE__*/React.createElement("button", {
+    onClick: onClose,
+    style: {
+      background: H.surface2,
+      border: "1px solid ".concat(H.border),
+      borderRadius: 10,
+      width: 34,
+      height: 34,
+      cursor: 'pointer',
+      color: H.muted,
+      fontSize: 20,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontWeight: 300
+    }
+  }, "\xD7")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 10,
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: labelStyle
+  }, "Tipo"), /*#__PURE__*/React.createElement("select", {
+    value: tipo,
+    onChange: function onChange(e) {
+      return setTipo(e.target.value);
+    },
+    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+      padding: '11px 14px'
+    })
+  }, tipos.map(function (t) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: t
+    }, t);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: labelStyle
+  }, "Projeto"), /*#__PURE__*/React.createElement("select", {
+    value: proj,
+    onChange: function onChange(e) {
+      return setProj(e.target.value);
+    },
+    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+      padding: '11px 14px'
+    })
+  }, projs.map(function (p) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: p
+    }, p);
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: labelStyle
+  }, "Hor\xE1rio"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "time",
+    value: hi,
+    onChange: function onChange(e) {
+      return setHi(e.target.value);
+    },
+    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+      flex: 1,
+      padding: '11px 12px'
+    })
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: H.muted,
+      fontSize: 14,
+      fontWeight: 700
+    }
+  }, "\u2192"), /*#__PURE__*/React.createElement("input", {
+    type: "time",
+    value: hf,
+    onChange: function onChange(e) {
+      return setHf(e.target.value);
+    },
+    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+      flex: 1,
+      padding: '11px 12px'
+    })
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: horas > 0 ? "rgba(184,150,46,0.12)" : H.surface2,
+      border: "1px solid ".concat(horas > 0 ? H.gold : H.border),
+      borderRadius: 12,
+      padding: '11px 12px',
+      minWidth: 54,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: horas > 0 ? H.gold : H.muted,
+      fontWeight: 900,
+      fontSize: 15
+    }
+  }, horas > 0 ? "".concat(horas, "h") : '—')))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 22
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: labelStyle
+  }, "Morada do trabalho"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative'
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    ref: moradaRef,
+    autoComplete: "off",
+    autoCorrect: "off",
+    spellCheck: false,
+    autoCapitalize: "words",
+    inputMode: "text",
+    type: "text",
+    placeholder: "Ex: D\xE4derizstrasse 21, Grenchen",
+    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+      paddingRight: 40
+    })
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      if (moradaRef.current) {
+        moradaRef.current.value = '';
+        moradaRef.current.focus();
+      }
+    },
+    style: {
+      position: 'absolute',
+      right: 10,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      background: 'rgba(0,0,0,0.07)',
+      border: 'none',
+      borderRadius: '50%',
+      width: 26,
+      height: 26,
+      cursor: 'pointer',
+      color: H.muted,
+      fontSize: 14,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, "\u2715"))), /*#__PURE__*/React.createElement("button", {
+    onClick: guardar,
+    disabled: horas <= 0,
+    style: {
+      width: '100%',
+      background: horas > 0 ? "linear-gradient(135deg,".concat(H.gold, ",").concat(H.goldL, ")") : '#ccc',
+      border: 'none',
+      borderRadius: 16,
+      padding: '15px',
+      color: horas > 0 ? '#fff' : '#999',
+      fontSize: 16,
+      fontWeight: 900,
+      cursor: horas > 0 ? 'pointer' : 'default',
+      boxShadow: horas > 0 ? "0 6px 20px rgba(184,150,46,0.35)" : 'none',
+      letterSpacing: '0.3px'
+    }
+  }, "\u2713 Guardar registo ", horas > 0 ? "\xB7 ".concat(horas, "h") : '')));
+});
+function HorasProApp(_ref9) {
+  var onBack = _ref9.onBack,
+    _ref9$sharedDias = _ref9.sharedDias,
+    sharedDias = _ref9$sharedDias === void 0 ? [] : _ref9$sharedDias,
+    _ref9$addSharedDia = _ref9.addSharedDia,
+    addSharedDia = _ref9$addSharedDia === void 0 ? function () {} : _ref9$addSharedDia,
+    _ref9$removeSharedDia = _ref9.removeSharedDia,
+    removeSharedDia = _ref9$removeSharedDia === void 0 ? function () {} : _ref9$removeSharedDia;
   var today = new Date();
   var _useState = (0, _react.useState)(new Date()),
     _useState2 = _slicedToArray(_useState, 2),
@@ -357,6 +650,7 @@ function HorasProApp(_ref8) {
     _useState18 = _slicedToArray(_useState17, 2),
     newHf = _useState18[0],
     setNewHf = _useState18[1];
+  var newMoradaRef = React.useRef(null);
   var _useState19 = (0, _react.useState)([{
       id: 1,
       date: '2026-06-01',
@@ -746,10 +1040,10 @@ function HorasProApp(_ref8) {
   var projColor = function projColor(p) {
     return p.includes('POP') ? H.blue : p.includes('BUDI') ? H.orange : H.gold;
   };
-  var LCard = function LCard(_ref9) {
-    var children = _ref9.children,
-      _ref9$style = _ref9.style,
-      style = _ref9$style === void 0 ? {} : _ref9$style;
+  var LCard = function LCard(_ref0) {
+    var children = _ref0.children,
+      _ref0$style = _ref0.style,
+      style = _ref0$style === void 0 ? {} : _ref0$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: H.surface,
@@ -1683,7 +1977,7 @@ function HorasProApp(_ref8) {
           fontWeight: 700,
           color: e.dlTipo === 'feriado' ? '#A855F7' : e.dlTipo === 'ferias' ? H.blue : e.dlTipo === 'sexta' ? H.gold : H.green
         }
-      }, e.dlTipo === 'feriado' ? '🎌 Feriado' : e.dlTipo === 'ferias' ? '🏖 Férias' : e.dlTipo === 'sexta' ? '🗓 Sexta livre' : '✅ Dia livre'))), !e.isAuto && /*#__PURE__*/React.createElement("div", {
+      }, e.dlTipo === 'feriado' ? '🎌 Feriado' : e.dlTipo === 'ferias' ? '🏖 Férias' : e.dlTipo === 'sexta' ? '🗓 Sexta livre' : '✅ Dia livre'))), !e.isAuto && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
         style: {
           display: 'flex',
           gap: 8,
@@ -1708,7 +2002,23 @@ function HorasProApp(_ref8) {
           color: H.muted,
           fontSize: 12
         }
-      }, e.hi, "\u2013", e.hf)), e.isAuto && e.proj !== '—' && /*#__PURE__*/React.createElement("p", {
+      }, e.hi, "\u2013", e.hf)), e.morada && /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: 5,
+          marginTop: 4
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 11
+        }
+      }, "\uD83D\uDCCD"), /*#__PURE__*/React.createElement("span", {
+        style: {
+          color: H.muted,
+          fontSize: 12
+        }
+      }, e.morada))), e.isAuto && e.proj !== '—' && /*#__PURE__*/React.createElement("p", {
         style: {
           color: H.muted,
           fontSize: 12,
@@ -2706,206 +3016,37 @@ function HorasProApp(_ref8) {
       lineHeight: 1,
       fontWeight: 300
     }
-  }, showAdd ? '×' : '+')), showAdd && /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'fixed',
-      bottom: 80,
-      left: 0,
-      right: 0,
-      background: H.surface,
-      borderTop: "2px solid ".concat(H.gold),
-      padding: '20px 16px',
-      zIndex: 200,
-      borderRadius: '20px 20px 0 0',
-      boxShadow: '0 -8px 32px rgba(0,0,0,0.15)'
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: H.gold,
-      fontWeight: 800,
-      fontSize: 16,
-      marginBottom: 14
-    }
-  }, "Novo registo"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8,
-      marginBottom: 10
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: H.muted,
-      fontSize: 10,
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      marginBottom: 4
-    }
-  }, "Tipo"), /*#__PURE__*/React.createElement("select", {
-    value: newTipo,
-    onChange: function onChange(e) {
-      return setNewTipo(e.target.value);
-    },
-    style: {
-      width: '100%',
-      background: H.surface2,
-      border: "1px solid ".concat(H.border),
-      borderRadius: 10,
-      padding: '10px 12px',
-      color: H.text,
-      fontSize: 13,
-      outline: 'none'
-    }
-  }, tipos.map(function (t) {
-    return /*#__PURE__*/React.createElement("option", {
-      key: t
-    }, t);
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: H.muted,
-      fontSize: 10,
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      marginBottom: 4
-    }
-  }, "Projeto"), /*#__PURE__*/React.createElement("select", {
-    value: newProj,
-    onChange: function onChange(e) {
-      return setNewProj(e.target.value);
-    },
-    style: {
-      width: '100%',
-      background: H.surface2,
-      border: "1px solid ".concat(H.border),
-      borderRadius: 10,
-      padding: '10px 12px',
-      color: H.text,
-      fontSize: 13,
-      outline: 'none'
-    }
-  }, projs.map(function (p) {
-    return /*#__PURE__*/React.createElement("option", {
-      key: p
-    }, p);
-  })))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8,
-      marginBottom: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: H.muted,
-      fontSize: 10,
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      marginBottom: 4
-    }
-  }, "In\xEDcio"), /*#__PURE__*/React.createElement("input", {
-    type: "time",
-    value: newHi,
-    onChange: function onChange(e) {
-      return setNewHi(e.target.value);
-    },
-    style: {
-      width: '100%',
-      background: H.surface2,
-      border: "1px solid ".concat(H.border),
-      borderRadius: 10,
-      padding: '10px 12px',
-      color: H.text,
-      fontSize: 14,
-      outline: 'none',
-      boxSizing: 'border-box'
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: H.muted,
-      fontSize: 10,
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      marginBottom: 4
-    }
-  }, "Fim"), /*#__PURE__*/React.createElement("input", {
-    type: "time",
-    value: newHf,
-    onChange: function onChange(e) {
-      return setNewHf(e.target.value);
-    },
-    style: {
-      width: '100%',
-      background: H.surface2,
-      border: "1px solid ".concat(H.border),
-      borderRadius: 10,
-      padding: '10px 12px',
-      color: H.text,
-      fontSize: 14,
-      outline: 'none',
-      boxSizing: 'border-box'
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'flex-end',
-      paddingBottom: 2
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: "rgba(184,150,46,0.1)",
-      border: "1px solid rgba(184,150,46,0.3)",
-      borderRadius: 10,
-      padding: '10px 12px'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: H.gold,
-      fontWeight: 800,
-      fontSize: 14
-    }
-  }, calcHoras(newHi, newHf), "h")))), /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      var h = calcHoras(newHi, newHf);
-      if (h <= 0) return;
+  }, showAdd ? '×' : '+')), showAdd && /*#__PURE__*/React.createElement(EntryFormModal, {
+    onSave: function onSave(_ref1) {
+      var tipo = _ref1.tipo,
+        proj = _ref1.proj,
+        hi = _ref1.hi,
+        hf = _ref1.hf,
+        horas = _ref1.horas,
+        morada = _ref1.morada;
+      var today = fmt(curDate);
       setEntries(function (p) {
         return [].concat(_toConsumableArray(p), [{
           id: Date.now(),
-          date: todayStr,
-          tipo: newTipo,
-          proj: newProj,
-          hi: newHi,
-          hf: newHf,
-          horas: h
+          date: today,
+          tipo: tipo,
+          proj: proj,
+          hi: hi,
+          hf: hf,
+          horas: horas,
+          morada: morada
         }]);
       });
       setShowAdd(false);
     },
-    style: {
-      width: '100%',
-      background: "linear-gradient(135deg,".concat(H.gold, ",").concat(H.goldL, ")"),
-      border: 'none',
-      borderRadius: 14,
-      padding: '13px',
-      color: '#fff',
-      fontSize: 15,
-      fontWeight: 800,
-      cursor: 'pointer'
-    }
-  }, "\u2713 Guardar registo")), showMenu && /*#__PURE__*/React.createElement("div", {
+    onClose: function onClose() {
+      return setShowAdd(false);
+    },
+    tipos: tipos,
+    projList: projList,
+    calcHoras: calcHoras,
+    H: H
+  }), ")}", showMenu && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -2991,10 +3132,10 @@ function HorasProApp(_ref8) {
         color: H.gold
       }
     }, d);
-  })), [[23, [1, 2, 3, 4, 5, 6, 7]], [24, [8, 9, 10, 11, 12, 13, 14]], [25, [15, 16, 17, 18, 19, 20, 21]], [26, [22, 23, 24, 25, 26, 27, 28]], [27, [29, 30]]].map(function (_ref0) {
-    var _ref1 = _slicedToArray(_ref0, 2),
-      kw2 = _ref1[0],
-      ds = _ref1[1];
+  })), [[23, [1, 2, 3, 4, 5, 6, 7]], [24, [8, 9, 10, 11, 12, 13, 14]], [25, [15, 16, 17, 18, 19, 20, 21]], [26, [22, 23, 24, 25, 26, 27, 28]], [27, [29, 30]]].map(function (_ref10) {
+    var _ref11 = _slicedToArray(_ref10, 2),
+      kw2 = _ref11[0],
+      ds = _ref11[1];
     return /*#__PURE__*/React.createElement("div", {
       key: kw2,
       style: {
@@ -3299,14 +3440,14 @@ var STATUS = {
     icon: '⚠️'
   }
 };
-function AgendaProApp(_ref10) {
-  var onBack = _ref10.onBack,
-    _ref10$sharedDias = _ref10.sharedDias,
-    sharedDias = _ref10$sharedDias === void 0 ? [] : _ref10$sharedDias,
-    _ref10$addSharedDia = _ref10.addSharedDia,
-    addSharedDia = _ref10$addSharedDia === void 0 ? function () {} : _ref10$addSharedDia,
-    _ref10$removeSharedDi = _ref10.removeSharedDia,
-    removeSharedDia = _ref10$removeSharedDi === void 0 ? function () {} : _ref10$removeSharedDi;
+function AgendaProApp(_ref12) {
+  var onBack = _ref12.onBack,
+    _ref12$sharedDias = _ref12.sharedDias,
+    sharedDias = _ref12$sharedDias === void 0 ? [] : _ref12$sharedDias,
+    _ref12$addSharedDia = _ref12.addSharedDia,
+    addSharedDia = _ref12$addSharedDia === void 0 ? function () {} : _ref12$addSharedDia,
+    _ref12$removeSharedDi = _ref12.removeSharedDia,
+    removeSharedDia = _ref12$removeSharedDi === void 0 ? function () {} : _ref12$removeSharedDi;
   var _useState49 = (0, _react.useState)([{
       id: 1,
       date: '2026-06-15',
@@ -3701,10 +3842,10 @@ function AgendaProApp(_ref10) {
       });
     });
   };
-  var ACard = function ACard(_ref11) {
-    var children = _ref11.children,
-      _ref11$style = _ref11.style,
-      style = _ref11$style === void 0 ? {} : _ref11$style;
+  var ACard = function ACard(_ref13) {
+    var children = _ref13.children,
+      _ref13$style = _ref13.style,
+      style = _ref13$style === void 0 ? {} : _ref13$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: A.surface,
@@ -5007,10 +5148,10 @@ function AgendaProApp(_ref10) {
       gap: 7,
       marginBottom: 16
     }
-  }, Object.entries(STATUS).map(function (_ref12) {
-    var _ref13 = _slicedToArray(_ref12, 2),
-      k = _ref13[0],
-      s = _ref13[1];
+  }, Object.entries(STATUS).map(function (_ref14) {
+    var _ref15 = _slicedToArray(_ref14, 2),
+      k = _ref15[0],
+      s = _ref15[1];
     return /*#__PURE__*/React.createElement("button", {
       key: k,
       onClick: function onClick() {
@@ -5264,10 +5405,10 @@ function AgendaProApp(_ref10) {
           gap: 6,
           marginBottom: 12
         }
-      }, Object.entries(STATUS).map(function (_ref14) {
-        var _ref15 = _slicedToArray(_ref14, 2),
-          k = _ref15[0],
-          s = _ref15[1];
+      }, Object.entries(STATUS).map(function (_ref16) {
+        var _ref17 = _slicedToArray(_ref16, 2),
+          k = _ref17[0],
+          s = _ref17[1];
         return /*#__PURE__*/React.createElement("button", {
           key: k,
           onClick: function onClick() {
@@ -5405,14 +5546,14 @@ var MEMBER_COLORS = {
   lucas: '#E8773A',
   liam: '#2D8A4E'
 };
-function FamiliaApp(_ref16) {
-  var onBack = _ref16.onBack,
-    _ref16$sharedDias = _ref16.sharedDias,
-    sharedDias = _ref16$sharedDias === void 0 ? [] : _ref16$sharedDias,
-    _ref16$addSharedDia = _ref16.addSharedDia,
-    addSharedDia = _ref16$addSharedDia === void 0 ? function () {} : _ref16$addSharedDia,
-    _ref16$removeSharedDi = _ref16.removeSharedDia,
-    removeSharedDia = _ref16$removeSharedDi === void 0 ? function () {} : _ref16$removeSharedDi;
+function FamiliaApp(_ref18) {
+  var onBack = _ref18.onBack,
+    _ref18$sharedDias = _ref18.sharedDias,
+    sharedDias = _ref18$sharedDias === void 0 ? [] : _ref18$sharedDias,
+    _ref18$addSharedDia = _ref18.addSharedDia,
+    addSharedDia = _ref18$addSharedDia === void 0 ? function () {} : _ref18$addSharedDia,
+    _ref18$removeSharedDi = _ref18.removeSharedDia,
+    removeSharedDia = _ref18$removeSharedDi === void 0 ? function () {} : _ref18$removeSharedDi;
   var _useState87 = (0, _react.useState)(new Date(2026, 5, 1)),
     _useState88 = _slicedToArray(_useState87, 2),
     curMonth = _useState88[0],
@@ -5593,10 +5734,10 @@ function FamiliaApp(_ref16) {
     });
     setShowAdd(false);
   };
-  var FCard = function FCard(_ref17) {
-    var children = _ref17.children,
-      _ref17$style = _ref17.style,
-      style = _ref17$style === void 0 ? {} : _ref17$style;
+  var FCard = function FCard(_ref19) {
+    var children = _ref19.children,
+      _ref19$style = _ref19.style,
+      style = _ref19$style === void 0 ? {} : _ref19$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: F.surface,
@@ -6465,10 +6606,10 @@ function FamiliaApp(_ref16) {
     var monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     // Collect all events with dates
-    var allEvs = Object.entries(events).flatMap(function (_ref18) {
-      var _ref19 = _slicedToArray(_ref18, 2),
-        date = _ref19[0],
-        evs = _ref19[1];
+    var allEvs = Object.entries(events).flatMap(function (_ref20) {
+      var _ref21 = _slicedToArray(_ref20, 2),
+        date = _ref21[0],
+        evs = _ref21[1];
       return evs.map(function (ev) {
         return _objectSpread(_objectSpread({}, ev), {}, {
           date: date
@@ -6514,16 +6655,16 @@ function FamiliaApp(_ref16) {
       (acc[ev.date] = acc[ev.date] || []).push(ev);
       return acc;
     }, {});
-    return Object.entries(grouped2).sort(function (_ref20, _ref21) {
-      var _ref22 = _slicedToArray(_ref20, 1),
-        a = _ref22[0];
-      var _ref23 = _slicedToArray(_ref21, 1),
-        b = _ref23[0];
+    return Object.entries(grouped2).sort(function (_ref22, _ref23) {
+      var _ref24 = _slicedToArray(_ref22, 1),
+        a = _ref24[0];
+      var _ref25 = _slicedToArray(_ref23, 1),
+        b = _ref25[0];
       return a.localeCompare(b);
-    }).map(function (_ref24) {
-      var _ref25 = _slicedToArray(_ref24, 2),
-        date = _ref25[0],
-        evs = _ref25[1];
+    }).map(function (_ref26) {
+      var _ref27 = _slicedToArray(_ref26, 2),
+        date = _ref27[0],
+        evs = _ref27[1];
       var d = new Date(date + 'T12:00:00');
       var isToday2 = date === todayStr2;
       var dayLabel = d.toLocaleDateString('pt-PT', {
@@ -6851,8 +6992,8 @@ function FamiliaApp(_ref16) {
 }
 
 // ── NUTRIGUIMA ──────────────────────────────────────────────────────
-function NutriguimaApp(_ref26) {
-  var onBack = _ref26.onBack;
+function NutriguimaApp(_ref28) {
+  var onBack = _ref28.onBack;
   var _useState107 = (0, _react.useState)({}),
     _useState108 = _slicedToArray(_useState107, 2),
     cart = _useState108[0],
@@ -6951,10 +7092,10 @@ function NutriguimaApp(_ref26) {
     green: '#16A34A',
     red: '#DC2626'
   };
-  var NCard = function NCard(_ref27) {
-    var children = _ref27.children,
-      _ref27$style = _ref27.style,
-      style = _ref27$style === void 0 ? {} : _ref27$style;
+  var NCard = function NCard(_ref29) {
+    var children = _ref29.children,
+      _ref29$style = _ref29.style,
+      style = _ref29$style === void 0 ? {} : _ref29$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: N.surface,
@@ -7982,14 +8123,14 @@ var ALUNOS_DEF = {
     }]
   }
 };
-function EscolarApp(_ref28) {
-  var onBack = _ref28.onBack,
-    _ref28$sharedDias = _ref28.sharedDias,
-    sharedDias = _ref28$sharedDias === void 0 ? [] : _ref28$sharedDias,
-    _ref28$addSharedDia = _ref28.addSharedDia,
-    addSharedDia = _ref28$addSharedDia === void 0 ? function () {} : _ref28$addSharedDia,
-    _ref28$activeUser = _ref28.activeUser,
-    activeUser = _ref28$activeUser === void 0 ? 'patricio' : _ref28$activeUser;
+function EscolarApp(_ref30) {
+  var onBack = _ref30.onBack,
+    _ref30$sharedDias = _ref30.sharedDias,
+    sharedDias = _ref30$sharedDias === void 0 ? [] : _ref30$sharedDias,
+    _ref30$addSharedDia = _ref30.addSharedDia,
+    addSharedDia = _ref30$addSharedDia === void 0 ? function () {} : _ref30$addSharedDia,
+    _ref30$activeUser = _ref30.activeUser,
+    activeUser = _ref30$activeUser === void 0 ? 'patricio' : _ref30$activeUser;
   var isAdmin = activeUser === 'patricio';
   var defaultAluno = activeUser === 'liam' ? 'liam' : 'lucas';
   var _useState119 = (0, _react.useState)(defaultAluno),
@@ -8182,10 +8323,10 @@ function EscolarApp(_ref28) {
     gold: '#C9A847',
     orange: '#F97316'
   };
-  var ECard = function ECard(_ref29) {
-    var children = _ref29.children,
-      _ref29$style = _ref29.style,
-      style = _ref29$style === void 0 ? {} : _ref29$style;
+  var ECard = function ECard(_ref31) {
+    var children = _ref31.children,
+      _ref31$style = _ref31.style,
+      style = _ref31$style === void 0 ? {} : _ref31$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: E.surface,

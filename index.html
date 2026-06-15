@@ -7491,6 +7491,7 @@ var ALUNOS_DEF = {
     cor: '#F97316',
     disciplinas: [{
       id: 1,
+      abr: 'D',
       nome: 'Deutsch',
       prof: 'Herr Müller',
       tel: '',
@@ -7498,27 +7499,31 @@ var ALUNOS_DEF = {
       cor: '#2563EB'
     }, {
       id: 2,
-      nome: 'Mathematik',
-      prof: 'Frau Schmidt',
+      abr: 'F',
+      nome: 'Français',
+      prof: 'Mme. Dupont',
       tel: '',
-      emoji: '📐',
-      cor: '#DC2626'
+      emoji: '🗼',
+      cor: '#9333EA'
     }, {
       id: 3,
-      nome: 'Sport',
-      prof: 'Herr Weber',
-      tel: '',
-      emoji: '⚽',
-      cor: '#D97706'
-    }, {
-      id: 4,
+      abr: 'E',
       nome: 'Englisch',
       prof: 'Frau Koch',
       tel: '',
       emoji: '🌍',
       cor: '#7C3AED'
     }, {
+      id: 4,
+      abr: 'M',
+      nome: 'Mathematik',
+      prof: 'Frau Schmidt',
+      tel: '',
+      emoji: '📐',
+      cor: '#DC2626'
+    }, {
       id: 5,
+      abr: 'Bio',
       nome: 'Biologie',
       prof: 'Frau Huber',
       tel: '',
@@ -7526,53 +7531,76 @@ var ALUNOS_DEF = {
       cor: '#16A34A'
     }, {
       id: 6,
-      nome: 'Geschichte',
+      abr: 'Ch',
+      nome: 'Chemie',
       prof: 'Herr Bauer',
+      tel: '',
+      emoji: '⚗️',
+      cor: '#0891B2'
+    }, {
+      id: 7,
+      abr: 'Gs',
+      nome: 'Geschichte',
+      prof: 'Herr Weber',
       tel: '',
       emoji: '🏛',
       cor: '#92400E'
     }, {
       id: 8,
-      nome: 'Informatik',
-      prof: 'Herr Klein',
+      abr: 'Gg',
+      nome: 'Geographie',
+      prof: 'Frau Schwarz',
       tel: '',
-      emoji: '💻',
-      cor: '#0891B2'
+      emoji: '🗺',
+      cor: '#65A30D'
     }, {
       id: 9,
-      nome: 'Français',
-      prof: 'Mme. Dupont',
+      abr: 'TG',
+      nome: 'Techn. Gestalten',
+      prof: 'Herr Klein',
       tel: '',
-      emoji: '🗼',
-      cor: '#9333EA'
+      emoji: '🔧',
+      cor: '#D97706'
     }, {
       id: 10,
-      nome: 'Musik',
-      prof: 'Frau Wolf',
-      tel: '',
-      emoji: '🎵',
-      cor: '#DB2777'
-    }, {
-      id: 11,
+      abr: 'BG',
       nome: 'Bild. Gestalten',
       prof: 'Herr Braun',
       tel: '',
       emoji: '🎨',
       cor: '#EA580C'
     }, {
-      id: 12,
-      nome: 'Geografie',
-      prof: 'Frau Schwarz',
+      id: 11,
+      abr: 'Mu',
+      nome: 'Musik',
+      prof: 'Frau Wolf',
       tel: '',
-      emoji: '🗺',
-      cor: '#65A30D'
+      emoji: '🎵',
+      cor: '#DB2777'
+    }, {
+      id: 12,
+      abr: 'T',
+      nome: 'Sport',
+      prof: 'Herr Fischer',
+      tel: '',
+      emoji: '⚽',
+      cor: '#16A34A'
     }, {
       id: 13,
-      nome: 'WAH',
-      prof: 'Frau Fischer',
+      abr: 'Inf',
+      nome: 'Informatik',
+      prof: 'Herr Schneider',
       tel: '',
-      emoji: '🏠',
-      cor: '#D97706'
+      emoji: '💻',
+      cor: '#0891B2'
+    }, {
+      id: 14,
+      abr: 'Lat',
+      nome: 'Latein',
+      prof: 'Frau Meyer',
+      tel: '',
+      emoji: '🏺',
+      cor: '#7C3AED'
     }],
     horario: {
       0: [{
@@ -8043,23 +8071,38 @@ function EscolarApp(_ref28) {
     }, 0) / ns.length).toFixed(1);
   };
   var calcMediaGeral = function calcMediaGeral(sem) {
-    var medias = aluno.disciplinas.map(function (d) {
+    var todas = aluno.disciplinas.map(function (d) {
       return {
         nome: d.nome,
+        abr: d.abr || '',
         cor: d.cor,
         m: parseFloat(media(d.id, sem))
       };
     }).filter(function (d) {
       return !isNaN(d.m);
-    }).sort(function (a, b) {
+    });
+    if (!todas.length) return null;
+    // Durchschnitt = média de todas
+    var durchschnitt = todas.reduce(function (s, d) {
+      return s + d.m;
+    }, 0) / todas.length;
+    // 5 tiefste Noten = soma das 5 mais baixas (mínimo 19 pontos)
+    var cincoMaisBaixas = _toConsumableArray(todas).sort(function (a, b) {
       return a.m - b.m;
     }).slice(0, 5);
-    if (!medias.length) return null;
+    var somaCinco = cincoMaisBaixas.reduce(function (s, d) {
+      return s + d.m;
+    }, 0);
+    var passaDurchschnitt = durchschnitt >= 4.0;
+    var passaCinco = somaCinco >= 19;
     return {
-      valor: (medias.reduce(function (s, d) {
-        return s + d.m;
-      }, 0) / medias.length).toFixed(2),
-      discs: medias
+      durchschnitt: durchschnitt.toFixed(2),
+      somaCinco: somaCinco.toFixed(1),
+      cincoMaisBaixas: cincoMaisBaixas,
+      passaDurchschnitt: passaDurchschnitt,
+      passaCinco: passaCinco,
+      passa: passaDurchschnitt && passaCinco,
+      todas: todas
     };
   };
   var notaColor = function notaColor(n) {
@@ -9621,8 +9664,7 @@ function EscolarApp(_ref28) {
           style: {
             padding: '14px',
             marginBottom: 12,
-            border: "2px solid ".concat(E.purple),
-            textAlign: 'center'
+            border: "2px solid ".concat(mg.passa ? E.green : E.red)
           }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
@@ -9630,47 +9672,119 @@ function EscolarApp(_ref28) {
             fontSize: 11,
             fontWeight: 700,
             textTransform: 'uppercase',
-            letterSpacing: '0.8px'
+            letterSpacing: '0.8px',
+            marginBottom: 10
           }
-        }, "\u2B50 M\xE9dia SEK P \xB7 ", semestre, "\xBA Semestre"), /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 48,
-            fontWeight: 900,
-            color: notaColor(mg.valor),
-            margin: '6px 0'
-          }
-        }, mg.valor), /*#__PURE__*/React.createElement("p", {
-          style: {
-            color: E.muted,
-            fontSize: 11
-          }
-        }, "Calculada com as 5 disciplinas mais baixas"), /*#__PURE__*/React.createElement("div", {
+        }, "\uD83D\uDCCB Resultados SEK P \xB7 ", semestre, "\xBA Semestre"), /*#__PURE__*/React.createElement("div", {
           style: {
             display: 'flex',
-            justifyContent: 'center',
-            gap: 16,
-            marginTop: 8
+            gap: 10,
+            marginBottom: 10
           }
-        }, mg.discs.map(function (d, i) {
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            flex: 1,
+            textAlign: 'center',
+            padding: '10px',
+            background: mg.passaDurchschnitt ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+            borderRadius: 12,
+            border: "1px solid ".concat(mg.passaDurchschnitt ? E.green : E.red, "44")
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 9,
+            color: E.muted,
+            fontWeight: 700,
+            textTransform: 'uppercase'
+          }
+        }, "Durchschnitt"), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 28,
+            fontWeight: 900,
+            color: mg.passaDurchschnitt ? E.green : E.red,
+            margin: '3px 0'
+          }
+        }, mg.durchschnitt), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 9,
+            color: mg.passaDurchschnitt ? E.green : E.red,
+            fontWeight: 700
+          }
+        }, "min. 4.0")), /*#__PURE__*/React.createElement("div", {
+          style: {
+            flex: 1,
+            textAlign: 'center',
+            padding: '10px',
+            background: mg.passaCinco ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+            borderRadius: 12,
+            border: "1px solid ".concat(mg.passaCinco ? E.green : E.red, "44")
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 9,
+            color: E.muted,
+            fontWeight: 700,
+            textTransform: 'uppercase'
+          }
+        }, "5 tiefste Noten"), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 28,
+            fontWeight: 900,
+            color: mg.passaCinco ? E.green : E.red,
+            margin: '3px 0'
+          }
+        }, mg.somaCinco), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 9,
+            color: mg.passaCinco ? E.green : E.red,
+            fontWeight: 700
+          }
+        }, "min. 19P"))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            gap: 5,
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            marginBottom: 10
+          }
+        }, mg.cincoMaisBaixas.map(function (d, i) {
           return /*#__PURE__*/React.createElement("div", {
             key: i,
             style: {
+              background: "".concat(notaColor(d.m), "15"),
+              border: "1px solid ".concat(notaColor(d.m), "44"),
+              borderRadius: 8,
+              padding: '3px 10px',
               textAlign: 'center'
             }
           }, /*#__PURE__*/React.createElement("p", {
+            style: {
+              fontSize: 9,
+              color: E.muted,
+              fontWeight: 700
+            }
+          }, d.abr || d.nome.slice(0, 3)), /*#__PURE__*/React.createElement("p", {
             style: {
               fontSize: 14,
               fontWeight: 900,
               color: notaColor(d.m)
             }
-          }, d.m.toFixed(1)), /*#__PURE__*/React.createElement("p", {
-            style: {
-              fontSize: 9,
-              color: E.muted,
-              marginTop: 1
-            }
-          }, d.nome.slice(0, 6)));
-        })));
+          }, d.m.toFixed(1)));
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            textAlign: 'center',
+            padding: '8px',
+            background: mg.passa ? 'rgba(22,163,74,0.12)' : 'rgba(220,38,38,0.12)',
+            borderRadius: 10,
+            border: "1px solid ".concat(mg.passa ? E.green : E.red)
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 15,
+            fontWeight: 900,
+            color: mg.passa ? E.green : E.red
+          }
+        }, mg.passa ? '✅ APROVADO' : '❌ NÃO APROVADO')));
       }(), /*#__PURE__*/React.createElement(ECard, {
         style: {
           padding: '14px',

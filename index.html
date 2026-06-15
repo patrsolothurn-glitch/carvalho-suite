@@ -5419,27 +5419,43 @@ function FamiliaApp(_ref16) {
       emoji: '📅',
       who: 'todos',
       data: '',
+      hora: '',
       nota: ''
     }),
     _useState98 = _slicedToArray(_useState97, 2),
     form = _useState98[0],
     setForm = _useState98[1];
-  var _useState99 = (0, _react.useState)('Semana'),
+  var _useState99 = (0, _react.useState)({}),
     _useState100 = _slicedToArray(_useState99, 2),
-    timeTab = _useState100[0],
-    setTimeTab = _useState100[1];
-  var _useState101 = (0, _react.useState)('semana'),
+    memberPhotos = _useState100[0],
+    setMemberPhotos = _useState100[1];
+  var handlePhotoUpload = function handlePhotoUpload(memberId, e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      return setMemberPhotos(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, memberId, ev.target.result));
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+  var _useState101 = (0, _react.useState)('Semana'),
     _useState102 = _slicedToArray(_useState101, 2),
-    mainView = _useState102[0],
-    setMainView = _useState102[1]; // semana | mes
-  var _useState103 = (0, _react.useState)(function () {
+    timeTab = _useState102[0],
+    setTimeTab = _useState102[1];
+  var _useState103 = (0, _react.useState)('semana'),
+    _useState104 = _slicedToArray(_useState103, 2),
+    mainView = _useState104[0],
+    setMainView = _useState104[1]; // semana | mes
+  var _useState105 = (0, _react.useState)(function () {
       var d = new Date(2026, 5, 15); // 15 Jun 2026
       d.setDate(d.getDate() - d.getDay() + 1); // Monday
       return d;
     }),
-    _useState104 = _slicedToArray(_useState103, 2),
-    weekStart = _useState104[0],
-    setWeekStart = _useState104[1];
+    _useState106 = _slicedToArray(_useState105, 2),
+    weekStart = _useState106[0],
+    setWeekStart = _useState106[1];
   var members = [{
     id: 'todos',
     name: 'Todos',
@@ -5508,6 +5524,7 @@ function FamiliaApp(_ref16) {
         emoji: form.emoji,
         who: form.who,
         color: (m === null || m === void 0 ? void 0 : m.color) || F.coral,
+        hora: form.hora,
         nota: form.nota
       }])));
     });
@@ -5516,6 +5533,7 @@ function FamiliaApp(_ref16) {
       emoji: '📅',
       who: 'todos',
       data: '',
+      hora: '',
       nota: ''
     });
     setShowAdd(false);
@@ -5546,7 +5564,7 @@ function FamiliaApp(_ref16) {
     style: {
       background: F.surface,
       borderBottom: "1px solid ".concat(F.border),
-      padding: '12px 16px',
+      padding: '10px 12px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -5555,37 +5573,47 @@ function FamiliaApp(_ref16) {
       zIndex: 200,
       boxShadow: '0 1px 8px rgba(184,120,60,0.08)'
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 4
-    }
   }, /*#__PURE__*/React.createElement("button", {
     onClick: onBack,
     style: {
       background: 'none',
       border: 'none',
       color: F.coral,
-      fontSize: 36,
+      fontSize: 34,
       cursor: 'pointer',
-      padding: '0 8px 0 0',
+      padding: '0',
       lineHeight: 1,
-      minWidth: 44,
+      width: 44,
+      height: 44,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      flexShrink: 0
     }
-  }, "\u2039"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontWeight: 900,
-      fontSize: 17
-    }
-  }, "\uD83C\uDFE0 Fam\xEDlia Carvalho")), /*#__PURE__*/React.createElement("div", {
+  }, "\u2039"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
-      gap: 7,
-      alignItems: 'center'
+      alignItems: 'center',
+      gap: 6,
+      flex: 1,
+      justifyContent: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 18
+    }
+  }, "\uD83C\uDFE0"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 900,
+      fontSize: 16,
+      whiteSpace: 'nowrap'
+    }
+  }, "Fam\xEDlia Carvalho")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      alignItems: 'center',
+      flexShrink: 0
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -5602,7 +5630,7 @@ function FamiliaApp(_ref16) {
     style: {
       background: mainView === 'semana' ? F.coral : 'transparent',
       border: 'none',
-      padding: '7px 10px',
+      padding: '6px 9px',
       color: mainView === 'semana' ? '#fff' : F.muted,
       fontSize: 12,
       fontWeight: 700,
@@ -5615,7 +5643,7 @@ function FamiliaApp(_ref16) {
     style: {
       background: mainView === 'mes' ? F.coral : 'transparent',
       border: 'none',
-      padding: '7px 10px',
+      padding: '6px 9px',
       color: mainView === 'mes' ? '#fff' : F.muted,
       fontSize: 12,
       fontWeight: 700,
@@ -5629,8 +5657,8 @@ function FamiliaApp(_ref16) {
       background: "linear-gradient(135deg,".concat(F.coral, ",#F59458)"),
       border: 'none',
       borderRadius: 12,
-      width: 36,
-      height: 36,
+      width: 34,
+      height: 34,
       color: '#fff',
       fontSize: 20,
       cursor: 'pointer',
@@ -5648,18 +5676,21 @@ function FamiliaApp(_ref16) {
   }, members.map(function (m) {
     return /*#__PURE__*/React.createElement("div", {
       key: m.id,
-      onClick: function onClick() {
-        return setSelMember(m.id);
-      },
       style: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: 4,
-        cursor: 'pointer',
         flex: 1
       }
     }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'relative'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        return setSelMember(m.id);
+      },
       style: {
         width: 50,
         height: 50,
@@ -5669,13 +5700,52 @@ function FamiliaApp(_ref16) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'all 0.15s'
+        transition: 'all 0.15s',
+        cursor: 'pointer',
+        overflow: 'hidden'
       }
-    }, /*#__PURE__*/React.createElement("span", {
+    }, memberPhotos[m.id] ? /*#__PURE__*/React.createElement("img", {
+      src: memberPhotos[m.id],
+      style: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      },
+      alt: m.name
+    }) : /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 24
       }
-    }, m.emoji)), /*#__PURE__*/React.createElement("span", {
+    }, m.emoji)), m.id !== 'todos' && /*#__PURE__*/React.createElement("label", {
+      style: {
+        position: 'absolute',
+        bottom: -4,
+        right: -4,
+        width: 18,
+        height: 18,
+        borderRadius: '50%',
+        background: F.coral,
+        border: "2px solid ".concat(F.surface),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 9,
+        color: '#fff'
+      }
+    }, "\uD83D\uDCF7"), /*#__PURE__*/React.createElement("input", {
+      type: "file",
+      accept: "image/*",
+      style: {
+        display: 'none'
+      },
+      onChange: function onChange(e) {
+        return handlePhotoUpload(m.id, e);
+      }
+    }))), /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 10,
         fontWeight: 700,
@@ -5788,9 +5858,18 @@ function FamiliaApp(_ref16) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '0 auto 3px'
+        margin: '0 auto 3px',
+        overflow: 'hidden'
       }
-    }, /*#__PURE__*/React.createElement("span", {
+    }, memberPhotos[m.id] ? /*#__PURE__*/React.createElement("img", {
+      src: memberPhotos[m.id],
+      style: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      },
+      alt: m.name
+    }) : /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 16
       }
@@ -5911,7 +5990,7 @@ function FamiliaApp(_ref16) {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis'
           }
-        }, ev.emoji, " ", ev.t));
+        }, ev.emoji, " ", ev.hora ? ev.hora + ' ' : '', ev.t));
       }));
     }));
   })), /*#__PURE__*/React.createElement("div", {
@@ -6181,18 +6260,34 @@ function FamiliaApp(_ref16) {
       style: {
         flex: 1
       }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 3
+      }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
         fontWeight: 800,
         fontSize: 15,
         color: F.text
       }
-    }, ev.t), /*#__PURE__*/React.createElement("div", {
+    }, ev.t), ev.hora && /*#__PURE__*/React.createElement("span", {
+      style: {
+        background: "".concat(ev.color, "15"),
+        border: "1px solid ".concat(ev.color, "33"),
+        borderRadius: 6,
+        padding: '1px 7px',
+        fontSize: 11,
+        fontWeight: 700,
+        color: ev.color
+      }
+    }, "\uD83D\uDD50 ", ev.hora)), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         alignItems: 'center',
-        gap: 6,
-        marginTop: 4
+        gap: 6
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
@@ -6440,18 +6535,30 @@ function FamiliaApp(_ref16) {
             flex: 1,
             minWidth: 0
           }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            marginBottom: 2
+          }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
             fontWeight: 700,
             fontSize: 14,
             color: F.text
           }
-        }, ev.t), /*#__PURE__*/React.createElement("div", {
+        }, ev.t), ev.hora && /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 10,
+            fontWeight: 700,
+            color: ev.color
+          }
+        }, "\uD83D\uDD50 ", ev.hora)), /*#__PURE__*/React.createElement("div", {
           style: {
             display: 'flex',
             alignItems: 'center',
-            gap: 5,
-            marginTop: 2
+            gap: 5
           }
         }, /*#__PURE__*/React.createElement("span", {
           style: {
@@ -6559,6 +6666,11 @@ function FamiliaApp(_ref16) {
     l: 'Data',
     k: 'data',
     type: 'date',
+    ph: ''
+  }, {
+    l: 'Hora',
+    k: 'hora',
+    type: 'time',
     ph: ''
   }, {
     l: 'Nota',
@@ -6686,14 +6798,37 @@ function FamiliaApp(_ref16) {
 // ── NUTRIGUIMA ──────────────────────────────────────────────────────
 function NutriguimaApp(_ref26) {
   var onBack = _ref26.onBack;
-  var _useState105 = (0, _react.useState)({}),
-    _useState106 = _slicedToArray(_useState105, 2),
-    cart = _useState106[0],
-    setCart = _useState106[1];
-  var _useState107 = (0, _react.useState)(''),
+  var _useState107 = (0, _react.useState)({}),
     _useState108 = _slicedToArray(_useState107, 2),
-    search = _useState108[0],
-    setSearch = _useState108[1];
+    cart = _useState108[0],
+    setCart = _useState108[1];
+  var _useState109 = (0, _react.useState)(''),
+    _useState110 = _slicedToArray(_useState109, 2),
+    search = _useState110[0],
+    setSearch = _useState110[1];
+  var _useState111 = (0, _react.useState)('loja'),
+    _useState112 = _slicedToArray(_useState111, 2),
+    tab = _useState112[0],
+    setTab = _useState112[1]; // loja | stock
+  var _useState113 = (0, _react.useState)({
+      1: 5,
+      2: 1,
+      3: 0,
+      4: 2,
+      5: 8,
+      6: 1
+    }),
+    _useState114 = _slicedToArray(_useState113, 2),
+    stock = _useState114[0],
+    setStock = _useState114[1];
+  var _useState115 = (0, _react.useState)(null),
+    _useState116 = _slicedToArray(_useState115, 2),
+    editStock = _useState116[0],
+    setEditStock = _useState116[1];
+  var _useState117 = (0, _react.useState)(''),
+    _useState118 = _slicedToArray(_useState117, 2),
+    stockVal = _useState118[0],
+    setStockVal = _useState118[1];
   var products = [{
     id: 1,
     name: 'Whey Protein 1kg',
@@ -6740,101 +6875,271 @@ function NutriguimaApp(_ref26) {
   var totalPrice = products.reduce(function (s, p) {
     return s + (cart[p.id] || 0) * p.price;
   }, 0);
+  var stockColor = function stockColor(qty) {
+    return qty === 0 ? '#DC2626' : qty <= 2 ? '#F97316' : '#16A34A';
+  };
+  var stockLabel = function stockLabel(qty) {
+    return qty === 0 ? 'Sem stock' : qty <= 2 ? 'Stock baixo' : 'Em stock';
+  };
+  var stockBg = function stockBg(qty) {
+    return qty === 0 ? 'rgba(220,38,38,0.1)' : qty <= 2 ? 'rgba(249,115,22,0.1)' : 'rgba(22,163,74,0.1)';
+  };
+  var N = {
+    bg: '#09090E',
+    surface: '#131319',
+    surface2: '#1C1C26',
+    gold: '#C9A847',
+    goldL: '#E8C96C',
+    text: '#F0EEE8',
+    muted: '#7A7A90',
+    border: 'rgba(201,168,71,0.2)',
+    green: '#16A34A',
+    red: '#DC2626'
+  };
+  var NCard = function NCard(_ref27) {
+    var children = _ref27.children,
+      _ref27$style = _ref27.style,
+      style = _ref27$style === void 0 ? {} : _ref27$style;
+    return /*#__PURE__*/React.createElement("div", {
+      style: _objectSpread({
+        background: N.surface,
+        borderRadius: 16,
+        border: "1px solid ".concat(N.border)
+      }, style)
+    }, children);
+  };
   return /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread(_objectSpread({}, wrap), {}, {
+    style: {
+      minHeight: '100vh',
+      background: N.bg,
+      fontFamily: "'Inter',system-ui,sans-serif",
+      color: N.text,
       paddingBottom: 80
-    })
-  }, /*#__PURE__*/React.createElement(TopBar, {
-    onBack: onBack,
-    title: "\uD83D\uDC8A Nutriguima",
-    right: /*#__PURE__*/React.createElement("div", {
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: N.surface,
+      borderBottom: "1px solid ".concat(N.border),
+      padding: '12px 16px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      position: 'sticky',
+      top: 0,
+      zIndex: 200
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: onBack,
+    style: {
+      background: 'none',
+      border: 'none',
+      color: N.gold,
+      fontSize: 30,
+      cursor: 'pointer',
+      padding: 0,
+      lineHeight: 1,
+      width: 40,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, "\u2039"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 900,
+      fontSize: 18
+    }
+  }, "\uD83D\uDC8A Nutriguima")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "http://zumu.be/eb762cd1",
+    target: "_blank",
+    rel: "noreferrer",
+    style: {
+      background: "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")"),
+      borderRadius: 12,
+      padding: '7px 12px',
+      textDecoration: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 5,
+      boxShadow: "0 4px 12px rgba(201,168,71,0.35)"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 13
+    }
+  }, "\uD83D\uDED2"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: N.bg,
+      fontSize: 12,
+      fontWeight: 800
+    }
+  }, "Zumub")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      cursor: 'pointer'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 22,
+      color: N.gold
+    }
+  }, "\uD83D\uDED2"), totalItems > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      top: -4,
+      right: -4,
+      width: 16,
+      height: 16,
+      background: N.red,
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 9,
+      color: '#fff',
+      fontWeight: 800
+    }
+  }, totalItems))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      margin: '12px 16px 0',
+      background: N.surface,
+      borderRadius: 14,
+      padding: 4,
+      border: "1px solid ".concat(N.border),
+      display: 'flex'
+    }
+  }, [{
+    v: 'loja',
+    l: '🛒 Loja'
+  }, {
+    v: 'stock',
+    l: '📦 Stock'
+  }].map(function (t) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.v,
+      onClick: function onClick() {
+        return setTab(t.v);
+      },
       style: {
-        position: 'relative',
+        flex: 1,
+        background: tab === t.v ? "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")") : 'none',
+        border: 'none',
+        borderRadius: 11,
+        padding: '9px',
+        color: tab === t.v ? N.bg : N.muted,
+        fontSize: 13,
+        fontWeight: 800,
         cursor: 'pointer'
       }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 22,
-        color: T.gold
-      }
-    }, "\uD83D\uDED2"), totalItems > 0 && /*#__PURE__*/React.createElement("div", {
-      style: {
-        position: 'absolute',
-        top: -4,
-        right: -4,
-        width: 16,
-        height: 16,
-        background: T.red,
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 9,
-        color: '#fff',
-        fontWeight: 800
-      }
-    }, totalItems)))
-  }), /*#__PURE__*/React.createElement("div", {
+    }, t.l);
+  })), tab === 'loja' && /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: '12px 16px'
+      padding: '12px 16px 0'
     }
-  }, /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: N.surface,
+      border: "1px solid ".concat(N.border),
+      borderRadius: 14,
+      padding: '10px 14px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: N.muted,
+      fontSize: 16
+    }
+  }, "\uD83D\uDD0D"), /*#__PURE__*/React.createElement("input", {
     value: search,
     onChange: function onChange(e) {
       return setSearch(e.target.value);
     },
-    placeholder: "\uD83D\uDD0D Pesquisar produtos...",
+    placeholder: "Pesquisar produtos...",
     style: {
-      width: '100%',
-      background: T.surface,
-      border: "1px solid ".concat(T.goldBrd),
-      borderRadius: 14,
-      padding: '12px 16px',
-      color: T.text,
+      flex: 1,
+      background: 'none',
+      border: 'none',
+      color: N.text,
       fontSize: 14,
-      outline: 'none',
-      boxSizing: 'border-box'
+      outline: 'none'
     }
-  })), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement(NCard, {
     style: {
-      margin: '0 16px 12px',
-      background: "linear-gradient(135deg,rgba(201,168,71,0.15),rgba(201,168,71,0.05))",
-      border: "1px solid ".concat(T.goldBrd),
-      borderRadius: 14,
-      padding: '10px 14px',
+      padding: '12px 14px',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
       display: 'flex',
+      alignItems: 'center',
       gap: 10,
-      alignItems: 'center'
+      marginBottom: 10
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 20
     }
-  }, "\uD83C\uDF81"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+  }, "\uD83C\uDF81"), /*#__PURE__*/React.createElement("div", {
     style: {
-      color: T.gold,
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: N.gold,
       fontWeight: 800,
       fontSize: 13
     }
   }, "10% desconto em tudo!"), /*#__PURE__*/React.createElement("p", {
     style: {
-      color: T.muted,
+      color: N.muted,
       fontSize: 11
     }
-  }, "C\xF3digo: EB762CD1 \xB7 via Zumub.pt"))), /*#__PURE__*/React.createElement("div", {
+  }, "C\xF3digo: EB762CD1 \xB7 via Zumub.pt"))), /*#__PURE__*/React.createElement("a", {
+    href: "http://zumu.be/eb762cd1",
+    target: "_blank",
+    rel: "noreferrer",
     style: {
-      padding: '0 16px',
+      display: 'block',
+      background: "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")"),
+      border: 'none',
+      borderRadius: 12,
+      padding: '12px',
+      color: N.bg,
+      fontSize: 14,
+      fontWeight: 800,
+      textDecoration: 'none',
+      textAlign: 'center',
+      boxShadow: "0 4px 14px rgba(201,168,71,0.4)"
+    }
+  }, "\uD83D\uDED2 Ir para Zumub com desconto \u2192")), /*#__PURE__*/React.createElement("div", {
+    style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
       gap: 10
     }
   }, filtered.map(function (p) {
+    var _stock$p$id;
     var qty = cart[p.id] || 0;
     var discounted = (p.price * 0.9).toFixed(2);
-    return /*#__PURE__*/React.createElement(Card, {
+    var st = (_stock$p$id = stock[p.id]) !== null && _stock$p$id !== void 0 ? _stock$p$id : 5;
+    return /*#__PURE__*/React.createElement(NCard, {
       key: p.id,
       style: {
         padding: '14px 12px',
@@ -6854,23 +7159,47 @@ function NutriguimaApp(_ref26) {
       style: {
         fontWeight: 700,
         fontSize: 13,
-        color: T.text,
+        color: N.text,
         lineHeight: 1.3
       }
     }, p.name), /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 10,
-        color: T.muted
+        color: N.muted
       }
-    }, p.cat)), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    }, p.cat)), /*#__PURE__*/React.createElement("div", {
       style: {
-        color: T.green,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 5,
+        background: stockBg(st),
+        borderRadius: 8,
+        padding: '3px 8px',
+        border: "1px solid ".concat(stockColor(st), "33")
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 7,
+        height: 7,
+        borderRadius: '50%',
+        background: stockColor(st),
+        flexShrink: 0
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        fontWeight: 700,
+        color: stockColor(st)
+      }
+    }, stockLabel(st), " (", st, ")")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: N.green,
         fontWeight: 900,
         fontSize: 16
       }
     }, "\u20AC", discounted), /*#__PURE__*/React.createElement("p", {
       style: {
-        color: T.muted,
+        color: N.muted,
         fontSize: 11,
         textDecoration: 'line-through'
       }
@@ -6881,21 +7210,23 @@ function NutriguimaApp(_ref26) {
         });
       },
       style: {
-        background: "linear-gradient(135deg,".concat(T.gold, ",").concat(T.goldL, ")"),
+        background: "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")"),
         border: 'none',
         borderRadius: 10,
         padding: '8px',
-        color: T.bg,
+        color: N.bg,
         fontSize: 12,
         fontWeight: 800,
-        cursor: 'pointer'
-      }
-    }, "Adicionar") : /*#__PURE__*/React.createElement("div", {
+        cursor: 'pointer',
+        opacity: st === 0 ? 0.4 : 1
+      },
+      disabled: st === 0
+    }, st === 0 ? 'Sem stock' : 'Adicionar') : /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: T.surface2,
+        background: N.surface2,
         borderRadius: 10,
         padding: '4px 8px'
       }
@@ -6908,7 +7239,7 @@ function NutriguimaApp(_ref26) {
       style: {
         background: 'none',
         border: 'none',
-        color: T.gold,
+        color: N.gold,
         fontSize: 20,
         cursor: 'pointer',
         fontWeight: 700,
@@ -6916,7 +7247,7 @@ function NutriguimaApp(_ref26) {
       }
     }, "\u2212"), /*#__PURE__*/React.createElement("span", {
       style: {
-        color: T.gold,
+        color: N.gold,
         fontWeight: 800,
         fontSize: 14
       }
@@ -6929,7 +7260,7 @@ function NutriguimaApp(_ref26) {
       style: {
         background: 'none',
         border: 'none',
-        color: T.gold,
+        color: N.gold,
         fontSize: 20,
         cursor: 'pointer',
         fontWeight: 700,
@@ -6938,211 +7269,1091 @@ function NutriguimaApp(_ref26) {
     }, "\uFF0B")));
   })), totalItems > 0 && /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: '16px'
+      padding: '14px 0'
     }
-  }, /*#__PURE__*/React.createElement(GoldBtn, {
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "http://zumu.be/eb762cd1",
+    target: "_blank",
+    rel: "noreferrer",
     style: {
-      width: '100%',
-      padding: '15px'
-    },
-    onClick: function onClick() {}
-  }, "\uD83D\uDED2 Encomendar \xB7 \u20AC", (totalPrice * 0.9).toFixed(2))));
-}
-
-// ── AGENDA ESCOLAR ──────────────────────────────────────────────────
-function EscolarApp(_ref27) {
-  var onBack = _ref27.onBack,
-    _ref27$sharedDias = _ref27.sharedDias,
-    sharedDias = _ref27$sharedDias === void 0 ? [] : _ref27$sharedDias,
-    _ref27$addSharedDia = _ref27.addSharedDia,
-    addSharedDia = _ref27$addSharedDia === void 0 ? function () {} : _ref27$addSharedDia,
-    _ref27$removeSharedDi = _ref27.removeSharedDia,
-    removeSharedDia = _ref27$removeSharedDi === void 0 ? function () {} : _ref27$removeSharedDi;
-  var _useState109 = (0, _react.useState)(0),
-    _useState110 = _slicedToArray(_useState109, 2),
-    dayIdx = _useState110[0],
-    setDayIdx = _useState110[1];
-  var days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'];
-  var schedule = {
-    0: [{
-      t: 'Deutsch',
-      h: '07:45–08:35',
-      r: '213',
-      emoji: '📝',
-      c: '#1D4ED8'
-    }, {
-      t: 'Mathematik',
-      h: '08:40–09:30',
-      r: '114',
-      emoji: '📐',
-      c: T.red
-    }, {
-      t: 'Sport',
-      h: '10:00–11:30',
-      r: 'Gym',
-      emoji: '⚽',
-      c: T.orange
-    }, {
-      t: 'Englisch',
-      h: '11:35–12:25',
-      r: '211',
-      emoji: '🌍',
-      c: '#5B21B6'
-    }],
-    1: [{
-      t: 'Biologie',
-      h: '07:45–08:35',
-      r: '301',
-      emoji: '🌿',
-      c: T.green
-    }, {
-      t: 'Geschichte',
-      h: '08:40–09:30',
-      r: '205',
-      emoji: '🏛',
-      c: '#92400E'
-    }, {
-      t: 'Mathematik',
-      h: '10:00–10:50',
-      r: '114',
-      emoji: '📐',
-      c: T.red
-    }, {
-      t: 'Informatik',
-      h: '11:35–12:25',
-      r: 'Computer',
-      emoji: '💻',
-      c: T.blue
-    }],
-    2: [{
-      t: 'Français',
-      h: '07:45–08:35',
-      r: '210',
-      emoji: '🗼',
-      c: '#B45309'
-    }, {
-      t: 'Deutsch',
-      h: '08:40–09:30',
-      r: '213',
-      emoji: '📝',
-      c: '#1D4ED8'
-    }, {
-      t: 'Physik',
-      h: '10:00–10:50',
-      r: '302',
-      emoji: '⚡',
-      c: '#075985'
-    }],
-    3: [{
-      t: 'Mathematik',
-      h: '07:45–08:35',
-      r: '114',
-      emoji: '📐',
-      c: T.red
-    }, {
-      t: 'Englisch',
-      h: '08:40–09:30',
-      r: '211',
-      emoji: '🌍',
-      c: '#5B21B6'
-    }, {
-      t: 'WAH',
-      h: '10:00–11:30',
-      r: 'Küche',
-      emoji: '🏠',
-      c: T.muted
-    }],
-    4: [{
-      t: 'Musik',
-      h: '07:45–08:35',
-      r: 'Musik',
-      emoji: '🎵',
-      c: '#5B21B6'
-    }, {
-      t: 'Bild. Gestalten',
-      h: '08:40–10:10',
-      r: 'Atelier',
-      emoji: '🎨',
-      c: '#9F1239'
-    }, {
-      t: 'Geografie',
-      h: '10:20–11:10',
-      r: '205',
-      emoji: '🗺',
-      c: T.green
-    }]
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    style: _objectSpread(_objectSpread({}, wrap), {}, {
-      paddingBottom: 80
-    })
-  }, /*#__PURE__*/React.createElement(TopBar, {
-    onBack: onBack,
-    title: "\uD83D\uDCDA Agenda Escolar",
-    right: /*#__PURE__*/React.createElement(Pill, null, "SEK P")
-  }), /*#__PURE__*/React.createElement("div", {
+      display: 'block',
+      background: "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")"),
+      border: 'none',
+      borderRadius: 14,
+      padding: '15px',
+      color: N.bg,
+      fontSize: 15,
+      fontWeight: 800,
+      textDecoration: 'none',
+      textAlign: 'center',
+      boxShadow: "0 8px 24px rgba(201,168,71,0.4)"
+    }
+  }, "\uD83D\uDED2 Encomendar no Zumub \xB7 \u20AC", (totalPrice * 0.9).toFixed(2)))), tab === 'stock' && /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: '12px 16px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: 10
+      padding: '12px 16px'
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
+      display: 'flex',
+      gap: 12,
+      marginBottom: 14,
+      padding: '10px 14px',
+      background: N.surface,
+      borderRadius: 14,
+      border: "1px solid ".concat(N.border)
+    }
+  }, [{
+    c: '#DC2626',
+    l: 'Sem stock (0)'
+  }, {
+    c: '#F97316',
+    l: 'Baixo (1-2)'
+  }, {
+    c: '#16A34A',
+    l: 'OK (3+)'
+  }].map(function (s) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: s.l,
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 5
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 10,
+        height: 10,
+        borderRadius: '50%',
+        background: s.c,
+        flexShrink: 0
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 10,
+        color: N.muted,
+        fontWeight: 600
+      }
+    }, s.l));
+  })), products.map(function (p) {
+    var _stock$p$id2;
+    var st = (_stock$p$id2 = stock[p.id]) !== null && _stock$p$id2 !== void 0 ? _stock$p$id2 : 0;
+    var isEdit = editStock === p.id;
+    return /*#__PURE__*/React.createElement(NCard, {
+      key: p.id,
+      style: {
+        padding: '14px 16px',
+        marginBottom: 10,
+        borderLeft: "4px solid ".concat(stockColor(st))
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 24
+      }
+    }, p.emoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 700,
+        fontSize: 14,
+        color: N.text
+      }
+    }, p.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginTop: 3
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 8,
+        height: 8,
+        borderRadius: '50%',
+        background: stockColor(st)
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: stockColor(st)
+      }
+    }, stockLabel(st)))), isEdit ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        setStock(function (s) {
+          return _objectSpread(_objectSpread({}, s), {}, _defineProperty({}, p.id, Math.max(0, (s[p.id] || 0) - 1)));
+        });
+      },
+      style: {
+        background: N.surface2,
+        border: "1px solid ".concat(N.border),
+        borderRadius: 8,
+        width: 30,
+        height: 30,
+        color: N.gold,
+        fontSize: 18,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700
+      }
+    }, "\u2212"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: N.gold,
+        fontWeight: 900,
+        fontSize: 20,
+        minWidth: 24,
+        textAlign: 'center'
+      }
+    }, st), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        setStock(function (s) {
+          return _objectSpread(_objectSpread({}, s), {}, _defineProperty({}, p.id, (s[p.id] || 0) + 1));
+        });
+      },
+      style: {
+        background: N.surface2,
+        border: "1px solid ".concat(N.border),
+        borderRadius: 8,
+        width: 30,
+        height: 30,
+        color: N.gold,
+        fontSize: 18,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700
+      }
+    }, "\uFF0B"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setEditStock(null);
+      },
+      style: {
+        background: "".concat(N.gold, "22"),
+        border: "1px solid ".concat(N.gold),
+        borderRadius: 8,
+        padding: '5px 10px',
+        color: N.gold,
+        fontSize: 12,
+        fontWeight: 700,
+        cursor: 'pointer'
+      }
+    }, "\u2713")) : /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: stockColor(st),
+        fontWeight: 900,
+        fontSize: 24
+      }
+    }, st), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setEditStock(p.id);
+      },
+      style: {
+        background: N.surface2,
+        border: "1px solid ".concat(N.border),
+        borderRadius: 8,
+        padding: '6px 10px',
+        color: N.muted,
+        fontSize: 12,
+        cursor: 'pointer'
+      }
+    }, "\u270F\uFE0F"))));
+  })));
+}
+
+// ── AGENDA ESCOLAR ──────────────────────────────────────────────────
+var DISC_CORES = ['#7C3AED', '#2563EB', '#DC2626', '#D97706', '#16A34A', '#DB2777', '#0891B2', '#65A30D', '#9333EA', '#EA580C'];
+var ALUNOS_DEF = {
+  lucas: {
+    nome: 'Lucas',
+    emoji: '👦',
+    cor: '#F97316',
+    disciplinas: [{
+      id: 1,
+      nome: 'Deutsch',
+      prof: 'Herr Müller',
+      tel: '',
+      emoji: '📝',
+      cor: '#2563EB'
+    }, {
+      id: 2,
+      nome: 'Mathematik',
+      prof: 'Frau Schmidt',
+      tel: '',
+      emoji: '📐',
+      cor: '#DC2626'
+    }, {
+      id: 3,
+      nome: 'Sport',
+      prof: 'Herr Weber',
+      tel: '',
+      emoji: '⚽',
+      cor: '#D97706'
+    }, {
+      id: 4,
+      nome: 'Englisch',
+      prof: 'Frau Koch',
+      tel: '',
+      emoji: '🌍',
+      cor: '#7C3AED'
+    }, {
+      id: 5,
+      nome: 'Biologie',
+      prof: 'Frau Huber',
+      tel: '',
+      emoji: '🌿',
+      cor: '#16A34A'
+    }, {
+      id: 6,
+      nome: 'Geschichte',
+      prof: 'Herr Bauer',
+      tel: '',
+      emoji: '🏛',
+      cor: '#92400E'
+    }, {
+      id: 8,
+      nome: 'Informatik',
+      prof: 'Herr Klein',
+      tel: '',
+      emoji: '💻',
+      cor: '#0891B2'
+    }, {
+      id: 9,
+      nome: 'Français',
+      prof: 'Mme. Dupont',
+      tel: '',
+      emoji: '🗼',
+      cor: '#9333EA'
+    }, {
+      id: 10,
+      nome: 'Musik',
+      prof: 'Frau Wolf',
+      tel: '',
+      emoji: '🎵',
+      cor: '#DB2777'
+    }, {
+      id: 11,
+      nome: 'Bild. Gestalten',
+      prof: 'Herr Braun',
+      tel: '',
+      emoji: '🎨',
+      cor: '#EA580C'
+    }, {
+      id: 12,
+      nome: 'Geografie',
+      prof: 'Frau Schwarz',
+      tel: '',
+      emoji: '🗺',
+      cor: '#65A30D'
+    }, {
+      id: 13,
+      nome: 'WAH',
+      prof: 'Frau Fischer',
+      tel: '',
+      emoji: '🏠',
+      cor: '#D97706'
+    }],
+    horario: {
+      0: [{
+        discId: 1,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '213',
+        livre: false
+      }, {
+        discId: 2,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '114',
+        livre: false
+      }, {
+        discId: 3,
+        hi: '10:00',
+        hf: '11:30',
+        sala: 'Gym',
+        livre: false
+      }, {
+        discId: 4,
+        hi: '11:35',
+        hf: '12:25',
+        sala: '211',
+        livre: false
+      }],
+      1: [{
+        discId: 5,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '301',
+        livre: false
+      }, {
+        discId: 6,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '205',
+        livre: false
+      }, {
+        discId: 2,
+        hi: '10:00',
+        hf: '10:50',
+        sala: '114',
+        livre: false
+      }, {
+        discId: 8,
+        hi: '11:35',
+        hf: '12:25',
+        sala: 'Computer',
+        livre: false
+      }],
+      2: [{
+        discId: 9,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '210',
+        livre: false
+      }, {
+        discId: 1,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '213',
+        livre: false
+      }, {
+        discId: 2,
+        hi: '10:00',
+        hf: '10:50',
+        sala: '114',
+        livre: false
+      }],
+      3: [{
+        discId: 2,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '114',
+        livre: false
+      }, {
+        discId: 4,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '211',
+        livre: false
+      }, {
+        discId: 13,
+        hi: '10:00',
+        hf: '11:30',
+        sala: 'Küche',
+        livre: false
+      }],
+      4: [{
+        discId: 10,
+        hi: '07:45',
+        hf: '08:35',
+        sala: 'Musik',
+        livre: false
+      }, {
+        discId: 11,
+        hi: '08:40',
+        hf: '10:10',
+        sala: 'Atelier',
+        livre: false
+      }, {
+        discId: 12,
+        hi: '10:20',
+        hf: '11:10',
+        sala: '205',
+        livre: false
+      }]
+    },
+    notas: {
+      1: {
+        1: [5.5, 4.0, 5.0],
+        2: [4.5, 5.0]
+      },
+      2: {
+        1: [4.0, 4.5, 3.5],
+        2: [5.0, 4.0]
+      },
+      3: {
+        1: [5.0, 5.5],
+        2: [4.5]
+      },
+      4: {
+        1: [4.5, 4.0, 5.0],
+        2: [3.5, 4.5]
+      },
+      5: {
+        1: [5.0, 4.5],
+        2: [5.5, 5.0]
+      },
+      9: {
+        1: [3.5, 4.0],
+        2: [4.0]
+      },
+      12: {
+        1: [5.5, 5.0],
+        2: [5.0]
+      }
+    },
+    tpc: [{
+      id: 1,
+      discId: 1,
+      titulo: 'Aufsatz schreiben',
+      data: '2026-06-18',
+      feito: false
+    }, {
+      id: 2,
+      discId: 2,
+      titulo: 'Seite 42-44',
+      data: '2026-06-17',
+      feito: true
+    }, {
+      id: 3,
+      discId: 4,
+      titulo: 'Vocabulary Unit 5',
+      data: '2026-06-19',
+      feito: false
+    }]
+  },
+  liam: {
+    nome: 'Liam',
+    emoji: '👦',
+    cor: '#22C55E',
+    disciplinas: [{
+      id: 1,
+      nome: 'Deutsch',
+      prof: 'Frau Meyer',
+      tel: '',
+      emoji: '📝',
+      cor: '#2563EB'
+    }, {
+      id: 2,
+      nome: 'Mathematik',
+      prof: 'Herr Vogel',
+      tel: '',
+      emoji: '📐',
+      cor: '#DC2626'
+    }, {
+      id: 3,
+      nome: 'Sport',
+      prof: 'Herr Weber',
+      tel: '',
+      emoji: '⚽',
+      cor: '#D97706'
+    }, {
+      id: 4,
+      nome: 'Englisch',
+      prof: 'Frau Koch',
+      tel: '',
+      emoji: '🌍',
+      cor: '#7C3AED'
+    }, {
+      id: 5,
+      nome: 'Biologie',
+      prof: 'Frau Huber',
+      tel: '',
+      emoji: '🌿',
+      cor: '#16A34A'
+    }, {
+      id: 7,
+      nome: 'Zeichnen',
+      prof: 'Herr Braun',
+      tel: '',
+      emoji: '✏️',
+      cor: '#EA580C'
+    }, {
+      id: 8,
+      nome: 'Informatik',
+      prof: 'Herr Klein',
+      tel: '',
+      emoji: '💻',
+      cor: '#0891B2'
+    }],
+    horario: {
+      0: [{
+        discId: 1,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '108',
+        livre: false
+      }, {
+        discId: 2,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '102',
+        livre: false
+      }, {
+        discId: 3,
+        hi: '10:00',
+        hf: '11:30',
+        sala: 'Gym',
+        livre: false
+      }],
+      1: [{
+        discId: 4,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '110',
+        livre: false
+      }, {
+        discId: 5,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '201',
+        livre: false
+      }, {
+        discId: 8,
+        hi: '10:00',
+        hf: '10:50',
+        sala: 'Computer',
+        livre: false
+      }],
+      2: [{
+        discId: 1,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '108',
+        livre: false
+      }, {
+        discId: 2,
+        hi: '08:40',
+        hf: '09:30',
+        sala: '102',
+        livre: false
+      }],
+      3: [{
+        discId: 2,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '102',
+        livre: false
+      }, {
+        discId: 7,
+        hi: '08:40',
+        hf: '10:10',
+        sala: 'Atelier',
+        livre: false
+      }],
+      4: [{
+        discId: 4,
+        hi: '07:45',
+        hf: '08:35',
+        sala: '110',
+        livre: false
+      }, {
+        discId: 3,
+        hi: '08:40',
+        hf: '10:10',
+        sala: 'Gym',
+        livre: false
+      }]
+    },
+    notas: {
+      1: {
+        1: [4.5, 5.0],
+        2: [4.0]
+      },
+      2: {
+        1: [3.5, 4.0],
+        2: [4.5]
+      },
+      3: {
+        1: [5.0],
+        2: [5.5]
+      },
+      4: {
+        1: [4.0, 4.5],
+        2: [3.5]
+      }
+    },
+    tpc: [{
+      id: 1,
+      discId: 1,
+      titulo: 'Text lesen S.30',
+      data: '2026-06-17',
+      feito: false
+    }, {
+      id: 2,
+      discId: 2,
+      titulo: 'Aufgaben 5-8',
+      data: '2026-06-18',
+      feito: false
+    }]
+  }
+};
+function EscolarApp(_ref28) {
+  var onBack = _ref28.onBack,
+    _ref28$sharedDias = _ref28.sharedDias,
+    sharedDias = _ref28$sharedDias === void 0 ? [] : _ref28$sharedDias,
+    _ref28$addSharedDia = _ref28.addSharedDia,
+    addSharedDia = _ref28$addSharedDia === void 0 ? function () {} : _ref28$addSharedDia,
+    _ref28$activeUser = _ref28.activeUser,
+    activeUser = _ref28$activeUser === void 0 ? 'patricio' : _ref28$activeUser;
+  var isAdmin = activeUser === 'patricio';
+  var defaultAluno = activeUser === 'liam' ? 'liam' : 'lucas';
+  var _useState119 = (0, _react.useState)(defaultAluno),
+    _useState120 = _slicedToArray(_useState119, 2),
+    alunoKey = _useState120[0],
+    setAlunoKey = _useState120[1];
+  var _useState121 = (0, _react.useState)('horario'),
+    _useState122 = _slicedToArray(_useState121, 2),
+    tab = _useState122[0],
+    setTab = _useState122[1];
+  var _useState123 = (0, _react.useState)(0),
+    _useState124 = _slicedToArray(_useState123, 2),
+    dayIdx = _useState124[0],
+    setDayIdx = _useState124[1];
+  var _useState125 = (0, _react.useState)(1),
+    _useState126 = _slicedToArray(_useState125, 2),
+    semestre = _useState126[0],
+    setSemestre = _useState126[1];
+  var _useState127 = (0, _react.useState)(false),
+    _useState128 = _slicedToArray(_useState127, 2),
+    showAddDisc = _useState128[0],
+    setShowAddDisc = _useState128[1];
+  var _useState129 = (0, _react.useState)(null),
+    _useState130 = _slicedToArray(_useState129, 2),
+    showAddNota = _useState130[0],
+    setShowAddNota = _useState130[1];
+  var _useState131 = (0, _react.useState)(false),
+    _useState132 = _slicedToArray(_useState131, 2),
+    showAddTPC = _useState132[0],
+    setShowAddTPC = _useState132[1];
+  var _useState133 = (0, _react.useState)(null),
+    _useState134 = _slicedToArray(_useState133, 2),
+    editAula = _useState134[0],
+    setEditAula = _useState134[1];
+  var _useState135 = (0, _react.useState)(new Date(2026, 5, 1)),
+    _useState136 = _slicedToArray(_useState135, 2),
+    calMonth = _useState136[0],
+    setCalMonth = _useState136[1];
+  var _useState137 = (0, _react.useState)(null),
+    _useState138 = _slicedToArray(_useState137, 2),
+    selDay = _useState138[0],
+    setSelDay = _useState138[1];
+  var _useState139 = (0, _react.useState)(''),
+    _useState140 = _slicedToArray(_useState139, 2),
+    novaNotaVal = _useState140[0],
+    setNovaNotaVal = _useState140[1];
+  var _useState141 = (0, _react.useState)({
+      nome: '',
+      prof: '',
+      tel: '',
+      emoji: '📚',
+      cor: '#7C3AED'
+    }),
+    _useState142 = _slicedToArray(_useState141, 2),
+    novaDisc = _useState142[0],
+    setNovaDisc = _useState142[1];
+  var _useState143 = (0, _react.useState)({
+      discId: 1,
+      titulo: '',
+      data: '',
+      feito: false
+    }),
+    _useState144 = _slicedToArray(_useState143, 2),
+    novaTPC = _useState144[0],
+    setNovaTPC = _useState144[1];
+  var _useState145 = (0, _react.useState)([]),
+    _useState146 = _slicedToArray(_useState145, 2),
+    escolarToasts = _useState146[0],
+    setEscolarToasts = _useState146[1];
+  var addEscolarToast = function addEscolarToast(msg) {
+    var sub = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+    var id = Date.now() + Math.random();
+    setEscolarToasts(function (p) {
+      return [].concat(_toConsumableArray(p), [{
+        id: id,
+        msg: msg,
+        sub: sub
+      }]);
+    });
+    setTimeout(function () {
+      return setEscolarToasts(function (p) {
+        return p.filter(function (t) {
+          return t.id !== id;
+        });
+      });
+    }, 4000);
+  };
+  // Check TPC on load
+  (0, _react.useEffect)(function () {
+    var today = '2026-06-15';
+    var tomorrow = '2026-06-16';
+    var urgentes = aluno.tpc.filter(function (t) {
+      return !t.feito && (t.data === today || t.data === tomorrow);
+    });
+    urgentes.forEach(function (t) {
+      var d = getDisc(t.discId);
+      addEscolarToast(t.data === today ? "\u26A0\uFE0F TPC para hoje! ".concat(d.nome) : "\uD83D\uDD14 TPC amanh\xE3! ".concat(d.nome), t.titulo);
+    });
+  }, [alunoKey]);
+
+  // Per-student state
+  var _useState147 = (0, _react.useState)(ALUNOS_DEF),
+    _useState148 = _slicedToArray(_useState147, 2),
+    alunosData = _useState148[0],
+    setAlunosData = _useState148[1];
+  var aluno = alunosData[alunoKey];
+  var setAluno = function setAluno(fn) {
+    return setAlunosData(function (p) {
+      return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, alunoKey, fn(p[alunoKey])));
+    });
+  };
+  var dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'];
+  var getDia = function getDia(i) {
+    var d = new Date(2026, 5, 15);
+    d.setDate(d.getDate() + i);
+    return d.getDate();
+  };
+  var getDisc = function getDisc(id) {
+    return aluno.disciplinas.find(function (d) {
+      return d.id === id;
+    }) || {
+      nome: 'Livre',
+      emoji: '⏸',
+      cor: '#444',
+      prof: '',
+      tel: ''
+    };
+  };
+  var media = function media(discId, sem) {
+    var ns = (aluno.notas[discId] || {})[sem] || [];
+    if (!ns.length) return null;
+    return (ns.reduce(function (s, n) {
+      return s + n;
+    }, 0) / ns.length).toFixed(1);
+  };
+  var calcMediaGeral = function calcMediaGeral(sem) {
+    var medias = aluno.disciplinas.map(function (d) {
+      return {
+        nome: d.nome,
+        cor: d.cor,
+        m: parseFloat(media(d.id, sem))
+      };
+    }).filter(function (d) {
+      return !isNaN(d.m);
+    }).sort(function (a, b) {
+      return a.m - b.m;
+    }).slice(0, 5);
+    if (!medias.length) return null;
+    return {
+      valor: (medias.reduce(function (s, d) {
+        return s + d.m;
+      }, 0) / medias.length).toFixed(2),
+      discs: medias
+    };
+  };
+  var notaColor = function notaColor(n) {
+    if (!n) return '#666';
+    var v = parseFloat(n);
+    return v >= 5 ? '#16A34A' : v >= 4 ? '#D97706' : '#DC2626';
+  };
+  var tpcPendentes = aluno.tpc.filter(function (t) {
+    return !t.feito;
+  }).length;
+  var E = {
+    bg: '#09090E',
+    surface: '#131319',
+    surface2: '#1C1C26',
+    purple: '#7C3AED',
+    purpleL: '#9F67FF',
+    text: '#F0EEE8',
+    muted: '#7A7A90',
+    border: 'rgba(124,58,237,0.2)',
+    green: '#16A34A',
+    red: '#DC2626',
+    gold: '#C9A847',
+    orange: '#F97316'
+  };
+  var ECard = function ECard(_ref29) {
+    var children = _ref29.children,
+      _ref29$style = _ref29.style,
+      style = _ref29$style === void 0 ? {} : _ref29$style;
+    return /*#__PURE__*/React.createElement("div", {
+      style: _objectSpread({
+        background: E.surface,
+        borderRadius: 16,
+        border: "1px solid ".concat(E.border)
+      }, style)
+    }, children);
+  };
+
+  // Calendar helpers
+  var yr = calMonth.getFullYear(),
+    mo = calMonth.getMonth();
+  var daysInMo = new Date(yr, mo + 1, 0).getDate();
+  var firstDow = (new Date(yr, mo, 1).getDay() + 6) % 7;
+  var getDayTPC = function getDayTPC(d) {
+    var dStr = "".concat(yr, "-").concat(String(mo + 1).padStart(2, '0'), "-").concat(String(d).padStart(2, '0'));
+    return aluno.tpc.filter(function (t) {
+      return t.data === dStr;
+    });
+  };
+  var getDayShared = function getDayShared(d) {
+    var dStr = "".concat(yr, "-").concat(String(mo + 1).padStart(2, '0'), "-").concat(String(d).padStart(2, '0'));
+    return sharedDias.filter(function (s) {
+      return s.date === dStr;
+    });
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: '100vh',
+      background: E.bg,
+      fontFamily: "'Inter',system-ui,sans-serif",
+      color: E.text,
+      paddingBottom: 90
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: E.surface,
+      borderBottom: "1px solid ".concat(E.border),
+      padding: '10px 14px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      position: 'sticky',
+      top: 0,
+      zIndex: 200
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: onBack,
+    style: {
+      background: 'none',
+      border: 'none',
+      color: E.purple,
+      fontSize: 30,
+      cursor: 'pointer',
+      padding: 0,
+      lineHeight: 1,
       width: 40,
       height: 40,
-      borderRadius: 12,
-      background: "linear-gradient(135deg,#A855F7,#7C3AED)",
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
     }
+  }, "\u2039"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 900,
+      fontSize: 16
+    }
+  }, "\uD83D\uDCDA Agenda Escolar")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "".concat(E.gold, "22"),
+      border: "1px solid ".concat(E.gold, "44"),
+      borderRadius: 8,
+      padding: '4px 10px'
+    }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 20
-    }
-  }, "\uD83D\uDC66")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    style: {
+      fontSize: 11,
       fontWeight: 800,
-      fontSize: 15,
-      color: T.text
+      color: E.gold
     }
-  }, "Lucas Carvalho"), /*#__PURE__*/React.createElement("p", {
+  }, "SEK P"))), /*#__PURE__*/React.createElement("div", {
     style: {
-      color: T.muted,
-      fontSize: 12
+      padding: '10px 14px',
+      display: 'flex',
+      gap: 10,
+      alignItems: 'center'
     }
-  }, "SEK P \xB7 Grenchen")), /*#__PURE__*/React.createElement("div", {
+  }, (isAdmin ? ['lucas', 'liam'] : [alunoKey]).map(function (k) {
+    var al = alunosData[k];
+    var isSel = alunoKey === k;
+    return /*#__PURE__*/React.createElement("button", {
+      key: k,
+      onClick: function onClick() {
+        return setAlunoKey(k);
+      },
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '8px 14px',
+        background: isSel ? "".concat(al.cor, "20") : E.surface,
+        border: "2px solid ".concat(isSel ? al.cor : E.border),
+        borderRadius: 14,
+        cursor: 'pointer',
+        flex: isAdmin ? 1 : 'auto'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 32,
+        height: 32,
+        borderRadius: 10,
+        background: "".concat(al.cor, "30"),
+        border: "2px solid ".concat(al.cor, "55"),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 18
+      }
+    }, al.emoji)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'left'
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 800,
+        fontSize: 13,
+        color: isSel ? al.cor : E.text
+      }
+    }, al.nome), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 10,
+        color: E.muted
+      }
+    }, "SEK P \xB7 Grenchen")), isSel && /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 7,
+        height: 7,
+        borderRadius: '50%',
+        background: E.green,
+        marginLeft: 'auto'
+      }
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginLeft: 'auto',
       display: 'flex',
       alignItems: 'center',
       gap: 5,
-      background: 'rgba(34,197,94,0.1)',
-      border: '1px solid rgba(34,197,94,0.3)',
+      background: 'rgba(22,163,74,0.1)',
+      border: '1px solid rgba(22,163,74,0.3)',
       borderRadius: 10,
-      padding: '4px 10px'
+      padding: '5px 10px',
+      flexShrink: 0
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       width: 6,
       height: 6,
-      background: T.green,
+      background: E.green,
       borderRadius: '50%'
     }
   }), /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 11,
-      color: T.green,
+      fontSize: 10,
+      color: E.green,
       fontWeight: 700
     }
   }, "Online"))), /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: '0 16px 12px',
-      display: 'flex',
-      gap: 6
+      margin: '0 14px 12px',
+      background: E.surface,
+      borderRadius: 14,
+      padding: 3,
+      border: "1px solid ".concat(E.border),
+      display: 'flex'
     }
-  }, days.map(function (d, i) {
+  }, [{
+    v: 'horario',
+    l: '📅'
+  }, {
+    v: 'cal',
+    l: '🗓'
+  }, {
+    v: 'tpc',
+    l: "\uD83D\uDCCB".concat(tpcPendentes > 0 ? " ".concat(tpcPendentes) : '')
+  }, {
+    v: 'notas',
+    l: '📊'
+  }, {
+    v: 'graficos',
+    l: '📈'
+  }].map(function (t) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: t.v,
+      onClick: function onClick() {
+        return setTab(t.v);
+      },
+      style: {
+        flex: 1,
+        background: tab === t.v ? "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")") : 'none',
+        border: 'none',
+        borderRadius: 11,
+        padding: '8px 4px',
+        color: tab === t.v ? '#fff' : E.muted,
+        fontSize: 16,
+        fontWeight: 800,
+        cursor: 'pointer',
+        position: 'relative'
+      }
+    }, t.l);
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'fixed',
+      top: 130,
+      left: 14,
+      right: 14,
+      zIndex: 999,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 6,
+      pointerEvents: 'none'
+    }
+  }, escolarToasts.map(function (t) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: t.id,
+      style: {
+        background: '#1A0A2E',
+        border: "2px solid ".concat(E.purple),
+        borderRadius: 14,
+        padding: '10px 14px',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+        pointerEvents: 'auto'
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 800,
+        fontSize: 13,
+        color: '#fff'
+      }
+    }, t.msg), t.sub && /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: 'rgba(255,255,255,0.6)',
+        fontSize: 11,
+        marginTop: 2
+      }
+    }, t.sub));
+  })), tab === 'horario' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '0 14px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 5,
+      marginBottom: 12
+    }
+  }, dias.map(function (d, i) {
+    var isSel = i === dayIdx;
     return /*#__PURE__*/React.createElement("button", {
       key: d,
       onClick: function onClick() {
@@ -7150,94 +8361,63 @@ function EscolarApp(_ref27) {
       },
       style: {
         flex: 1,
-        background: dayIdx === i ? '#A855F7' : T.surface,
-        border: "1px solid ".concat(dayIdx === i ? '#A855F7' : T.goldBrd),
-        borderRadius: 12,
-        padding: '8px 4px',
-        cursor: 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 2
+        background: isSel ? "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")") : E.surface,
+        border: "1px solid ".concat(isSel ? E.purple : E.border),
+        borderRadius: 13,
+        padding: '8px 3px',
+        cursor: 'pointer'
       }
-    }, /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("p", {
       style: {
-        fontSize: 10,
+        fontSize: 9,
         fontWeight: 700,
-        color: dayIdx === i ? '#fff' : T.muted
+        color: isSel ? '#fff' : E.muted
       }
-    }, d), /*#__PURE__*/React.createElement("span", {
+    }, d), /*#__PURE__*/React.createElement("p", {
       style: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: 900,
-        color: dayIdx === i ? '#fff' : T.text
+        color: isSel ? '#fff' : E.text,
+        marginTop: 1
       }
-    }, 10 + i));
-  })), /*#__PURE__*/React.createElement("div", {
+    }, getDia(i)));
+  })), /*#__PURE__*/React.createElement("p", {
     style: {
-      padding: '0 16px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: T.muted,
+      color: E.muted,
       fontSize: 10,
       fontWeight: 700,
       textTransform: 'uppercase',
-      letterSpacing: '0.6px',
-      marginBottom: 4
+      letterSpacing: '0.8px',
+      marginBottom: 10
     }
-  }, schedule[dayIdx].length, " aulas"), sharedDias.filter(function (d) {
-    var dStr = "2026-06-".concat(String(10 + dayIdx).padStart(2, '0'));
-    return d.date === dStr;
-  }).map(function (d, i) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: 'sd' + i,
-      style: {
-        background: d.tipo === 'feriado' ? 'rgba(168,85,247,0.1)' : d.tipo === 'ferias' ? 'rgba(59,130,246,0.1)' : 'rgba(34,197,94,0.1)',
-        border: "1px solid ".concat(d.tipo === 'feriado' ? 'rgba(168,85,247,0.3)' : d.tipo === 'ferias' ? 'rgba(59,130,246,0.3)' : 'rgba(34,197,94,0.3)'),
-        borderRadius: 14,
-        padding: '12px 16px',
-        marginBottom: 8,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 12
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 22
-      }
-    }, d.tipo === 'feriado' ? '🎌' : d.tipo === 'ferias' ? '🏖' : '✅'), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-      style: {
-        fontWeight: 700,
-        fontSize: 14,
-        color: T.text
-      }
-    }, d.tipo === 'feriado' ? 'Feriado - Sem aulas' : d.tipo === 'ferias' ? 'Férias escolares' : 'Dia livre'), d.nome && /*#__PURE__*/React.createElement("p", {
-      style: {
-        color: T.muted,
-        fontSize: 12,
-        marginTop: 1
-      }
-    }, d.nome)));
-  }), schedule[dayIdx].map(function (s, i) {
-    return /*#__PURE__*/React.createElement(Card, {
+  }, (aluno.horario[dayIdx] || []).length, " aulas"), (aluno.horario[dayIdx] || []).map(function (aula, i) {
+    var disc = getDisc(aula.discId);
+    var isEdit = editAula === "".concat(alunoKey, "-").concat(dayIdx, "-").concat(i);
+    return /*#__PURE__*/React.createElement(ECard, {
       key: i,
       style: {
-        padding: '13px 16px',
-        borderLeft: "3px solid ".concat(s.c),
+        marginBottom: 9,
+        borderLeft: "4px solid ".concat(aula.livre ? '#444' : disc.cor),
+        overflow: 'hidden'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        return setEditAula(isEdit ? null : "".concat(alunoKey, "-").concat(dayIdx, "-").concat(i));
+      },
+      style: {
+        padding: '12px 14px',
+        cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        gap: 12
+        gap: 10
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
-        width: 40,
-        height: 40,
-        borderRadius: 12,
-        background: T.surface2,
+        width: 42,
+        height: 42,
+        borderRadius: 13,
+        background: "".concat(aula.livre ? '#333' : disc.cor, "22"),
+        border: "1px solid ".concat(aula.livre ? '#444' : disc.cor, "44"),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -7247,7 +8427,7 @@ function EscolarApp(_ref27) {
       style: {
         fontSize: 20
       }
-    }, s.emoji)), /*#__PURE__*/React.createElement("div", {
+    }, aula.livre ? '⏸' : disc.emoji)), /*#__PURE__*/React.createElement("div", {
       style: {
         flex: 1
       }
@@ -7255,15 +8435,1529 @@ function EscolarApp(_ref27) {
       style: {
         fontWeight: 800,
         fontSize: 14,
-        color: T.text
+        color: aula.livre ? E.muted : E.text
       }
-    }, s.t), /*#__PURE__*/React.createElement("p", {
+    }, aula.livre ? 'Hora livre' : disc.nome), /*#__PURE__*/React.createElement("p", {
       style: {
-        color: T.muted,
-        fontSize: 12,
+        color: E.muted,
+        fontSize: 11,
         marginTop: 2
       }
-    }, "\uD83D\uDD50 ", s.h, " \xB7 \uD83C\uDFEB Sala ", s.r)));
+    }, "\uD83D\uDD50 ", aula.hi, "\u2013", aula.hf, " \xB7 \uD83C\uDFEB Sala ", aula.sala), !aula.livre && disc.prof && /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        marginTop: 1
+      }
+    }, "\uD83D\uDC64 ", disc.prof, disc.tel ? " \xB7 \uD83D\uDCDE ".concat(disc.tel) : '')), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: E.purple,
+        fontSize: 16
+      }
+    }, "\u203A")), isEdit && /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderTop: "1px solid ".concat(E.border),
+        padding: '10px 14px'
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setAluno(function (al) {
+          var h = _objectSpread({}, al.horario);
+          var d = _toConsumableArray(h[dayIdx]);
+          d[i] = _objectSpread(_objectSpread({}, d[i]), {}, {
+            livre: !d[i].livre
+          });
+          return _objectSpread(_objectSpread({}, al), {}, {
+            horario: _objectSpread(_objectSpread({}, h), {}, _defineProperty({}, dayIdx, d))
+          });
+        });
+      },
+      style: {
+        width: '100%',
+        background: aula.livre ? "".concat(E.purple, "22") : 'rgba(68,68,68,0.2)',
+        border: "1px solid ".concat(aula.livre ? E.purple : '#444'),
+        borderRadius: 10,
+        padding: '8px',
+        color: aula.livre ? E.purple : E.muted,
+        fontSize: 12,
+        fontWeight: 700,
+        cursor: 'pointer',
+        marginBottom: 8
+      }
+    }, aula.livre ? '🔔 Pôr aula' : '⏸ Marcar como livre'), !aula.livre && /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 4
+      }
+    }, "Sala"), /*#__PURE__*/React.createElement("input", {
+      value: aula.sala,
+      onChange: function onChange(e) {
+        return setAluno(function (al) {
+          var h = _objectSpread({}, al.horario);
+          var d = _toConsumableArray(h[dayIdx]);
+          d[i] = _objectSpread(_objectSpread({}, d[i]), {}, {
+            sala: e.target.value
+          });
+          return _objectSpread(_objectSpread({}, al), {}, {
+            horario: _objectSpread(_objectSpread({}, h), {}, _defineProperty({}, dayIdx, d))
+          });
+        });
+      },
+      style: {
+        width: '100%',
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 10px',
+        color: E.text,
+        fontSize: 13,
+        outline: 'none',
+        boxSizing: 'border-box'
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 4
+      }
+    }, "Professor"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.text,
+        fontSize: 12,
+        padding: '8px 10px',
+        background: E.surface2,
+        borderRadius: 9
+      }
+    }, disc.prof || '—')))));
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setShowAddDisc(function (v) {
+        return !v;
+      });
+    },
+    style: {
+      width: '100%',
+      background: 'none',
+      border: "1px dashed ".concat(E.purple, "55"),
+      borderRadius: 13,
+      padding: '11px',
+      color: E.purple,
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: 'pointer',
+      marginTop: 4
+    }
+  }, showAddDisc ? '✕ Fechar' : '＋ Gerir disciplinas'), showAddDisc && /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      marginTop: 10,
+      padding: '14px',
+      border: "1px solid ".concat(E.purple)
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.purple,
+      fontWeight: 800,
+      fontSize: 13,
+      marginBottom: 10
+    }
+  }, "Nova disciplina"), [{
+    l: 'Nome',
+    k: 'nome',
+    ph: 'Ex: Physik'
+  }, {
+    l: 'Professor',
+    k: 'prof',
+    ph: 'Ex: Herr Müller'
+  }, {
+    l: 'Tel.',
+    k: 'tel',
+    ph: 'Opcional'
+  }].map(function (f) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: f.k,
+      style: {
+        marginBottom: 7
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 3
+      }
+    }, f.l), /*#__PURE__*/React.createElement("input", {
+      value: novaDisc[f.k],
+      onChange: function onChange(e) {
+        return setNovaDisc(function (p) {
+          return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, f.k, e.target.value));
+        });
+      },
+      placeholder: f.ph,
+      style: {
+        width: '100%',
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 11px',
+        color: E.text,
+        fontSize: 13,
+        outline: 'none',
+        boxSizing: 'border-box'
+      }
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 5,
+      marginBottom: 10,
+      flexWrap: 'wrap'
+    }
+  }, DISC_CORES.map(function (c) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: c,
+      onClick: function onClick() {
+        return setNovaDisc(function (p) {
+          return _objectSpread(_objectSpread({}, p), {}, {
+            cor: c
+          });
+        });
+      },
+      style: {
+        width: 26,
+        height: 26,
+        borderRadius: '50%',
+        background: c,
+        cursor: 'pointer',
+        border: novaDisc.cor === c ? '3px solid #fff' : '3px solid transparent'
+      }
+    });
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      if (!novaDisc.nome.trim()) return;
+      var id = Date.now();
+      setAluno(function (al) {
+        return _objectSpread(_objectSpread({}, al), {}, {
+          disciplinas: [].concat(_toConsumableArray(al.disciplinas), [_objectSpread({
+            id: id
+          }, novaDisc)])
+        });
+      });
+      setNovaDisc({
+        nome: '',
+        prof: '',
+        tel: '',
+        emoji: '📚',
+        cor: '#7C3AED'
+      });
+    },
+    style: {
+      width: '100%',
+      background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+      border: 'none',
+      borderRadius: 11,
+      padding: '10px',
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\u2713 Adicionar"))), tab === 'cal' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '0 14px'
+    }
+  }, /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      padding: '14px',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setCalMonth(function (m) {
+        var d = new Date(m);
+        d.setMonth(d.getMonth() - 1);
+        return d;
+      });
+    },
+    style: {
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      width: 32,
+      height: 32,
+      color: E.purple,
+      fontSize: 18,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, "\u2039"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontWeight: 800,
+      fontSize: 15,
+      color: E.text
+    }
+  }, calMonth.toLocaleDateString('pt-PT', {
+    month: 'long',
+    year: 'numeric'
+  }).replace(/^\w/, function (c) {
+    return c.toUpperCase();
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setCalMonth(function (m) {
+        var d = new Date(m);
+        d.setMonth(d.getMonth() + 1);
+        return d;
+      });
+    },
+    style: {
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      width: 32,
+      height: 32,
+      color: E.purple,
+      fontSize: 18,
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, "\u203A")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7,1fr)',
+      gap: 2,
+      marginBottom: 5
+    }
+  }, ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map(function (d, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        textAlign: 'center',
+        fontSize: 10,
+        fontWeight: 700,
+        color: E.muted,
+        padding: '2px 0'
+      }
+    }, d);
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7,1fr)',
+      gap: 2
+    }
+  }, Array.from({
+    length: firstDow
+  }).map(function (_, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: 'e' + i
+    });
+  }), Array.from({
+    length: daysInMo
+  }).map(function (_, i) {
+    var d = i + 1;
+    var tpcs = getDayTPC(d);
+    var shared = getDayShared(d);
+    var isToday = "".concat(yr, "-").concat(String(mo + 1).padStart(2, '0'), "-").concat(String(d).padStart(2, '0')) === '2026-06-15';
+    var isSel = selDay === d;
+    var hasTPC = tpcs.length > 0;
+    var hasShared = shared.length > 0;
+    return /*#__PURE__*/React.createElement("div", {
+      key: d,
+      onClick: function onClick() {
+        return setSelDay(isSel ? null : d);
+      },
+      style: {
+        textAlign: 'center',
+        padding: '4px 1px',
+        borderRadius: 8,
+        cursor: 'pointer',
+        background: isSel ? E.purple : isToday ? "".concat(E.purple, "30") : 'transparent',
+        border: hasTPC ? "1px solid ".concat(E.orange, "44") : hasShared ? "1px solid ".concat(E.gold, "33") : '1px solid transparent',
+        minHeight: 36,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 1
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: isSel || isToday ? 800 : 400,
+        color: isSel ? '#fff' : isToday ? E.purple : E.text
+      }
+    }, d), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 1
+      }
+    }, hasTPC && /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 4,
+        height: 4,
+        borderRadius: '50%',
+        background: isSel ? '#fff' : E.orange
+      }
+    }), hasShared && /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 4,
+        height: 4,
+        borderRadius: '50%',
+        background: isSel ? '#fff' : E.gold
+      }
+    })));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 12,
+      marginBottom: 10,
+      padding: '8px 12px',
+      background: E.surface,
+      borderRadius: 10,
+      border: "1px solid ".concat(E.border)
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 5
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 8,
+      height: 8,
+      borderRadius: '50%',
+      background: E.orange
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: E.muted
+    }
+  }, "TPC")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 5
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 8,
+      height: 8,
+      borderRadius: '50%',
+      background: E.gold
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 10,
+      color: E.muted
+    }
+  }, "Dia livre"))), selDay && function () {
+    var tpcs = getDayTPC(selDay);
+    var shared = getDayShared(selDay);
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        letterSpacing: '0.6px',
+        marginBottom: 8
+      }
+    }, selDay, " ", calMonth.toLocaleDateString('pt-PT', {
+      month: 'long'
+    })), tpcs.map(function (t, i) {
+      var d = getDisc(t.discId);
+      return /*#__PURE__*/React.createElement(ECard, {
+        key: i,
+        style: {
+          padding: '12px 14px',
+          marginBottom: 8,
+          borderLeft: "3px solid ".concat(d.cor),
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 18
+        }
+      }, d.emoji), /*#__PURE__*/React.createElement("div", {
+        style: {
+          flex: 1
+        }
+      }, /*#__PURE__*/React.createElement("p", {
+        style: {
+          fontWeight: 700,
+          fontSize: 13,
+          color: E.text
+        }
+      }, t.titulo), /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: E.muted,
+          fontSize: 11,
+          marginTop: 1
+        }
+      }, d.nome)), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return setAluno(function (al) {
+            return _objectSpread(_objectSpread({}, al), {}, {
+              tpc: al.tpc.map(function (x) {
+                return x.id === t.id ? _objectSpread(_objectSpread({}, x), {}, {
+                  feito: !x.feito
+                }) : x;
+              })
+            });
+          });
+        },
+        style: {
+          background: t.feito ? 'rgba(22,163,74,0.15)' : 'transparent',
+          border: "1px solid ".concat(t.feito ? E.green : E.border),
+          borderRadius: 8,
+          padding: '5px 8px',
+          color: t.feito ? E.green : E.muted,
+          fontSize: 12,
+          cursor: 'pointer',
+          fontWeight: 700
+        }
+      }, t.feito ? '✓ Feito' : 'Fazer'));
+    }), shared.map(function (s, i) {
+      return /*#__PURE__*/React.createElement(ECard, {
+        key: 's' + i,
+        style: {
+          padding: '10px 14px',
+          marginBottom: 8,
+          borderLeft: "3px solid ".concat(E.gold),
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 18
+        }
+      }, s.tipo === 'feriado' ? '🎌' : s.tipo === 'ferias' ? '🏖' : '✅'), /*#__PURE__*/React.createElement("p", {
+        style: {
+          fontWeight: 700,
+          fontSize: 13,
+          color: E.text
+        }
+      }, s.tipo === 'feriado' ? 'Feriado' : s.tipo === 'ferias' ? 'Férias' : 'Dia livre'));
+    }), tpcs.length === 0 && shared.length === 0 && /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 13,
+        textAlign: 'center',
+        padding: '16px'
+      }
+    }, "Sem eventos neste dia"));
+  }()), tab === 'tpc' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '0 14px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      letterSpacing: '0.6px'
+    }
+  }, tpcPendentes, " pendente(s) \xB7 ", aluno.tpc.filter(function (t) {
+    return t.feito;
+  }).length, " feito(s)"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setShowAddTPC(function (v) {
+        return !v;
+      });
+    },
+    style: {
+      background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+      border: 'none',
+      borderRadius: 10,
+      padding: '6px 14px',
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\uFF0B TPC")), showAddTPC && /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      padding: '14px',
+      marginBottom: 12,
+      border: "1px solid ".concat(E.purple)
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.purple,
+      fontWeight: 800,
+      fontSize: 13,
+      marginBottom: 10
+    }
+  }, "Novo trabalho de casa"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Disciplina"), /*#__PURE__*/React.createElement("select", {
+    value: novaTPC.discId,
+    onChange: function onChange(e) {
+      return setNovaTPC(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          discId: parseInt(e.target.value)
+        });
+      });
+    },
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '9px 11px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none',
+      marginBottom: 8
+    }
+  }, aluno.disciplinas.map(function (d) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: d.id,
+      value: d.id
+    }, d.emoji, " ", d.nome);
+  })), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Descri\xE7\xE3o"), /*#__PURE__*/React.createElement("input", {
+    value: novaTPC.titulo,
+    onChange: function onChange(e) {
+      return setNovaTPC(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          titulo: e.target.value
+        });
+      });
+    },
+    placeholder: "Ex: Seite 42-44",
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '9px 11px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none',
+      marginBottom: 8,
+      boxSizing: 'border-box'
+    }
+  }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Para quando"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: novaTPC.data,
+    onChange: function onChange(e) {
+      return setNovaTPC(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          data: e.target.value
+        });
+      });
+    },
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '9px 11px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none',
+      marginBottom: 12,
+      boxSizing: 'border-box'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setShowAddTPC(false);
+    },
+    style: {
+      flex: 1,
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 10,
+      padding: '10px',
+      color: E.muted,
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: 'pointer'
+    }
+  }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      var _aluno$disciplinas$;
+      if (!novaTPC.titulo.trim() || !novaTPC.data) return;
+      setAluno(function (al) {
+        return _objectSpread(_objectSpread({}, al), {}, {
+          tpc: [].concat(_toConsumableArray(al.tpc), [_objectSpread({
+            id: Date.now()
+          }, novaTPC)])
+        });
+      });
+      setNovaTPC({
+        discId: ((_aluno$disciplinas$ = aluno.disciplinas[0]) === null || _aluno$disciplinas$ === void 0 ? void 0 : _aluno$disciplinas$.id) || 1,
+        titulo: '',
+        data: '',
+        feito: false
+      });
+      setShowAddTPC(false);
+    },
+    style: {
+      flex: 2,
+      background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+      border: 'none',
+      borderRadius: 10,
+      padding: '10px',
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\u2713 Guardar"))), aluno.tpc.filter(function (t) {
+    return !t.feito;
+  }).map(function (t) {
+    var d = getDisc(t.discId);
+    var overdue = t.data && t.data < '2026-06-15';
+    return /*#__PURE__*/React.createElement(ECard, {
+      key: t.id,
+      style: {
+        marginBottom: 8,
+        borderLeft: "3px solid ".concat(overdue ? E.red : d.cor)
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: '12px 14px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 20
+      }
+    }, d.emoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 700,
+        fontSize: 14,
+        color: E.text
+      }
+    }, t.titulo), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 11,
+        marginTop: 1
+      }
+    }, d.nome, t.data ? " \xB7 \uD83D\uDCC5 ".concat(t.data) : ''), overdue && /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.red,
+        fontSize: 10,
+        fontWeight: 700,
+        marginTop: 2
+      }
+    }, "\u26A0 Em atraso!")), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setAluno(function (al) {
+          return _objectSpread(_objectSpread({}, al), {}, {
+            tpc: al.tpc.map(function (x) {
+              return x.id === t.id ? _objectSpread(_objectSpread({}, x), {}, {
+                feito: true
+              }) : x;
+            })
+          });
+        });
+      },
+      style: {
+        background: "".concat(E.purple, "22"),
+        border: "1px solid ".concat(E.purple, "44"),
+        borderRadius: 10,
+        padding: '7px 12px',
+        color: E.purple,
+        fontSize: 12,
+        fontWeight: 700,
+        cursor: 'pointer'
+      }
+    }, "Feito \u2713")));
+  }), aluno.tpc.some(function (t) {
+    return t.feito;
+  }) && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      letterSpacing: '0.6px',
+      marginBottom: 8
+    }
+  }, "\u2705 Conclu\xEDdos"), aluno.tpc.filter(function (t) {
+    return t.feito;
+  }).map(function (t) {
+    var d = getDisc(t.discId);
+    return /*#__PURE__*/React.createElement(ECard, {
+      key: t.id,
+      style: {
+        marginBottom: 7,
+        opacity: 0.6
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: '10px 14px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 18
+      }
+    }, d.emoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 700,
+        fontSize: 13,
+        color: E.muted,
+        textDecoration: 'line-through'
+      }
+    }, t.titulo), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 11
+      }
+    }, d.nome)), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setAluno(function (al) {
+          return _objectSpread(_objectSpread({}, al), {}, {
+            tpc: al.tpc.filter(function (x) {
+              return x.id !== t.id;
+            })
+          });
+        });
+      },
+      style: {
+        background: 'none',
+        border: 'none',
+        color: E.muted,
+        fontSize: 16,
+        cursor: 'pointer'
+      }
+    }, "\uD83D\uDDD1")));
+  }))), tab === 'notas' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '0 14px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      marginBottom: 12
+    }
+  }, [1, 2].map(function (s) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: s,
+      onClick: function onClick() {
+        return setSemestre(s);
+      },
+      style: {
+        flex: 1,
+        background: semestre === s ? "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")") : E.surface,
+        border: "1px solid ".concat(semestre === s ? E.purple : E.border),
+        borderRadius: 12,
+        padding: '9px',
+        color: semestre === s ? '#fff' : E.muted,
+        fontSize: 13,
+        fontWeight: 800,
+        cursor: 'pointer'
+      }
+    }, s, "\xBA Semestre");
+  })), function () {
+    var mg = calcMediaGeral(semestre);
+    if (!mg) return null;
+    return /*#__PURE__*/React.createElement(ECard, {
+      style: {
+        padding: '14px',
+        marginBottom: 12,
+        border: "2px solid ".concat(E.purple)
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.purple,
+        fontWeight: 800,
+        fontSize: 11,
+        textTransform: 'uppercase',
+        letterSpacing: '0.8px',
+        marginBottom: 8
+      }
+    }, "\u2B50 M\xE9dia SEK P \u2014 5 mais baixas"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 38,
+        fontWeight: 900,
+        color: notaColor(mg.valor)
+      }
+    }, mg.valor), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, mg.discs.map(function (d, i) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 3
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: 5
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          width: 6,
+          height: 6,
+          borderRadius: '50%',
+          background: d.cor || E.purple
+        }
+      }), /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 11,
+          color: E.muted
+        }
+      }, d.nome)), /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 12,
+          fontWeight: 800,
+          color: notaColor(d.m)
+        }
+      }, d.m.toFixed(1)));
+    }))));
+  }(), aluno.disciplinas.map(function (disc) {
+    var ns = (aluno.notas[disc.id] || {})[semestre] || [];
+    var med = media(disc.id, semestre);
+    var isAddNota = showAddNota === "".concat(alunoKey, "-").concat(disc.id);
+    return /*#__PURE__*/React.createElement(ECard, {
+      key: disc.id,
+      style: {
+        marginBottom: 9,
+        borderLeft: "4px solid ".concat(disc.cor)
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: '12px 14px'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        marginBottom: ns.length || isAddNota ? 10 : 0
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 18
+      }
+    }, disc.emoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 800,
+        fontSize: 14,
+        color: E.text
+      }
+    }, disc.nome), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10
+      }
+    }, disc.prof)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'right'
+      }
+    }, med ? /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 22,
+        fontWeight: 900,
+        color: notaColor(med)
+      }
+    }, med) : /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 11,
+        color: E.muted
+      }
+    }, "\u2014"))), ns.length > 0 && /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 6,
+        flexWrap: 'wrap',
+        marginBottom: 8
+      }
+    }, ns.map(function (n, i) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: {
+          background: "".concat(notaColor(n), "15"),
+          border: "1px solid ".concat(notaColor(n), "44"),
+          borderRadius: 9,
+          padding: '4px 10px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 5
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 13,
+          fontWeight: 900,
+          color: notaColor(n)
+        }
+      }, n.toFixed(1)), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return setAluno(function (al) {
+            var _al$notas$disc$id;
+            var copy = _objectSpread(_objectSpread({}, al), {}, {
+              notas: _objectSpread(_objectSpread({}, al.notas), {}, _defineProperty({}, disc.id, _objectSpread(_objectSpread({}, al.notas[disc.id] || {}), {}, _defineProperty({}, semestre, _toConsumableArray(((_al$notas$disc$id = al.notas[disc.id]) === null || _al$notas$disc$id === void 0 ? void 0 : _al$notas$disc$id[semestre]) || [])))))
+            });
+            copy.notas[disc.id][semestre].splice(i, 1);
+            return copy;
+          });
+        },
+        style: {
+          background: 'none',
+          border: 'none',
+          color: E.muted,
+          fontSize: 10,
+          cursor: 'pointer',
+          padding: 0
+        }
+      }, "\u2715"));
+    })), isAddNota ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 7,
+        alignItems: 'center'
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      step: "0.5",
+      min: "1",
+      max: "6",
+      value: novaNotaVal,
+      onChange: function onChange(e) {
+        return setNovaNotaVal(e.target.value);
+      },
+      placeholder: "1.0\u20136.0",
+      style: {
+        flex: 1,
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 11px',
+        color: E.text,
+        fontSize: 14,
+        outline: 'none'
+      }
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        var v = parseFloat(novaNotaVal);
+        if (isNaN(v) || v < 1 || v > 6) return;
+        setAluno(function (al) {
+          var _al$notas$disc$id2;
+          return _objectSpread(_objectSpread({}, al), {}, {
+            notas: _objectSpread(_objectSpread({}, al.notas), {}, _defineProperty({}, disc.id, _objectSpread(_objectSpread({}, al.notas[disc.id] || {}), {}, _defineProperty({}, semestre, [].concat(_toConsumableArray(((_al$notas$disc$id2 = al.notas[disc.id]) === null || _al$notas$disc$id2 === void 0 ? void 0 : _al$notas$disc$id2[semestre]) || []), [v])))))
+          });
+        });
+        setNovaNotaVal('');
+        setShowAddNota(null);
+      },
+      style: {
+        background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+        border: 'none',
+        borderRadius: 9,
+        padding: '8px 14px',
+        color: '#fff',
+        fontSize: 13,
+        fontWeight: 800,
+        cursor: 'pointer'
+      }
+    }, "\u2713"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setShowAddNota(null);
+      },
+      style: {
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 11px',
+        color: E.muted,
+        fontSize: 12,
+        cursor: 'pointer'
+      }
+    }, "\u2715")) : /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        setShowAddNota("".concat(alunoKey, "-").concat(disc.id));
+        setNovaNotaVal('');
+      },
+      style: {
+        background: "".concat(disc.cor, "15"),
+        border: "1px solid ".concat(disc.cor, "33"),
+        borderRadius: 9,
+        padding: '5px 12px',
+        color: disc.cor,
+        fontSize: 11,
+        fontWeight: 700,
+        cursor: 'pointer'
+      }
+    }, "\uFF0B Nota")));
+    {/* ═══ GRÁFICOS ═══ */}
+    {
+      tab === 'graficos' && /*#__PURE__*/React.createElement("div", {
+        style: {
+          padding: '0 14px'
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: 'flex',
+          gap: 8,
+          marginBottom: 12
+        }
+      }, [1, 2].map(function (s) {
+        return /*#__PURE__*/React.createElement("button", {
+          key: s,
+          onClick: function onClick() {
+            return setSemestre(s);
+          },
+          style: {
+            flex: 1,
+            background: semestre === s ? "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")") : E.surface,
+            border: "1px solid ".concat(semestre === s ? E.purple : E.border),
+            borderRadius: 12,
+            padding: '9px',
+            color: semestre === s ? '#fff' : E.muted,
+            fontSize: 13,
+            fontWeight: 800,
+            cursor: 'pointer'
+          }
+        }, s, "\xBA Semestre");
+      })), function () {
+        var mg = calcMediaGeral(semestre);
+        if (!mg) return null;
+        return /*#__PURE__*/React.createElement(ECard, {
+          style: {
+            padding: '14px',
+            marginBottom: 12,
+            border: "2px solid ".concat(E.purple),
+            textAlign: 'center'
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            color: E.purple,
+            fontSize: 11,
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.8px'
+          }
+        }, "\u2B50 M\xE9dia SEK P \xB7 ", semestre, "\xBA Semestre"), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 48,
+            fontWeight: 900,
+            color: notaColor(mg.valor),
+            margin: '6px 0'
+          }
+        }, mg.valor), /*#__PURE__*/React.createElement("p", {
+          style: {
+            color: E.muted,
+            fontSize: 11
+          }
+        }, "Calculada com as 5 disciplinas mais baixas"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 16,
+            marginTop: 8
+          }
+        }, mg.discs.map(function (d, i) {
+          return /*#__PURE__*/React.createElement("div", {
+            key: i,
+            style: {
+              textAlign: 'center'
+            }
+          }, /*#__PURE__*/React.createElement("p", {
+            style: {
+              fontSize: 14,
+              fontWeight: 900,
+              color: notaColor(d.m)
+            }
+          }, d.m.toFixed(1)), /*#__PURE__*/React.createElement("p", {
+            style: {
+              fontSize: 9,
+              color: E.muted,
+              marginTop: 1
+            }
+          }, d.nome.slice(0, 6)));
+        })));
+      }(), /*#__PURE__*/React.createElement(ECard, {
+        style: {
+          padding: '14px',
+          marginBottom: 12
+        }
+      }, /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: E.text,
+          fontWeight: 800,
+          fontSize: 13,
+          marginBottom: 12
+        }
+      }, "\uD83D\uDCCA Notas por disciplina"), /*#__PURE__*/React.createElement("div", {
+        style: {
+          overflowX: 'auto',
+          paddingBottom: 4
+        }
+      }, function () {
+        var w = Math.max(300, aluno.disciplinas.length * 46);
+        return /*#__PURE__*/React.createElement("svg", {
+          width: w,
+          height: "170",
+          style: {
+            display: 'block'
+          }
+        }, [2, 3, 4, 5, 6].map(function (g) {
+          var y = 140 - (g - 1) / 5 * 120;
+          return /*#__PURE__*/React.createElement("g", {
+            key: g
+          }, /*#__PURE__*/React.createElement("line", {
+            x1: "28",
+            y1: y,
+            x2: w,
+            y2: y,
+            stroke: "#2A2A3A",
+            strokeWidth: "1"
+          }), /*#__PURE__*/React.createElement("text", {
+            x: "24",
+            y: y + 4,
+            textAnchor: "end",
+            fontSize: "9",
+            fill: "#666"
+          }, g));
+        }), aluno.disciplinas.map(function (disc, i) {
+          var med = parseFloat(media(disc.id, semestre)) || 0;
+          var h = med > 0 ? (med - 1) / 5 * 120 : 0;
+          var x = 28 + i * 46 + 6;
+          return /*#__PURE__*/React.createElement("g", {
+            key: disc.id
+          }, /*#__PURE__*/React.createElement("rect", {
+            x: x,
+            y: med > 0 ? 140 - h : 132,
+            width: "32",
+            height: med > 0 ? h : 8,
+            rx: "5",
+            fill: med > 0 ? disc.cor : '#333',
+            opacity: med > 0 ? 0.85 : 0.4
+          }), med > 0 && /*#__PURE__*/React.createElement("text", {
+            x: x + 16,
+            y: 140 - h - 5,
+            textAnchor: "middle",
+            fontSize: "10",
+            fontWeight: "800",
+            fill: notaColor(med)
+          }, med.toFixed(1)), /*#__PURE__*/React.createElement("text", {
+            x: x + 16,
+            y: 158,
+            textAnchor: "middle",
+            fontSize: "8",
+            fill: "#555"
+          }, disc.nome.slice(0, 5)));
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "28",
+          y1: 140 - (4 - 1) / 5 * 120,
+          x2: w,
+          y2: 140 - (4 - 1) / 5 * 120,
+          stroke: "#F97316",
+          strokeWidth: "1.5",
+          strokeDasharray: "5,3"
+        }));
+      }()), /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: E.muted,
+          fontSize: 10,
+          marginTop: 4
+        }
+      }, "\uD83D\uDFE0 Linha laranja = m\xEDnimo (4.0)")), /*#__PURE__*/React.createElement(ECard, {
+        style: {
+          padding: '14px',
+          marginBottom: 12
+        }
+      }, /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: E.text,
+          fontWeight: 800,
+          fontSize: 13,
+          marginBottom: 12
+        }
+      }, "\uD83D\uDCC8 Evolu\xE7\xE3o S1 \u2192 S2"), aluno.disciplinas.filter(function (d) {
+        return parseFloat(media(d.id, 1)) && parseFloat(media(d.id, 2));
+      }).map(function (disc) {
+        var m1 = parseFloat(media(disc.id, 1));
+        var m2 = parseFloat(media(disc.id, 2));
+        var diff = m2 - m1;
+        return /*#__PURE__*/React.createElement("div", {
+          key: disc.id,
+          style: {
+            marginBottom: 10
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 14
+          }
+        }, disc.emoji), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            fontWeight: 700,
+            color: E.text
+          }
+        }, disc.nome)), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 11,
+            color: notaColor(m1),
+            fontWeight: 700
+          }
+        }, m1.toFixed(1)), /*#__PURE__*/React.createElement("span", {
+          style: {
+            color: E.muted,
+            fontSize: 11
+          }
+        }, "\u2192"), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 11,
+            color: notaColor(m2),
+            fontWeight: 700
+          }
+        }, m2.toFixed(1)), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 13,
+            fontWeight: 900,
+            color: diff > 0 ? E.green : diff < 0 ? E.red : E.muted,
+            minWidth: 32,
+            textAlign: 'right'
+          }
+        }, diff > 0 ? "\u2191".concat(diff.toFixed(1)) : diff < 0 ? "\u2193".concat(Math.abs(diff).toFixed(1)) : '='))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            height: 7,
+            background: E.surface2,
+            borderRadius: 6,
+            overflow: 'hidden',
+            position: 'relative'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: "".concat((m1 - 1) / 5 * 100, "%"),
+            background: notaColor(m1),
+            borderRadius: '6px 0 0 6px',
+            opacity: 0.5
+          }
+        }), /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: "".concat((m2 - 1) / 5 * 100, "%"),
+            background: notaColor(m2),
+            borderRadius: 6,
+            opacity: 0.7
+          }
+        })));
+      }), !aluno.disciplinas.some(function (d) {
+        return parseFloat(media(d.id, 1)) && parseFloat(media(d.id, 2));
+      }) && /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: E.muted,
+          fontSize: 12,
+          textAlign: 'center',
+          padding: '10px'
+        }
+      }, "Precisa de notas nos 2 semestres para comparar")), /*#__PURE__*/React.createElement(ECard, {
+        style: {
+          padding: '14px'
+        }
+      }, /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: E.text,
+          fontWeight: 800,
+          fontSize: 13,
+          marginBottom: 12
+        }
+      }, "\uD83D\uDD14 Notifica\xE7\xF5es activas"), [{
+        emoji: '📋',
+        txt: 'TPC para hoje',
+        c: E.red
+      }, {
+        emoji: '⏰',
+        txt: 'TPC amanhã',
+        c: E.orange
+      }, {
+        emoji: '📊',
+        txt: 'Nota adicionada',
+        c: E.purple
+      }, {
+        emoji: '📅',
+        txt: 'Dias livres partilhados',
+        c: E.gold
+      }].map(function (n, i, arr) {
+        return /*#__PURE__*/React.createElement("div", {
+          key: i,
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            padding: '9px 0',
+            borderBottom: i < arr.length - 1 ? "1px solid ".concat(E.border) : 'none'
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 18
+          }
+        }, n.emoji), /*#__PURE__*/React.createElement("span", {
+          style: {
+            flex: 1,
+            fontSize: 13,
+            color: E.text
+          }
+        }, n.txt), /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 40,
+            height: 22,
+            borderRadius: 11,
+            background: n.c,
+            position: 'relative'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'absolute',
+            top: 3,
+            right: 3,
+            width: 16,
+            height: 16,
+            borderRadius: '50%',
+            background: '#fff'
+          }
+        })));
+      }), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return addEscolarToast("\uD83D\uDD14 ".concat(aluno.nome, " \u2014 TPC amanh\xE3!"), 'Vocabulary Unit 5 · Englisch');
+        },
+        style: {
+          width: '100%',
+          marginTop: 12,
+          background: "".concat(E.purple, "22"),
+          border: "1px solid ".concat(E.purple, "44"),
+          borderRadius: 10,
+          padding: '10px',
+          color: E.purple,
+          fontSize: 12,
+          fontWeight: 700,
+          cursor: 'pointer'
+        }
+      }, "\uD83D\uDD14 Testar aviso agora")));
+    }
   })));
 }
 
@@ -7272,45 +9966,45 @@ function EscolarApp(_ref27) {
 // ══════════════════════════════════════════════════════════════════
 function CarvalhoSuite() {
   useFont();
-  var _useState111 = (0, _react.useState)('login'),
-    _useState112 = _slicedToArray(_useState111, 2),
-    screen = _useState112[0],
-    setScreen = _useState112[1];
-  var _useState113 = (0, _react.useState)('Pc12345'),
-    _useState114 = _slicedToArray(_useState113, 2),
-    pass = _useState114[0],
-    setPass = _useState114[1];
-  var _useState115 = (0, _react.useState)(''),
-    _useState116 = _slicedToArray(_useState115, 2),
-    passErr = _useState116[0],
-    setPassErr = _useState116[1];
-  var _useState117 = (0, _react.useState)(true),
-    _useState118 = _slicedToArray(_useState117, 2),
-    online = _useState118[0],
-    setOnline = _useState118[1];
-  var _useState119 = (0, _react.useState)(USERS_DEF),
-    _useState120 = _slicedToArray(_useState119, 2),
-    users = _useState120[0],
-    setUsers = _useState120[1];
-  var _useState121 = (0, _react.useState)(PERMS_DEF),
-    _useState122 = _slicedToArray(_useState121, 2),
-    perms = _useState122[0],
-    setPerms = _useState122[1];
-  var _useState123 = (0, _react.useState)('patricio'),
-    _useState124 = _slicedToArray(_useState123, 2),
-    activeUser = _useState124[0],
-    setUser = _useState124[1];
-  var _useState125 = (0, _react.useState)(null),
-    _useState126 = _slicedToArray(_useState125, 2),
-    activeApp = _useState126[0],
-    setApp = _useState126[1];
+  var _useState149 = (0, _react.useState)('login'),
+    _useState150 = _slicedToArray(_useState149, 2),
+    screen = _useState150[0],
+    setScreen = _useState150[1];
+  var _useState151 = (0, _react.useState)('Pc12345'),
+    _useState152 = _slicedToArray(_useState151, 2),
+    pass = _useState152[0],
+    setPass = _useState152[1];
+  var _useState153 = (0, _react.useState)(''),
+    _useState154 = _slicedToArray(_useState153, 2),
+    passErr = _useState154[0],
+    setPassErr = _useState154[1];
+  var _useState155 = (0, _react.useState)(true),
+    _useState156 = _slicedToArray(_useState155, 2),
+    online = _useState156[0],
+    setOnline = _useState156[1];
+  var _useState157 = (0, _react.useState)(USERS_DEF),
+    _useState158 = _slicedToArray(_useState157, 2),
+    users = _useState158[0],
+    setUsers = _useState158[1];
+  var _useState159 = (0, _react.useState)(PERMS_DEF),
+    _useState160 = _slicedToArray(_useState159, 2),
+    perms = _useState160[0],
+    setPerms = _useState160[1];
+  var _useState161 = (0, _react.useState)('patricio'),
+    _useState162 = _slicedToArray(_useState161, 2),
+    activeUser = _useState162[0],
+    setUser = _useState162[1];
+  var _useState163 = (0, _react.useState)(null),
+    _useState164 = _slicedToArray(_useState163, 2),
+    activeApp = _useState164[0],
+    setApp = _useState164[1];
   // Estado partilhado entre TODAS as apps
-  var _useState127 = (0, _react.useState)([
+  var _useState165 = (0, _react.useState)([
       // Exemplo: {date:'2026-06-20', tipo:'ferias', nome:'Férias Verão', addedBy:'patricio'}
     ]),
-    _useState128 = _slicedToArray(_useState127, 2),
-    sharedDias = _useState128[0],
-    setSharedDias = _useState128[1];
+    _useState166 = _slicedToArray(_useState165, 2),
+    sharedDias = _useState166[0],
+    setSharedDias = _useState166[1];
   var addSharedDia = function addSharedDia(dia) {
     return setSharedDias(function (p) {
       if (p.some(function (x) {
@@ -7326,26 +10020,26 @@ function CarvalhoSuite() {
       });
     });
   };
-  var _useState129 = (0, _react.useState)(new Date()),
-    _useState130 = _slicedToArray(_useState129, 2),
-    time = _useState130[0],
-    setTime = _useState130[1];
-  var _useState131 = (0, _react.useState)(''),
-    _useState132 = _slicedToArray(_useState131, 2),
-    newName = _useState132[0],
-    setNewName = _useState132[1];
-  var _useState133 = (0, _react.useState)('Família'),
-    _useState134 = _slicedToArray(_useState133, 2),
-    newRole = _useState134[0],
-    setNewRole = _useState134[1];
-  var _useState135 = (0, _react.useState)('👤'),
-    _useState136 = _slicedToArray(_useState135, 2),
-    newEmoji = _useState136[0],
-    setNewEmoji = _useState136[1];
-  var _useState137 = (0, _react.useState)(false),
-    _useState138 = _slicedToArray(_useState137, 2),
-    showAddUser = _useState138[0],
-    setShowAddUser = _useState138[1];
+  var _useState167 = (0, _react.useState)(new Date()),
+    _useState168 = _slicedToArray(_useState167, 2),
+    time = _useState168[0],
+    setTime = _useState168[1];
+  var _useState169 = (0, _react.useState)(''),
+    _useState170 = _slicedToArray(_useState169, 2),
+    newName = _useState170[0],
+    setNewName = _useState170[1];
+  var _useState171 = (0, _react.useState)('Família'),
+    _useState172 = _slicedToArray(_useState171, 2),
+    newRole = _useState172[0],
+    setNewRole = _useState172[1];
+  var _useState173 = (0, _react.useState)('👤'),
+    _useState174 = _slicedToArray(_useState173, 2),
+    newEmoji = _useState174[0],
+    setNewEmoji = _useState174[1];
+  var _useState175 = (0, _react.useState)(false),
+    _useState176 = _slicedToArray(_useState175, 2),
+    showAddUser = _useState176[0],
+    setShowAddUser = _useState176[1];
   (0, _react.useEffect)(function () {
     var t = setInterval(function () {
       return setTime(new Date());

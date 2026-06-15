@@ -18,16 +18,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script>
   // CommonJS shim for browser
-  const require = (mod) => {
-    if (mod === 'react' || mod === 'React') return window.React;
-    if (mod === 'react-dom' || mod === 'ReactDOM') return window.ReactDOM;
-    return {};
-  };
-  const exports = {};
-  const module = { exports };
-  </script>
-  <script>
-"use strict";
+  const require=(mod)=>{if(mod==='react'||mod==='React')return window.React;if(mod==='react-dom'||mod==='ReactDOM')return window.ReactDOM;return {};};
+  const exports={};const module={exports};
+  </script><script>"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8462,13 +8455,8 @@ function CarvalhoSuite() {
     onNav: nav
   }));
 }
-
-  </script>
+</script>
   <script>
-    const App = module.exports.default || exports.default || window.CarvalhoSuite;
-    const container = document.getElementById('root');
-    const root = ReactDOM.createRoot(container);
-    root.render(React.createElement(App));
-  </script>
-</body>
-</html>
+    const App=module.exports.default||exports.default||window.CarvalhoSuite;
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script></body></html>

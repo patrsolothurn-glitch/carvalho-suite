@@ -1876,7 +1876,12 @@ function HorasProApp(_ref8) {
       textTransform: 'uppercase',
       marginBottom: 4
     }
-  }, "Nome do projeto"), /*#__PURE__*/React.createElement("input", {
+  }, "Nome do projeto"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("input", {
     value: newProjName,
     onChange: function onChange(e) {
       return setNewProjName(e.target.value);
@@ -1887,14 +1892,35 @@ function HorasProApp(_ref8) {
       background: H.surface2,
       border: "1px solid ".concat(H.border),
       borderRadius: 10,
-      padding: '10px 12px',
+      padding: '10px 40px 10px 12px',
       color: H.text,
       fontSize: 14,
       outline: 'none',
-      marginBottom: 10,
       boxSizing: 'border-box'
     }
-  }), /*#__PURE__*/React.createElement("p", {
+  }), newProjName.length > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setNewProjName('');
+    },
+    style: {
+      position: 'absolute',
+      right: 10,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      background: 'rgba(0,0,0,0.1)',
+      border: 'none',
+      borderRadius: '50%',
+      width: 22,
+      height: 22,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      color: H.muted,
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("p", {
     style: {
       color: H.muted,
       fontSize: 10,
@@ -1902,7 +1928,12 @@ function HorasProApp(_ref8) {
       textTransform: 'uppercase',
       marginBottom: 4
     }
-  }, "Descri\xE7\xE3o"), /*#__PURE__*/React.createElement("input", {
+  }, "Descri\xE7\xE3o"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("input", {
     value: newProjDesc,
     onChange: function onChange(e) {
       return setNewProjDesc(e.target.value);
@@ -1913,14 +1944,35 @@ function HorasProApp(_ref8) {
       background: H.surface2,
       border: "1px solid ".concat(H.border),
       borderRadius: 10,
-      padding: '10px 12px',
+      padding: '10px 40px 10px 12px',
       color: H.text,
       fontSize: 14,
       outline: 'none',
-      marginBottom: 12,
       boxSizing: 'border-box'
     }
-  }), /*#__PURE__*/React.createElement("p", {
+  }), newProjDesc.length > 0 && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setNewProjDesc('');
+    },
+    style: {
+      position: 'absolute',
+      right: 10,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      background: 'rgba(0,0,0,0.1)',
+      border: 'none',
+      borderRadius: '50%',
+      width: 22,
+      height: 22,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      color: H.muted,
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, "\u2715")), /*#__PURE__*/React.createElement("p", {
     style: {
       color: H.muted,
       fontSize: 10,

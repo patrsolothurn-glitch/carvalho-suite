@@ -5566,7 +5566,7 @@ function FamiliaApp(_ref16) {
     style: {
       display: 'flex',
       alignItems: 'center',
-      gap: 10
+      gap: 4
     }
   }, /*#__PURE__*/React.createElement("button", {
     onClick: onBack,
@@ -5574,15 +5574,19 @@ function FamiliaApp(_ref16) {
       background: 'none',
       border: 'none',
       color: F.coral,
-      fontSize: 24,
+      fontSize: 36,
       cursor: 'pointer',
-      padding: 0,
-      lineHeight: 1
+      padding: '0 8px 0 0',
+      lineHeight: 1,
+      minWidth: 44,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     }
   }, "\u2039"), /*#__PURE__*/React.createElement("span", {
     style: {
       fontWeight: 900,
-      fontSize: 18
+      fontSize: 17
     }
   }, "\uD83C\uDFE0 Fam\xEDlia Carvalho")), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -8458,6 +8462,7 @@ function CarvalhoSuite() {
     onNav: nav
   }));
 }
+
   </script>
   <script>
     const App = module.exports.default || exports.default || window.CarvalhoSuite;

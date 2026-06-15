@@ -516,6 +516,8 @@ function HorasProApp(_ref8) {
     _useState34 = _slicedToArray(_useState33, 2),
     newProjColor = _useState34[0],
     setNewProjColor = _useState34[1];
+  var projNameRef = React.useRef(null);
+  var projDescRef = React.useRef(null);
 
   // Feriados Solothurn 2026
   var FERIADOS_SO = [{
@@ -1882,10 +1884,9 @@ function HorasProApp(_ref8) {
       marginBottom: 10
     }
   }, /*#__PURE__*/React.createElement("input", {
-    value: newProjName,
-    onChange: function onChange(e) {
-      return setNewProjName(e.target.value);
-    },
+    ref: projNameRef,
+    defaultValue: newProjName,
+    key: "name-".concat(editProj),
     placeholder: "Ex: POP GREN05",
     style: {
       width: '100%',
@@ -1898,9 +1899,9 @@ function HorasProApp(_ref8) {
       outline: 'none',
       boxSizing: 'border-box'
     }
-  }), newProjName.length > 0 && /*#__PURE__*/React.createElement("button", {
+  }), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      return setNewProjName('');
+      if (projNameRef.current) projNameRef.current.value = '';
     },
     style: {
       position: 'absolute',
@@ -1934,10 +1935,9 @@ function HorasProApp(_ref8) {
       marginBottom: 12
     }
   }, /*#__PURE__*/React.createElement("input", {
-    value: newProjDesc,
-    onChange: function onChange(e) {
-      return setNewProjDesc(e.target.value);
-    },
+    ref: projDescRef,
+    defaultValue: newProjDesc,
+    key: "desc-".concat(editProj),
     placeholder: "Ex: Grenchen - Zona 5",
     style: {
       width: '100%',
@@ -1950,9 +1950,9 @@ function HorasProApp(_ref8) {
       outline: 'none',
       boxSizing: 'border-box'
     }
-  }), newProjDesc.length > 0 && /*#__PURE__*/React.createElement("button", {
+  }), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      return setNewProjDesc('');
+      if (projDescRef.current) projDescRef.current.value = '';
     },
     style: {
       position: 'absolute',
@@ -2023,13 +2023,16 @@ function HorasProApp(_ref8) {
     }
   }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      if (!newProjName.trim()) return;
+      var _projNameRef$current, _projDescRef$current;
+      var name = (((_projNameRef$current = projNameRef.current) === null || _projNameRef$current === void 0 ? void 0 : _projNameRef$current.value) || '').trim();
+      var desc = (((_projDescRef$current = projDescRef.current) === null || _projDescRef$current === void 0 ? void 0 : _projDescRef$current.value) || '').trim();
+      if (!name) return;
       if (editProj) {
         setProjList(function (p) {
           return p.map(function (x) {
             return x.id === editProj ? _objectSpread(_objectSpread({}, x), {}, {
-              name: newProjName.trim(),
-              desc: newProjDesc,
+              name: name,
+              desc: desc,
               color: newProjColor
             }) : x;
           });
@@ -2038,8 +2041,8 @@ function HorasProApp(_ref8) {
         setProjList(function (p) {
           return [].concat(_toConsumableArray(p), [{
             id: 'p-' + Date.now(),
-            name: newProjName.trim(),
-            desc: newProjDesc,
+            name: name,
+            desc: desc,
             color: newProjColor
           }]);
         });

@@ -10748,52 +10748,54 @@ function EscolarApp(_ref31) {
           },
           style: {
             borderLeft: "1px solid ".concat(E.border),
-            padding: '3px',
-            background: aula ? isFirst ? "".concat(disc.cor, "18") : "".concat(disc.cor, "06") : 'transparent',
+            padding: isFirst ? '2px' : 0,
+            background: isMiddle && disc ? "".concat(disc.cor, "28") : 'transparent',
             cursor: aula ? 'pointer' : 'default',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            overflow: 'hidden'
           }
         }, isFirst && disc && /*#__PURE__*/React.createElement("div", {
           style: {
-            padding: '3px 5px',
-            borderRadius: 7,
-            background: "".concat(disc.cor, "25"),
-            border: "1px solid ".concat(disc.cor, "44"),
-            boxSizing: 'border-box',
+            borderRadius: 6,
+            background: disc.cor,
+            boxShadow: "0 2px 8px ".concat(disc.cor, "66"),
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            padding: '4px 6px',
+            height: 'calc(100% - 4px)',
+            boxSizing: 'border-box'
           }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 900,
-            color: disc.cor,
-            lineHeight: 1.2
+            color: '#fff',
+            lineHeight: 1.2,
+            textShadow: '0 1px 3px rgba(0,0,0,0.5)'
           }
         }, disc.abr || disc.nome.slice(0, 3)), /*#__PURE__*/React.createElement("p", {
           style: {
             fontSize: 8,
-            color: E.muted,
+            color: 'rgba(255,255,255,0.8)',
             lineHeight: 1.1,
             marginTop: 1
           }
         }, "S.", aula.sala)), isMiddle && disc && /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "".concat(disc.cor, "10"),
-            borderRadius: 4,
-            borderLeft: "2px solid ".concat(disc.cor, "55"),
-            paddingLeft: 3,
+            background: disc.cor,
+            opacity: 0.5,
+            height: '100%',
             display: 'flex',
             alignItems: 'center',
-            height: '100%'
+            justifyContent: 'center'
           }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
             fontSize: 8,
-            color: "".concat(disc.cor, "88")
+            color: '#fff'
           }
         }, "\u2195")), !aula && isAlmoco && /*#__PURE__*/React.createElement("p", {
           style: {

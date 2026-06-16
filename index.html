@@ -6099,7 +6099,8 @@ function FamiliaApp(_ref19) {
       titulo: '',
       emoji: '📅',
       who: 'todos',
-      data: '',
+      dataDE: '',
+      dataATE: '',
       hora: '',
       nota: ''
     }),
@@ -6109,7 +6110,7 @@ function FamiliaApp(_ref19) {
   var _useState107 = (0, _react.useState)(null),
     _useState108 = _slicedToArray(_useState107, 2),
     editEvKey = _useState108[0],
-    setEditEvKey = _useState108[1]; // '{dateStr}-{idx}'
+    setEditEvKey = _useState108[1];
   var _useState109 = (0, _react.useState)({}),
     _useState110 = _slicedToArray(_useState109, 2),
     memberPhotos = _useState110[0],
@@ -6199,25 +6200,41 @@ function FamiliaApp(_ref19) {
     };
   };
   var addEvent = function addEvent() {
-    if (!form.titulo || !form.data) return;
+    if (!form.titulo || !form.dataDE) return;
     var m = members.find(function (x) {
       return x.id === form.who;
     });
+    var ev = {
+      t: form.titulo,
+      emoji: form.emoji,
+      who: form.who,
+      color: (m === null || m === void 0 ? void 0 : m.color) || F.coral,
+      hora: form.hora,
+      nota: form.nota
+    };
+    var ate = form.dataATE && form.dataATE >= form.dataDE ? form.dataATE : form.dataDE;
+    // Gerar todos os dias do intervalo
+    var cur = new Date(form.dataDE + 'T12:00:00');
+    var fim = new Date(ate + 'T12:00:00');
+    var updates = {};
+    while (cur <= fim) {
+      var d = cur.toISOString().slice(0, 10);
+      updates[d] = true;
+      cur.setDate(cur.getDate() + 1);
+    }
     setEvents(function (p) {
-      return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, form.data, [].concat(_toConsumableArray(p[form.data] || []), [{
-        t: form.titulo,
-        emoji: form.emoji,
-        who: form.who,
-        color: (m === null || m === void 0 ? void 0 : m.color) || F.coral,
-        hora: form.hora,
-        nota: form.nota
-      }])));
+      var np = _objectSpread({}, p);
+      Object.keys(updates).forEach(function (d) {
+        np[d] = [].concat(_toConsumableArray(np[d] || []), [ev]);
+      });
+      return np;
     });
     setForm({
       titulo: '',
       emoji: '📅',
       who: 'todos',
-      data: '',
+      dataDE: '',
+      dataATE: '',
       hora: '',
       nota: ''
     });
@@ -7258,7 +7275,8 @@ function FamiliaApp(_ref19) {
     onClick: function onClick() {
       setForm(function (p) {
         return _objectSpread(_objectSpread({}, p), {}, {
-          data: selDateStr
+          dataDE: selDateStr,
+          dataATE: selDateStr
         });
       });
       setShowAdd(true);
@@ -7576,11 +7594,6 @@ function FamiliaApp(_ref19) {
     type: 'text',
     ph: 'Ex: Médico Lucas'
   }, {
-    l: 'Data',
-    k: 'data',
-    type: 'date',
-    ph: ''
-  }, {
     l: 'Hora',
     k: 'hora',
     type: 'time',
@@ -7626,6 +7639,110 @@ function FamiliaApp(_ref19) {
       }
     }));
   }), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: F.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 6
+    }
+  }, "Per\xEDodo"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: F.muted,
+      fontSize: 9,
+      fontWeight: 700,
+      marginBottom: 3
+    }
+  }, "DE"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: form.dataDE,
+    onChange: function onChange(e) {
+      return setForm(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          dataDE: e.target.value,
+          dataATE: p.dataATE < e.target.value ? e.target.value : p.dataATE
+        });
+      });
+    },
+    style: {
+      width: '100%',
+      background: F.surface2,
+      border: "1px solid ".concat(form.dataDE ? F.coral : F.border),
+      borderRadius: 12,
+      padding: '11px 10px',
+      color: F.text,
+      fontSize: 13,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      paddingBottom: 12,
+      color: F.muted,
+      fontSize: 18,
+      fontWeight: 300
+    }
+  }, "\u2192"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: F.muted,
+      fontSize: 9,
+      fontWeight: 700,
+      marginBottom: 3
+    }
+  }, "AT\xC9 (opcional)"), /*#__PURE__*/React.createElement("input", {
+    type: "date",
+    value: form.dataATE,
+    onChange: function onChange(e) {
+      return setForm(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          dataATE: e.target.value
+        });
+      });
+    },
+    min: form.dataDE,
+    style: {
+      width: '100%',
+      background: F.surface2,
+      border: "1px solid ".concat(form.dataATE && form.dataATE !== form.dataDE ? F.coral : F.border),
+      borderRadius: 12,
+      padding: '11px 10px',
+      color: F.text,
+      fontSize: 13,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  }))), form.dataDE && form.dataATE && form.dataATE > form.dataDE && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "".concat(F.coral, "12"),
+      border: "1px solid ".concat(F.coral, "33"),
+      borderRadius: 10,
+      padding: '8px 12px',
+      marginBottom: 10,
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: F.coral,
+      fontSize: 12,
+      fontWeight: 700
+    }
+  }, "\uD83D\uDCC5 ", Math.round((new Date(form.dataATE) - new Date(form.dataDE)) / 86400000) + 1, " dias marcados")), /*#__PURE__*/React.createElement("p", {
     style: {
       color: F.muted,
       fontSize: 10,

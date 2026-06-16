@@ -8117,6 +8117,384 @@ function NutriguimaApp(_ref29) {
     }
   }, totalItems))))), /*#__PURE__*/React.createElement("div", {
     style: {
+      position: 'relative',
+      height: 160,
+      overflow: 'hidden',
+      borderBottom: "2px solid ".concat(N.gold, "44")
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 400 160",
+    xmlns: "http://www.w3.org/2000/svg",
+    style: {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0
+    }
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "sky",
+    x1: "0%",
+    y1: "0%",
+    x2: "0%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#0A0418"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#1A0A35"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "castleGrad",
+    x1: "0%",
+    y1: "0%",
+    x2: "0%",
+    y2: "100%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#2A1F10"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#1A1208"
+  })), /*#__PURE__*/React.createElement("linearGradient", {
+    id: "goldGlow",
+    x1: "0%",
+    y1: "0%",
+    x2: "100%",
+    y2: "0%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: "#C9A847",
+    stopOpacity: "0"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "50%",
+    stopColor: "#C9A847",
+    stopOpacity: "0.15"
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: "#C9A847",
+    stopOpacity: "0"
+  }))), /*#__PURE__*/React.createElement("rect", {
+    width: "400",
+    height: "160",
+    fill: "url(#sky)"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "340",
+    cy: "30",
+    r: "20",
+    fill: "#F5E090",
+    opacity: "0.15"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "340",
+    cy: "30",
+    r: "14",
+    fill: "#F5E090",
+    opacity: "0.25"
+  }), [[20, 15], [60, 8], [90, 22], [130, 10], [170, 18], [200, 7], [250, 14], [290, 9], [360, 25], [380, 12]].map(function (pos, i) {
+    return /*#__PURE__*/React.createElement("circle", {
+      key: i,
+      cx: pos[0],
+      cy: pos[1],
+      r: "1",
+      fill: "#fff",
+      opacity: "0.5"
+    });
+  }), /*#__PURE__*/React.createElement("ellipse", {
+    cx: "200",
+    cy: "170",
+    rx: "280",
+    ry: "60",
+    fill: "#0F0A05"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "40",
+    y: "70",
+    width: "30",
+    height: "70",
+    fill: "url(#castleGrad)",
+    stroke: "#C9A84730",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "38",
+    y: "65",
+    width: "8",
+    height: "12",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "50",
+    y: "65",
+    width: "8",
+    height: "12",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "62",
+    y: "65",
+    width: "8",
+    height: "12",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "52",
+    y: "95",
+    width: "12",
+    height: "16",
+    fill: "#C9A84720"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "70",
+    y: "95",
+    width: "60",
+    height: "45",
+    fill: "url(#castleGrad)",
+    stroke: "#C9A84730",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "70",
+    y: "90",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "83",
+    y: "90",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "96",
+    y: "90",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "109",
+    y: "90",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "148",
+    y: "40",
+    width: "45",
+    height: "100",
+    fill: "url(#castleGrad)",
+    stroke: "#C9A84740",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "146",
+    y: "34",
+    width: "10",
+    height: "14",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "160",
+    y: "34",
+    width: "10",
+    height: "14",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "174",
+    y: "34",
+    width: "10",
+    height: "14",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "183",
+    y: "34",
+    width: "10",
+    height: "14",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "163",
+    y: "70",
+    width: "14",
+    height: "18",
+    fill: "#C9A84740",
+    rx: "3"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "163",
+    y: "70",
+    width: "14",
+    height: "18",
+    fill: "#C9A847",
+    opacity: "0.2",
+    rx: "3"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "193",
+    y: "88",
+    width: "65",
+    height: "52",
+    fill: "url(#castleGrad)",
+    stroke: "#C9A84730",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "193",
+    y: "83",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "206",
+    y: "83",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "219",
+    y: "83",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "232",
+    y: "83",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "245",
+    y: "83",
+    width: "8",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "258",
+    y: "65",
+    width: "35",
+    height: "75",
+    fill: "url(#castleGrad)",
+    stroke: "#C9A84730",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "256",
+    y: "60",
+    width: "8",
+    height: "11",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "268",
+    y: "60",
+    width: "8",
+    height: "11",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "280",
+    y: "60",
+    width: "8",
+    height: "11",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "266",
+    y: "88",
+    width: "11",
+    height: "14",
+    fill: "#C9A84720"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "310",
+    y: "85",
+    width: "28",
+    height: "55",
+    fill: "url(#castleGrad)",
+    stroke: "#C9A84730",
+    strokeWidth: "0.5"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "309",
+    y: "80",
+    width: "7",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "319",
+    y: "80",
+    width: "7",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "329",
+    y: "80",
+    width: "7",
+    height: "10",
+    fill: "#1A1208"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "162",
+    y: "110",
+    width: "17",
+    height: "30",
+    fill: "#050204",
+    rx: "2"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "0",
+    y: "140",
+    width: "400",
+    height: "20",
+    fill: "url(#goldGlow)"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "0",
+    y: "100",
+    width: "400",
+    height: "60",
+    fill: "url(#sky)",
+    opacity: "0.6"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'linear-gradient(135deg,#FF6B00,#FFD700,#FF6B00)',
+      padding: '2px',
+      borderRadius: 18,
+      boxShadow: '0 0 30px rgba(255,180,0,0.5)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'rgba(5,2,10,0.85)',
+      borderRadius: 16,
+      padding: '10px 24px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 28
+    }
+  }, "\uD83D\uDE80"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 22,
+      fontWeight: 900,
+      background: 'linear-gradient(90deg,#FFD700,#FF8C00,#FFD700)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      letterSpacing: '1px',
+      lineHeight: 1
+    }
+  }, "Nutriguima"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 10,
+      color: 'rgba(255,180,0,0.7)',
+      fontWeight: 600,
+      letterSpacing: '2px',
+      textTransform: 'uppercase'
+    }
+  }, "suplementos \xB7 guimar\xE3es")), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 24
+    }
+  }, "\uD83D\uDCAA"))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 10,
+      color: 'rgba(201,168,71,0.5)',
+      marginTop: 6,
+      letterSpacing: '1px'
+    }
+  }, "\uD83C\uDFF0 Guimar\xE3es \xB7 onde nasce a for\xE7a"))), /*#__PURE__*/React.createElement("div", {
+    style: {
       margin: '12px 16px 0',
       background: N.surface,
       borderRadius: 14,

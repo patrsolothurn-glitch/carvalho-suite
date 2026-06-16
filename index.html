@@ -10732,25 +10732,25 @@ function EscolarApp(_ref31) {
           color: E.muted
         }
       }, "\u2192", slot.hf)), [0, 1, 2, 3, 4].map(function (di) {
-        var aula = (aluno.horario[di] || []).find(function (a) {
+        var aula = isAlmoco ? (aluno.horario[di] || []).find(function (a) {
+          return a.hi >= '11:45' && a.hi < '13:45';
+        }) : (aluno.horario[di] || []).find(function (a) {
           return a.hi <= slot.hi && a.hf > slot.hi;
         });
         var disc = aula ? getDisc(aula.discId) : null;
-        var isFirst = aula && aula.hi === slot.hi;
-        var isMiddle = aula && aula.hi < slot.hi;
+        var isFirst = aula && (isAlmoco ? true : aula.hi === slot.hi);
+        var isMiddle = !isAlmoco && aula && aula.hi < slot.hi;
         return /*#__PURE__*/React.createElement("div", {
           key: di,
           onClick: function onClick() {
-            if (aula) {
-              setHorView('dia');
-              setDayIdx(di);
-            }
+            setHorView('dia');
+            setDayIdx(di);
           },
           style: {
             borderLeft: "1px solid ".concat(E.border),
             padding: isFirst ? '2px' : 0,
-            background: isMiddle && disc ? "".concat(disc.cor, "28") : 'transparent',
-            cursor: aula ? 'pointer' : 'default',
+            background: isMiddle && disc ? "".concat(disc.cor, "28") : isAlmoco && !aula ? 'rgba(80,80,80,0.04)' : 'transparent',
+            cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -10797,13 +10797,13 @@ function EscolarApp(_ref31) {
             fontSize: 8,
             color: '#fff'
           }
-        }, "\u2195")), !aula && isAlmoco && /*#__PURE__*/React.createElement("p", {
+        }, "\u2195")), isAlmoco && !aula && /*#__PURE__*/React.createElement("p", {
           style: {
-            fontSize: 7,
+            fontSize: 10,
             textAlign: 'center',
             color: 'rgba(150,150,150,0.25)'
           }
-        }, "\u2014"));
+        }, "\uFF0B"));
       })));
     })), /*#__PURE__*/React.createElement("p", {
       style: {

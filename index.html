@@ -7042,6 +7042,29 @@ function FamiliaApp(_ref19) {
       }
     }, /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
+        setForm({
+          titulo: ev.t,
+          emoji: ev.emoji,
+          who: ev.who,
+          dataDE: selDateStr,
+          dataATE: selDateStr,
+          hora: ev.hora || '',
+          nota: ev.nota || ''
+        });
+        setEditEvKey(null);
+        setShowAdd(true);
+      },
+      style: {
+        background: "".concat(F.orange, "12"),
+        border: "1px solid ".concat(F.orange, "33"),
+        borderRadius: 8,
+        padding: '6px 8px',
+        cursor: 'pointer',
+        color: F.orange,
+        fontSize: 13
+      }
+    }, "\uD83D\uDCCB"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
         return setEditEvKey(isEditing ? null : evKey);
       },
       style: {

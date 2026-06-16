@@ -7230,47 +7230,96 @@ function NutriguimaApp(_ref29) {
     _useState118 = _slicedToArray(_useState117, 2),
     editStock = _useState118[0],
     setEditStock = _useState118[1];
-  var _useState119 = (0, _react.useState)(''),
+  var _useState119 = (0, _react.useState)(false),
     _useState120 = _slicedToArray(_useState119, 2),
-    stockVal = _useState120[0],
-    setStockVal = _useState120[1];
-  var products = [{
-    id: 1,
-    name: 'Whey Protein 1kg',
-    price: 24.9,
-    emoji: '🥛',
-    cat: 'Proteína'
-  }, {
-    id: 2,
-    name: 'Creatina 300g',
-    price: 12.9,
-    emoji: '⚡',
-    cat: 'Força'
-  }, {
-    id: 3,
-    name: 'Vitamina C 1000mg',
-    price: 8.9,
-    emoji: '🍊',
-    cat: 'Vitaminas'
-  }, {
-    id: 4,
-    name: 'Ómega 3',
-    price: 14.9,
-    emoji: '🐟',
-    cat: 'Saúde'
-  }, {
-    id: 5,
-    name: 'Pack Ganho Muscular',
-    price: 49.9,
-    emoji: '💪',
-    cat: 'Packs'
-  }, {
-    id: 6,
-    name: 'BCAA 300g',
-    price: 18.9,
-    emoji: '🔥',
-    cat: 'Força'
-  }];
+    showAddProd = _useState120[0],
+    setShowAddProd = _useState120[1];
+  var novoNomeRef = React.useRef(null);
+  var novoPrecoRef = React.useRef(null);
+  var _useState121 = (0, _react.useState)('💊'),
+    _useState122 = _slicedToArray(_useState121, 2),
+    novoEmoji = _useState122[0],
+    setNovoEmoji = _useState122[1];
+  var _useState123 = (0, _react.useState)('Proteína'),
+    _useState124 = _slicedToArray(_useState123, 2),
+    novoCat = _useState124[0],
+    setNovoCat = _useState124[1];
+  var _useState125 = (0, _react.useState)([{
+      id: 1,
+      name: 'Whey Protein 1kg',
+      price: 24.9,
+      emoji: '🥛',
+      cat: 'Proteína'
+    }, {
+      id: 2,
+      name: 'Creatina 300g',
+      price: 12.9,
+      emoji: '⚡',
+      cat: 'Força'
+    }, {
+      id: 3,
+      name: 'Vitamina C 1000mg',
+      price: 8.9,
+      emoji: '🍊',
+      cat: 'Vitaminas'
+    }, {
+      id: 4,
+      name: 'Ómega 3',
+      price: 14.9,
+      emoji: '🐟',
+      cat: 'Saúde'
+    }, {
+      id: 5,
+      name: 'Pack Ganho Muscular',
+      price: 49.9,
+      emoji: '💪',
+      cat: 'Packs'
+    }, {
+      id: 6,
+      name: 'BCAA 300g',
+      price: 18.9,
+      emoji: '🔥',
+      cat: 'Força'
+    }]),
+    _useState126 = _slicedToArray(_useState125, 2),
+    products = _useState126[0],
+    setProducts = _useState126[1];
+  var addProduto = function addProduto() {
+    var _novoNomeRef$current, _novoPrecoRef$current;
+    var name = (((_novoNomeRef$current = novoNomeRef.current) === null || _novoNomeRef$current === void 0 ? void 0 : _novoNomeRef$current.value) || '').trim();
+    var price = parseFloat(((_novoPrecoRef$current = novoPrecoRef.current) === null || _novoPrecoRef$current === void 0 ? void 0 : _novoPrecoRef$current.value) || '0');
+    if (!name || isNaN(price) || price <= 0) return;
+    var id = Date.now();
+    setProducts(function (p) {
+      return [].concat(_toConsumableArray(p), [{
+        id: id,
+        name: name,
+        price: price,
+        emoji: novoEmoji,
+        cat: novoCat
+      }]);
+    });
+    setStock(function (s) {
+      return _objectSpread(_objectSpread({}, s), {}, _defineProperty({}, id, 0));
+    });
+    setNovoEmoji('💊');
+    setNovoCat('Proteína');
+    if (novoNomeRef.current) novoNomeRef.current.value = '';
+    if (novoPrecoRef.current) novoPrecoRef.current.value = '';
+    setShowAddProd(false);
+  };
+  var removeProduto = function removeProduto(id) {
+    setProducts(function (p) {
+      return p.filter(function (x) {
+        return x.id !== id;
+      });
+    });
+    setStock(function (s) {
+      var c = _objectSpread({}, s);
+      delete c[id];
+      return c;
+    });
+  };
   var filtered = products.filter(function (p) {
     return p.name.toLowerCase().includes(search.toLowerCase());
   });
@@ -7697,7 +7746,171 @@ function NutriguimaApp(_ref29) {
     style: {
       padding: '12px 16px'
     }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setShowAddProd(function (v) {
+        return !v;
+      });
+    },
+    style: {
+      width: '100%',
+      background: showAddProd ? "".concat(N.gold, "22") : "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")"),
+      border: showAddProd ? "1px solid ".concat(N.gold) : 'none',
+      borderRadius: 14,
+      padding: '12px',
+      color: showAddProd ? N.gold : N.bg,
+      fontSize: 14,
+      fontWeight: 800,
+      cursor: 'pointer',
+      marginBottom: 12
+    }
+  }, showAddProd ? '✕ Fechar' : '＋ Adicionar produto'), showAddProd && /*#__PURE__*/React.createElement(NCard, {
+    style: {
+      padding: '14px',
+      marginBottom: 14,
+      border: "1px solid ".concat(N.gold)
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: N.gold,
+      fontWeight: 800,
+      fontSize: 14,
+      marginBottom: 12
+    }
+  }, "Novo produto"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: N.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 6
+    }
+  }, "\xCDcone"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      marginBottom: 12,
+      flexWrap: 'wrap'
+    }
+  }, ['💊', '🥛', '⚡', '🍊', '🐟', '💪', '🔥', '🌿', '💉', '🧪', '🍫', '🥤'].map(function (e) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: e,
+      onClick: function onClick() {
+        return setNovoEmoji(e);
+      },
+      style: {
+        background: novoEmoji === e ? "".concat(N.gold, "22") : N.surface2,
+        border: "1px solid ".concat(novoEmoji === e ? N.gold : N.border),
+        borderRadius: 10,
+        padding: '8px',
+        fontSize: 20,
+        cursor: 'pointer'
+      }
+    }, e);
+  })), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: N.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Nome"), /*#__PURE__*/React.createElement("input", {
+    ref: novoNomeRef,
+    autoComplete: "off",
+    placeholder: "Ex: Magn\xE9sio 300mg",
+    style: {
+      width: '100%',
+      background: N.surface2,
+      border: "1px solid ".concat(N.border),
+      borderRadius: 10,
+      padding: '10px 12px',
+      color: N.text,
+      fontSize: 14,
+      outline: 'none',
+      marginBottom: 10,
+      boxSizing: 'border-box'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      marginBottom: 14
+    }
   }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: N.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Pre\xE7o \u20AC"), /*#__PURE__*/React.createElement("input", {
+    ref: novoPrecoRef,
+    type: "number",
+    step: "0.1",
+    autoComplete: "off",
+    placeholder: "Ex: 15.90",
+    style: {
+      width: '100%',
+      background: N.surface2,
+      border: "1px solid ".concat(N.border),
+      borderRadius: 10,
+      padding: '10px 12px',
+      color: N.text,
+      fontSize: 14,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: N.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Categoria"), /*#__PURE__*/React.createElement("select", {
+    value: novoCat,
+    onChange: function onChange(e) {
+      return setNovoCat(e.target.value);
+    },
+    style: {
+      width: '100%',
+      background: N.surface2,
+      border: "1px solid ".concat(N.border),
+      borderRadius: 10,
+      padding: '10px 12px',
+      color: N.text,
+      fontSize: 14,
+      outline: 'none'
+    }
+  }, ['Proteína', 'Força', 'Vitaminas', 'Saúde', 'Packs', 'Outros'].map(function (c) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: c
+    }, c);
+  })))), /*#__PURE__*/React.createElement("button", {
+    onClick: addProduto,
+    style: {
+      width: '100%',
+      background: "linear-gradient(135deg,".concat(N.gold, ",").concat(N.goldL, ")"),
+      border: 'none',
+      borderRadius: 12,
+      padding: '12px',
+      color: N.bg,
+      fontSize: 14,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\u2713 Adicionar produto")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 12,
@@ -7790,7 +8003,12 @@ function NutriguimaApp(_ref29) {
         fontWeight: 700,
         color: stockColor(st)
       }
-    }, stockLabel(st)))), isEdit ? /*#__PURE__*/React.createElement("div", {
+    }, stockLabel(st)), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: N.muted
+      }
+    }, "\xB7 \u20AC", p.price.toFixed(2)))), isEdit ? /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         alignItems: 'center',
@@ -7858,7 +8076,20 @@ function NutriguimaApp(_ref29) {
         fontWeight: 700,
         cursor: 'pointer'
       }
-    }, "\u2713")) : /*#__PURE__*/React.createElement("div", {
+    }, "\u2713"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return removeProduto(p.id);
+      },
+      style: {
+        background: 'rgba(220,38,38,0.1)',
+        border: '1px solid rgba(220,38,38,0.25)',
+        borderRadius: 8,
+        padding: '5px 9px',
+        color: N.red,
+        fontSize: 12,
+        cursor: 'pointer'
+      }
+    }, "\uD83D\uDDD1")) : /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         alignItems: 'center',
@@ -8342,73 +8573,73 @@ function EscolarApp(_ref31) {
     activeUser = _ref31$activeUser === void 0 ? 'patricio' : _ref31$activeUser;
   var isAdmin = activeUser === 'patricio';
   var defaultAluno = activeUser === 'liam' ? 'liam' : 'lucas';
-  var _useState121 = (0, _react.useState)(defaultAluno),
-    _useState122 = _slicedToArray(_useState121, 2),
-    alunoKey = _useState122[0],
-    setAlunoKey = _useState122[1];
-  var _useState123 = (0, _react.useState)('horario'),
-    _useState124 = _slicedToArray(_useState123, 2),
-    tab = _useState124[0],
-    setTab = _useState124[1];
-  var _useState125 = (0, _react.useState)(0),
-    _useState126 = _slicedToArray(_useState125, 2),
-    dayIdx = _useState126[0],
-    setDayIdx = _useState126[1];
-  var _useState127 = (0, _react.useState)(1),
+  var _useState127 = (0, _react.useState)(defaultAluno),
     _useState128 = _slicedToArray(_useState127, 2),
-    semestre = _useState128[0],
-    setSemestre = _useState128[1];
-  var _useState129 = (0, _react.useState)(false),
+    alunoKey = _useState128[0],
+    setAlunoKey = _useState128[1];
+  var _useState129 = (0, _react.useState)('horario'),
     _useState130 = _slicedToArray(_useState129, 2),
-    showAddDisc = _useState130[0],
-    setShowAddDisc = _useState130[1];
-  var _useState131 = (0, _react.useState)(null),
+    tab = _useState130[0],
+    setTab = _useState130[1];
+  var _useState131 = (0, _react.useState)(0),
     _useState132 = _slicedToArray(_useState131, 2),
-    showAddNota = _useState132[0],
-    setShowAddNota = _useState132[1];
-  var _useState133 = (0, _react.useState)(false),
+    dayIdx = _useState132[0],
+    setDayIdx = _useState132[1];
+  var _useState133 = (0, _react.useState)(1),
     _useState134 = _slicedToArray(_useState133, 2),
-    showAddTPC = _useState134[0],
-    setShowAddTPC = _useState134[1];
-  var _useState135 = (0, _react.useState)(null),
+    semestre = _useState134[0],
+    setSemestre = _useState134[1];
+  var _useState135 = (0, _react.useState)(false),
     _useState136 = _slicedToArray(_useState135, 2),
-    editAula = _useState136[0],
-    setEditAula = _useState136[1];
-  var _useState137 = (0, _react.useState)(new Date(2026, 5, 1)),
+    showAddDisc = _useState136[0],
+    setShowAddDisc = _useState136[1];
+  var _useState137 = (0, _react.useState)(null),
     _useState138 = _slicedToArray(_useState137, 2),
-    calMonth = _useState138[0],
-    setCalMonth = _useState138[1];
-  var _useState139 = (0, _react.useState)(null),
+    showAddNota = _useState138[0],
+    setShowAddNota = _useState138[1];
+  var _useState139 = (0, _react.useState)(false),
     _useState140 = _slicedToArray(_useState139, 2),
-    selDay = _useState140[0],
-    setSelDay = _useState140[1];
-  var _useState141 = (0, _react.useState)(''),
+    showAddTPC = _useState140[0],
+    setShowAddTPC = _useState140[1];
+  var _useState141 = (0, _react.useState)(null),
     _useState142 = _slicedToArray(_useState141, 2),
-    novaNotaVal = _useState142[0],
-    setNovaNotaVal = _useState142[1];
-  var _useState143 = (0, _react.useState)({
+    editAula = _useState142[0],
+    setEditAula = _useState142[1];
+  var _useState143 = (0, _react.useState)(new Date(2026, 5, 1)),
+    _useState144 = _slicedToArray(_useState143, 2),
+    calMonth = _useState144[0],
+    setCalMonth = _useState144[1];
+  var _useState145 = (0, _react.useState)(null),
+    _useState146 = _slicedToArray(_useState145, 2),
+    selDay = _useState146[0],
+    setSelDay = _useState146[1];
+  var _useState147 = (0, _react.useState)(''),
+    _useState148 = _slicedToArray(_useState147, 2),
+    novaNotaVal = _useState148[0],
+    setNovaNotaVal = _useState148[1];
+  var _useState149 = (0, _react.useState)({
       nome: '',
       prof: '',
       tel: '',
       emoji: '📚',
       cor: '#7C3AED'
     }),
-    _useState144 = _slicedToArray(_useState143, 2),
-    novaDisc = _useState144[0],
-    setNovaDisc = _useState144[1];
-  var _useState145 = (0, _react.useState)({
+    _useState150 = _slicedToArray(_useState149, 2),
+    novaDisc = _useState150[0],
+    setNovaDisc = _useState150[1];
+  var _useState151 = (0, _react.useState)({
       discId: 1,
       titulo: '',
       data: '',
       feito: false
     }),
-    _useState146 = _slicedToArray(_useState145, 2),
-    novaTPC = _useState146[0],
-    setNovaTPC = _useState146[1];
-  var _useState147 = (0, _react.useState)([]),
-    _useState148 = _slicedToArray(_useState147, 2),
-    escolarToasts = _useState148[0],
-    setEscolarToasts = _useState148[1];
+    _useState152 = _slicedToArray(_useState151, 2),
+    novaTPC = _useState152[0],
+    setNovaTPC = _useState152[1];
+  var _useState153 = (0, _react.useState)([]),
+    _useState154 = _slicedToArray(_useState153, 2),
+    escolarToasts = _useState154[0],
+    setEscolarToasts = _useState154[1];
   var addEscolarToast = function addEscolarToast(msg) {
     var sub = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var id = Date.now() + Math.random();
@@ -8441,10 +8672,10 @@ function EscolarApp(_ref31) {
   }, [alunoKey]);
 
   // Per-student state
-  var _useState149 = (0, _react.useState)(ALUNOS_DEF),
-    _useState150 = _slicedToArray(_useState149, 2),
-    alunosData = _useState150[0],
-    setAlunosData = _useState150[1];
+  var _useState155 = (0, _react.useState)(ALUNOS_DEF),
+    _useState156 = _slicedToArray(_useState155, 2),
+    alunosData = _useState156[0],
+    setAlunosData = _useState156[1];
   var aluno = alunosData[alunoKey];
   var setAluno = function setAluno(fn) {
     return setAlunosData(function (p) {
@@ -10485,45 +10716,45 @@ function EscolarApp(_ref31) {
 // ══════════════════════════════════════════════════════════════════
 function CarvalhoSuite() {
   useFont();
-  var _useState151 = (0, _react.useState)('login'),
-    _useState152 = _slicedToArray(_useState151, 2),
-    screen = _useState152[0],
-    setScreen = _useState152[1];
-  var _useState153 = (0, _react.useState)('Pc12345'),
-    _useState154 = _slicedToArray(_useState153, 2),
-    pass = _useState154[0],
-    setPass = _useState154[1];
-  var _useState155 = (0, _react.useState)(''),
-    _useState156 = _slicedToArray(_useState155, 2),
-    passErr = _useState156[0],
-    setPassErr = _useState156[1];
-  var _useState157 = (0, _react.useState)(true),
+  var _useState157 = (0, _react.useState)('login'),
     _useState158 = _slicedToArray(_useState157, 2),
-    online = _useState158[0],
-    setOnline = _useState158[1];
-  var _useState159 = (0, _react.useState)(USERS_DEF),
+    screen = _useState158[0],
+    setScreen = _useState158[1];
+  var _useState159 = (0, _react.useState)('Pc12345'),
     _useState160 = _slicedToArray(_useState159, 2),
-    users = _useState160[0],
-    setUsers = _useState160[1];
-  var _useState161 = (0, _react.useState)(PERMS_DEF),
+    pass = _useState160[0],
+    setPass = _useState160[1];
+  var _useState161 = (0, _react.useState)(''),
     _useState162 = _slicedToArray(_useState161, 2),
-    perms = _useState162[0],
-    setPerms = _useState162[1];
-  var _useState163 = (0, _react.useState)('patricio'),
+    passErr = _useState162[0],
+    setPassErr = _useState162[1];
+  var _useState163 = (0, _react.useState)(true),
     _useState164 = _slicedToArray(_useState163, 2),
-    activeUser = _useState164[0],
-    setUser = _useState164[1];
-  var _useState165 = (0, _react.useState)(null),
+    online = _useState164[0],
+    setOnline = _useState164[1];
+  var _useState165 = (0, _react.useState)(USERS_DEF),
     _useState166 = _slicedToArray(_useState165, 2),
-    activeApp = _useState166[0],
-    setApp = _useState166[1];
+    users = _useState166[0],
+    setUsers = _useState166[1];
+  var _useState167 = (0, _react.useState)(PERMS_DEF),
+    _useState168 = _slicedToArray(_useState167, 2),
+    perms = _useState168[0],
+    setPerms = _useState168[1];
+  var _useState169 = (0, _react.useState)('patricio'),
+    _useState170 = _slicedToArray(_useState169, 2),
+    activeUser = _useState170[0],
+    setUser = _useState170[1];
+  var _useState171 = (0, _react.useState)(null),
+    _useState172 = _slicedToArray(_useState171, 2),
+    activeApp = _useState172[0],
+    setApp = _useState172[1];
   // Estado partilhado entre TODAS as apps
-  var _useState167 = (0, _react.useState)([
+  var _useState173 = (0, _react.useState)([
       // Exemplo: {date:'2026-06-20', tipo:'ferias', nome:'Férias Verão', addedBy:'patricio'}
     ]),
-    _useState168 = _slicedToArray(_useState167, 2),
-    sharedDias = _useState168[0],
-    setSharedDias = _useState168[1];
+    _useState174 = _slicedToArray(_useState173, 2),
+    sharedDias = _useState174[0],
+    setSharedDias = _useState174[1];
   var addSharedDia = function addSharedDia(dia) {
     return setSharedDias(function (p) {
       if (p.some(function (x) {
@@ -10539,26 +10770,26 @@ function CarvalhoSuite() {
       });
     });
   };
-  var _useState169 = (0, _react.useState)(new Date()),
-    _useState170 = _slicedToArray(_useState169, 2),
-    time = _useState170[0],
-    setTime = _useState170[1];
-  var _useState171 = (0, _react.useState)(''),
-    _useState172 = _slicedToArray(_useState171, 2),
-    newName = _useState172[0],
-    setNewName = _useState172[1];
-  var _useState173 = (0, _react.useState)('Família'),
-    _useState174 = _slicedToArray(_useState173, 2),
-    newRole = _useState174[0],
-    setNewRole = _useState174[1];
-  var _useState175 = (0, _react.useState)('👤'),
+  var _useState175 = (0, _react.useState)(new Date()),
     _useState176 = _slicedToArray(_useState175, 2),
-    newEmoji = _useState176[0],
-    setNewEmoji = _useState176[1];
-  var _useState177 = (0, _react.useState)(false),
+    time = _useState176[0],
+    setTime = _useState176[1];
+  var _useState177 = (0, _react.useState)(''),
     _useState178 = _slicedToArray(_useState177, 2),
-    showAddUser = _useState178[0],
-    setShowAddUser = _useState178[1];
+    newName = _useState178[0],
+    setNewName = _useState178[1];
+  var _useState179 = (0, _react.useState)('Família'),
+    _useState180 = _slicedToArray(_useState179, 2),
+    newRole = _useState180[0],
+    setNewRole = _useState180[1];
+  var _useState181 = (0, _react.useState)('👤'),
+    _useState182 = _slicedToArray(_useState181, 2),
+    newEmoji = _useState182[0],
+    setNewEmoji = _useState182[1];
+  var _useState183 = (0, _react.useState)(false),
+    _useState184 = _slicedToArray(_useState183, 2),
+    showAddUser = _useState184[0],
+    setShowAddUser = _useState184[1];
   (0, _react.useEffect)(function () {
     var t = setInterval(function () {
       return setTime(new Date());

@@ -8630,55 +8630,78 @@ function NutriguimaApp(_ref29) {
 var DISC_CORES = ['#7C3AED', '#2563EB', '#DC2626', '#D97706', '#16A34A', '#DB2777', '#0891B2', '#65A30D', '#9333EA', '#EA580C'];
 
 // Horários Suíços - Lektionen Grenchen
-var SWISS_SLOTS = [{
+// Slots Grenchen — Lucas começa 07:40, Liam 08:10
+// Cada aluno tem os seus próprios slots definidos em ALUNOS_DEF
+var SWISS_SLOTS_LUCAS = [{
   id: 1,
-  hi: '07:45',
-  hf: '08:35',
-  label: '07:45'
+  hi: '07:40',
+  hf: '08:30'
 }, {
   id: 2,
-  hi: '08:40',
-  hf: '09:30',
-  label: '08:40'
+  hi: '08:35',
+  hf: '09:25'
 }, {
   id: 3,
-  hi: '09:45',
-  hf: '10:35',
-  label: '09:45'
+  hi: '09:35',
+  hf: '10:25'
 }, {
   id: 4,
-  hi: '10:40',
-  hf: '11:30',
-  label: '10:40'
+  hi: '10:30',
+  hf: '11:20'
 }, {
   id: 5,
-  hi: '11:35',
-  hf: '12:25',
-  label: '11:35'
-},
-// pausa almoço 12:25-13:15 — pode ter aulas
-{
+  hi: '11:20',
+  hf: '11:45'
+}, {
   id: 6,
-  hi: '12:25',
-  hf: '13:15',
-  label: '12:25',
-  almoco: true
+  hi: '13:45',
+  hf: '14:35',
+  tarde: true
 }, {
   id: 7,
-  hi: '13:15',
-  hf: '14:05',
-  label: '13:15'
+  hi: '14:40',
+  hf: '15:30',
+  tarde: true
 }, {
   id: 8,
-  hi: '14:10',
-  hf: '15:00',
-  label: '14:10'
-}, {
-  id: 9,
-  hi: '15:05',
-  hf: '15:55',
-  label: '15:05'
+  hi: '15:35',
+  hf: '16:20',
+  tarde: true
 }];
+var SWISS_SLOTS_LIAM = [{
+  id: 1,
+  hi: '08:10',
+  hf: '09:00'
+}, {
+  id: 2,
+  hi: '09:05',
+  hf: '09:55'
+}, {
+  id: 3,
+  hi: '10:05',
+  hf: '10:55'
+}, {
+  id: 4,
+  hi: '11:00',
+  hf: '11:45'
+}, {
+  id: 6,
+  hi: '13:45',
+  hf: '14:35',
+  tarde: true
+}, {
+  id: 7,
+  hi: '14:40',
+  hf: '15:30',
+  tarde: true
+}, {
+  id: 8,
+  hi: '15:35',
+  hf: '16:20',
+  tarde: true
+}];
+var SWISS_SLOTS = SWISS_SLOTS_LUCAS; // default
+
 var ALUNOS_DEF = {
   lucas: {
     nome: 'Lucas',
@@ -8798,147 +8821,160 @@ var ALUNOS_DEF = {
       emoji: '🏺',
       cor: '#7C3AED'
     }],
+    slots: SWISS_SLOTS_LUCAS,
     horario: {
       0: [{
         discId: 1,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '07:40',
+        hf: '08:30',
         sala: '213',
         livre: false
       }, {
         discId: 2,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '08:35',
+        hf: '09:25',
         sala: '114',
         livre: false
       }, {
         discId: 12,
-        hi: '09:45',
-        hf: '11:30',
+        hi: '09:35',
+        hf: '11:20',
         sala: 'Gym',
         livre: false
       }, {
         discId: 3,
-        hi: '11:35',
-        hf: '12:25',
+        hi: '11:20',
+        hf: '11:45',
         sala: '211',
         livre: false
       }, {
         discId: 7,
-        hi: '13:15',
-        hf: '14:05',
+        hi: '13:45',
+        hf: '14:35',
         sala: '205',
         livre: false
       }],
       1: [{
         discId: 5,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '07:40',
+        hf: '08:30',
         sala: '301',
         livre: false
       }, {
         discId: 6,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '08:35',
+        hf: '09:25',
         sala: '205',
         livre: false
       }, {
         discId: 2,
-        hi: '09:45',
-        hf: '10:35',
+        hi: '09:35',
+        hf: '10:25',
         sala: '114',
         livre: false
       }, {
         discId: 8,
-        hi: '11:35',
-        hf: '12:25',
+        hi: '11:20',
+        hf: '11:45',
         sala: 'Computer',
         livre: false
       }, {
         discId: 14,
-        hi: '13:15',
-        hf: '14:05',
+        hi: '13:45',
+        hf: '14:35',
         sala: '210',
         livre: false
       }, {
         discId: 14,
-        hi: '14:10',
-        hf: '15:00',
+        hi: '14:40',
+        hf: '15:30',
         sala: '210',
         livre: false
       }],
       2: [{
         discId: 9,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '07:40',
+        hf: '08:30',
         sala: '210',
         livre: false
       }, {
         discId: 1,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '08:35',
+        hf: '09:25',
         sala: '213',
         livre: false
       }, {
         discId: 4,
-        hi: '09:45',
-        hf: '10:35',
+        hi: '09:35',
+        hf: '10:25',
         sala: '114',
+        livre: false
+      }, {
+        discId: 11,
+        hi: '13:45',
+        hf: '14:35',
+        sala: 'Musik',
         livre: false
       }],
       3: [{
         discId: 2,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '07:40',
+        hf: '08:30',
         sala: '114',
         livre: false
       }, {
         discId: 4,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '08:35',
+        hf: '09:25',
         sala: '211',
         livre: false
       }, {
         discId: 13,
-        hi: '09:45',
-        hf: '11:30',
+        hi: '09:35',
+        hf: '11:20',
         sala: 'Computer',
         livre: false
       }, {
-        discId: 11,
-        hi: '13:15',
-        hf: '14:05',
-        sala: 'Musik',
+        discId: 10,
+        hi: '13:45',
+        hf: '14:35',
+        sala: 'Atelier',
         livre: false
       }, {
         discId: 10,
-        hi: '14:10',
-        hf: '15:00',
+        hi: '14:40',
+        hf: '15:30',
         sala: 'Atelier',
+        livre: false
+      }, {
+        discId: 7,
+        hi: '15:35',
+        hf: '16:20',
+        sala: '205',
         livre: false
       }],
       4: [{
         discId: 10,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '07:40',
+        hf: '08:30',
         sala: 'Atelier',
         livre: false
       }, {
         discId: 11,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '08:35',
+        hf: '09:25',
         sala: 'Musik',
         livre: false
       }, {
         discId: 7,
-        hi: '09:45',
-        hf: '10:35',
+        hi: '09:35',
+        hf: '10:25',
         sala: '205',
         livre: false
       }, {
         discId: 14,
-        hi: '13:15',
-        hf: '14:05',
+        hi: '13:45',
+        hf: '14:35',
         sala: '210',
         livre: false
       }]
@@ -9055,82 +9091,131 @@ var ALUNOS_DEF = {
       emoji: '💻',
       cor: '#0891B2'
     }],
+    slots: SWISS_SLOTS_LIAM,
     horario: {
       0: [{
         discId: 1,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '08:10',
+        hf: '09:00',
         sala: '108',
         livre: false
       }, {
         discId: 2,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '09:05',
+        hf: '09:55',
         sala: '102',
         livre: false
       }, {
         discId: 3,
-        hi: '09:45',
-        hf: '11:30',
+        hi: '10:05',
+        hf: '11:45',
         sala: 'Gym',
+        livre: false
+      }, {
+        discId: 7,
+        hi: '13:45',
+        hf: '14:35',
+        sala: 'Computer',
         livre: false
       }],
       1: [{
         discId: 4,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '08:10',
+        hf: '09:00',
         sala: '110',
         livre: false
       }, {
         discId: 5,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '09:05',
+        hf: '09:55',
         sala: '201',
         livre: false
       }, {
         discId: 7,
-        hi: '09:45',
-        hf: '10:35',
+        hi: '10:05',
+        hf: '10:55',
         sala: 'Computer',
         livre: false
-      }],
-      2: [{
+      }, {
         discId: 1,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '13:45',
+        hf: '14:35',
         sala: '108',
         livre: false
       }, {
         discId: 2,
-        hi: '08:40',
-        hf: '09:30',
+        hi: '14:40',
+        hf: '15:30',
         sala: '102',
+        livre: false
+      }],
+      2: [{
+        discId: 1,
+        hi: '08:10',
+        hf: '09:00',
+        sala: '108',
+        livre: false
+      }, {
+        discId: 2,
+        hi: '09:05',
+        hf: '09:55',
+        sala: '102',
+        livre: false
+      }, {
+        discId: 4,
+        hi: '10:05',
+        hf: '10:55',
+        sala: '110',
         livre: false
       }],
       3: [{
         discId: 2,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '08:10',
+        hf: '09:00',
         sala: '102',
         livre: false
       }, {
         discId: 6,
-        hi: '08:40',
-        hf: '10:10',
+        hi: '09:05',
+        hf: '11:45',
         sala: 'Atelier',
+        livre: false
+      }, {
+        discId: 5,
+        hi: '13:45',
+        hf: '14:35',
+        sala: '201',
+        livre: false
+      }, {
+        discId: 4,
+        hi: '14:40',
+        hf: '15:30',
+        sala: '110',
+        livre: false
+      }, {
+        discId: 7,
+        hi: '15:35',
+        hf: '16:20',
+        sala: 'Computer',
         livre: false
       }],
       4: [{
         discId: 4,
-        hi: '07:45',
-        hf: '08:35',
+        hi: '08:10',
+        hf: '09:00',
         sala: '110',
         livre: false
       }, {
         discId: 3,
-        hi: '08:40',
-        hf: '10:10',
+        hi: '09:05',
+        hf: '11:45',
         sala: 'Gym',
+        livre: false
+      }, {
+        discId: 1,
+        hi: '13:45',
+        hf: '14:35',
+        sala: '108',
         livre: false
       }]
     },
@@ -9969,14 +10054,15 @@ function EscolarApp(_ref31) {
           color: E.purple
         }
       }, d));
-    })), SWISS_SLOTS.map(function (slot, si) {
+    })), (aluno.slots || SWISS_SLOTS).map(function (slot, si) {
+      var _ref33;
       var hasAny = [0, 1, 2, 3, 4].some(function (di) {
         return (aluno.horario[di] || []).some(function (a) {
           return a.hi <= slot.hi && a.hf > slot.hi;
         });
       });
       var isAlmoco = !!slot.almoco;
-      var isTardeStart = slot.hi === '13:15';
+      var isTardeStart = !!slot.tarde && si > 0 && !((_ref33 = (aluno.slots || SWISS_SLOTS)[si - 1]) !== null && _ref33 !== void 0 && _ref33.tarde);
       return /*#__PURE__*/React.createElement(React.Fragment, {
         key: slot.id
       }, isTardeStart && /*#__PURE__*/React.createElement("div", {

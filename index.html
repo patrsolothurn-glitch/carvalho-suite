@@ -10317,7 +10317,7 @@ function EscolarApp(_ref31) {
         fontSize: 10,
         marginTop: 1
       }
-    }, "\uD83D\uDC64 ", disc.prof, disc.tel ? " \xB7 \uD83D\uDCDE ".concat(disc.tel) : '')), /*#__PURE__*/React.createElement("span", {
+    }, "\uD83D\uDC64 ", disc.prof, disc.tel ? " \xB7 ".concat(disc.tel.includes('@') ? '📧' : '📞', " ").concat(disc.tel) : '')), /*#__PURE__*/React.createElement("span", {
       style: {
         color: E.purple,
         fontSize: 16
@@ -10455,9 +10455,9 @@ function EscolarApp(_ref31) {
     k: 'prof',
     ph: 'Ex: Herr Müller'
   }, {
-    l: 'Tel.',
+    l: 'Tel. / Email',
     k: 'tel',
-    ph: 'Opcional'
+    ph: 'Ex: 032 123 45 67 ou prof@schule.ch'
   }].map(function (f) {
     return /*#__PURE__*/React.createElement("div", {
       key: f.k,

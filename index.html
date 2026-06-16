@@ -6062,24 +6062,28 @@ function FamiliaApp(_ref19) {
         t: 'Médico Lucas',
         emoji: '🏥',
         who: 'lucas',
-        color: F.orange
+        color: F.orange,
+        hora: '10:30'
       }, {
         t: 'Reunião escola Liam',
         emoji: '📚',
         who: 'liam',
-        color: F.green
+        color: F.green,
+        hora: '14:00'
       }],
       '2026-06-20': [{
         t: 'Aniversário Esposa 🎂',
         emoji: '🎂',
         who: 'todos',
-        color: F.pink
+        color: F.pink,
+        hora: '19:00'
       }],
       '2026-06-25': [{
         t: 'Consulta dentista',
         emoji: '🦷',
         who: 'patricio',
-        color: F.gold
+        color: F.gold,
+        hora: '09:00'
       }],
       '2026-06-28': [{
         t: 'Fim de semana Fafe',
@@ -6681,13 +6685,22 @@ function FamiliaApp(_ref19) {
             fontSize: 8,
             fontWeight: 700,
             color: ev.color,
-            lineHeight: 1.3,
-            whiteSpace: 'nowrap',
+            lineHeight: 1.2,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            margin: 0
+            margin: 0,
+            whiteSpace: 'nowrap'
           }
-        }, ev.emoji, " ", ev.hora ? ev.hora + ' ' : '', ev.t));
+        }, ev.emoji, " ", ev.t), ev.hora && /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 8,
+            fontWeight: 800,
+            color: ev.color,
+            opacity: 0.85,
+            margin: 0,
+            lineHeight: 1.1
+          }
+        }, "\uD83D\uDD50", ev.hora));
       }));
     }));
   })), /*#__PURE__*/React.createElement("div", {

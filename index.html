@@ -11225,7 +11225,112 @@ function EscolarApp(_ref31) {
         key: d.id,
         value: d.id
       }, d.emoji, " ", d.nome);
-    }))), /*#__PURE__*/React.createElement("div", {
+    }))), !aula.livre && /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: E.surface2,
+        borderRadius: 10,
+        padding: '10px',
+        marginBottom: 8,
+        border: "1px solid ".concat(disc.cor, "33")
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: disc.cor,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 6
+      }
+    }, "\uD83D\uDC64 ", disc.nome, " \u2014 Contacto"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 6,
+        marginBottom: 6
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 9,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 2
+      }
+    }, "Professor"), /*#__PURE__*/React.createElement("input", {
+      defaultValue: disc.prof || '',
+      id: "prof-".concat(alunoKey, "-").concat(dayIdx, "-").concat(i),
+      autoComplete: "off",
+      placeholder: "Herr/Frau...",
+      style: {
+        width: '100%',
+        background: E.surface,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 8,
+        padding: '6px 9px',
+        color: E.text,
+        fontSize: 12,
+        outline: 'none',
+        boxSizing: 'border-box'
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 9,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 2
+      }
+    }, "Tel / Email"), /*#__PURE__*/React.createElement("input", {
+      defaultValue: disc.tel || '',
+      id: "tel-".concat(alunoKey, "-").concat(dayIdx, "-").concat(i),
+      autoComplete: "off",
+      placeholder: "032... ou @...",
+      style: {
+        width: '100%',
+        background: E.surface,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 8,
+        padding: '6px 9px',
+        color: E.text,
+        fontSize: 12,
+        outline: 'none',
+        boxSizing: 'border-box'
+      }
+    }))), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        var _document$getElementB9, _document$getElementB0;
+        var prof = ((_document$getElementB9 = document.getElementById("prof-".concat(alunoKey, "-").concat(dayIdx, "-").concat(i))) === null || _document$getElementB9 === void 0 ? void 0 : _document$getElementB9.value) || '';
+        var tel = ((_document$getElementB0 = document.getElementById("tel-".concat(alunoKey, "-").concat(dayIdx, "-").concat(i))) === null || _document$getElementB0 === void 0 ? void 0 : _document$getElementB0.value) || '';
+        setAluno(function (al) {
+          return _objectSpread(_objectSpread({}, al), {}, {
+            disciplinas: al.disciplinas.map(function (d) {
+              return d.id === aula.discId ? _objectSpread(_objectSpread({}, d), {}, {
+                prof: prof,
+                tel: tel
+              }) : d;
+            })
+          });
+        });
+      },
+      style: {
+        width: '100%',
+        background: "".concat(disc.cor, "22"),
+        border: "1px solid ".concat(disc.cor, "44"),
+        borderRadius: 8,
+        padding: '6px',
+        color: disc.cor,
+        fontSize: 11,
+        fontWeight: 700,
+        cursor: 'pointer'
+      }
+    }, "\u2713 Guardar professor")), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         gap: 8
@@ -11484,8 +11589,8 @@ function EscolarApp(_ref31) {
     }, /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
         var get = function get(k) {
-          var _document$getElementB9;
-          return ((_document$getElementB9 = document.getElementById("disc-".concat(d.id, "-").concat(k))) === null || _document$getElementB9 === void 0 ? void 0 : _document$getElementB9.value) || '';
+          var _document$getElementB1;
+          return ((_document$getElementB1 = document.getElementById("disc-".concat(d.id, "-").concat(k))) === null || _document$getElementB1 === void 0 ? void 0 : _document$getElementB1.value) || '';
         };
         setAluno(function (al) {
           return _objectSpread(_objectSpread({}, al), {}, {

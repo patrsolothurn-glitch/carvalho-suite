@@ -6216,14 +6216,13 @@ function FamiliaApp(_ref19) {
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
-      gridTemplateColumns: "60px repeat(".concat(members.filter(function (m) {
+      gridTemplateColumns: "52px repeat(".concat(members.filter(function (m) {
         return m.id !== 'todos';
       }).length, ",1fr)"),
       borderBottom: "2px solid ".concat(F.border)
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: '10px 6px',
       background: F.surface2
     }
   }), members.filter(function (m) {
@@ -6232,15 +6231,16 @@ function FamiliaApp(_ref19) {
     return /*#__PURE__*/React.createElement("div", {
       key: m.id,
       style: {
-        padding: '8px 4px',
+        padding: '8px 2px',
         textAlign: 'center',
         background: "".concat(m.color, "10"),
-        borderLeft: "1px solid ".concat(F.border)
+        borderLeft: "1px solid ".concat(F.border),
+        overflow: 'hidden'
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
-        width: 32,
-        height: 32,
+        width: 30,
+        height: 30,
         borderRadius: 10,
         background: "".concat(m.color, "20"),
         border: "2px solid ".concat(m.color, "55"),
@@ -6248,7 +6248,8 @@ function FamiliaApp(_ref19) {
         alignItems: 'center',
         justifyContent: 'center',
         margin: '0 auto 3px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        flexShrink: 0
       }
     }, memberPhotos[m.id] ? /*#__PURE__*/React.createElement("img", {
       src: memberPhotos[m.id],
@@ -6260,13 +6261,14 @@ function FamiliaApp(_ref19) {
       alt: m.name
     }) : /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 16
+        fontSize: 15
       }
     }, m.emoji)), /*#__PURE__*/React.createElement("p", {
       style: {
         fontSize: 9,
         fontWeight: 800,
-        color: m.color
+        color: m.color,
+        textAlign: 'center'
       }
     }, m.name));
   })), Array.from({
@@ -6285,7 +6287,7 @@ function FamiliaApp(_ref19) {
       key: di,
       style: {
         display: 'grid',
-        gridTemplateColumns: "60px repeat(".concat(members.filter(function (m) {
+        gridTemplateColumns: "52px repeat(".concat(members.filter(function (m) {
           return m.id !== 'todos';
         }).length, ",1fr)"),
         borderBottom: di < 6 ? "1px solid ".concat(F.border) : 'none',
@@ -6293,31 +6295,35 @@ function FamiliaApp(_ref19) {
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
-        padding: '10px 6px',
+        padding: '8px 4px',
         textAlign: 'center',
         borderRight: "1px solid ".concat(F.border),
-        background: isToday ? "".concat(F.coral, "10") : isWeekend ? F.surface2 : 'transparent'
+        background: isToday ? "".concat(F.coral, "10") : isWeekend ? F.surface2 : 'transparent',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
       }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
-        fontSize: 9,
+        fontSize: 8,
         fontWeight: 700,
         color: isWeekend ? F.coral : F.muted
       }
     }, dayName), /*#__PURE__*/React.createElement("div", {
       style: {
-        width: 28,
-        height: 28,
+        width: 26,
+        height: 26,
         borderRadius: '50%',
         background: isToday ? F.coral : 'transparent',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '2px auto 0'
+        marginTop: 2
       }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: isToday ? 900 : 600,
         color: isToday ? '#fff' : isWeekend ? F.coral : F.text
       }
@@ -6331,53 +6337,63 @@ function FamiliaApp(_ref19) {
       return /*#__PURE__*/React.createElement("div", {
         key: m.id,
         style: {
-          padding: '4px 3px',
+          padding: '3px 3px',
           borderLeft: "1px solid ".concat(F.border),
-          minHeight: 48,
+          minHeight: 44,
           display: 'flex',
           flexDirection: 'column',
-          gap: 3
+          gap: 2,
+          overflow: 'hidden',
+          boxSizing: 'border-box'
         }
       }, mShared && dayShared.map(function (s, si) {
         return /*#__PURE__*/React.createElement("div", {
           key: si,
           style: {
             background: "".concat(F.purple, "15"),
-            borderRadius: 6,
-            padding: '2px 5px',
-            border: "1px solid ".concat(F.purple, "30")
+            borderRadius: 5,
+            padding: '2px 4px',
+            border: "1px solid ".concat(F.purple, "30"),
+            overflow: 'hidden'
           }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
-            fontSize: 9,
+            fontSize: 8,
             fontWeight: 700,
             color: F.purple,
-            lineHeight: 1.2
+            lineHeight: 1.2,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
           }
         }, s.tipo === 'ferias' ? '🏖' : s.tipo === 'feriado' ? '🎌' : '✅', " ", s.tipo === 'ferias' ? 'Férias' : s.tipo === 'feriado' ? 'Feriado' : 'Livre'));
       }), mEvs.map(function (ev, ei) {
         return /*#__PURE__*/React.createElement("div", {
           key: ei,
-          style: {
-            background: "".concat(ev.color, "15"),
-            borderRadius: 6,
-            padding: '2px 5px',
-            border: "1px solid ".concat(ev.color, "33"),
-            cursor: 'pointer'
-          },
           onClick: function onClick() {
             setSelDay(date.getDate());
             setMainView('mes');
+          },
+          style: {
+            background: "".concat(ev.color, "18"),
+            borderRadius: 5,
+            padding: '3px 4px',
+            border: "1px solid ".concat(ev.color, "40"),
+            cursor: 'pointer',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+            width: '100%'
           }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
-            fontSize: 9,
+            fontSize: 8,
             fontWeight: 700,
             color: ev.color,
             lineHeight: 1.3,
-            overflow: 'hidden',
             whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis'
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            margin: 0
           }
         }, ev.emoji, " ", ev.hora ? ev.hora + ' ' : '', ev.t));
       }));
@@ -6385,7 +6401,7 @@ function FamiliaApp(_ref19) {
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
-      gap: 10,
+      gap: 12,
       marginTop: 10,
       flexWrap: 'wrap',
       padding: '0 4px'

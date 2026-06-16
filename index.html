@@ -8655,18 +8655,26 @@ var SWISS_SLOTS = [{
   hi: '11:35',
   hf: '12:25',
   label: '11:35'
-}, {
+},
+// pausa almoço 12:25-13:15 — pode ter aulas
+{
   id: 6,
+  hi: '12:25',
+  hf: '13:15',
+  label: '12:25',
+  almoco: true
+}, {
+  id: 7,
   hi: '13:15',
   hf: '14:05',
   label: '13:15'
 }, {
-  id: 7,
+  id: 8,
   hi: '14:10',
   hf: '15:00',
   label: '14:10'
 }, {
-  id: 8,
+  id: 9,
   hi: '15:05',
   hf: '15:55',
   label: '15:05'
@@ -8815,6 +8823,12 @@ var ALUNOS_DEF = {
         hf: '12:25',
         sala: '211',
         livre: false
+      }, {
+        discId: 7,
+        hi: '13:15',
+        hf: '14:05',
+        sala: '205',
+        livre: false
       }],
       1: [{
         discId: 5,
@@ -8839,6 +8853,18 @@ var ALUNOS_DEF = {
         hi: '11:35',
         hf: '12:25',
         sala: 'Computer',
+        livre: false
+      }, {
+        discId: 14,
+        hi: '13:15',
+        hf: '14:05',
+        sala: '210',
+        livre: false
+      }, {
+        discId: 14,
+        hi: '14:10',
+        hf: '15:00',
+        sala: '210',
         livre: false
       }],
       2: [{
@@ -8878,6 +8904,18 @@ var ALUNOS_DEF = {
         hf: '11:30',
         sala: 'Computer',
         livre: false
+      }, {
+        discId: 11,
+        hi: '13:15',
+        hf: '14:05',
+        sala: 'Musik',
+        livre: false
+      }, {
+        discId: 10,
+        hi: '14:10',
+        hf: '15:00',
+        sala: 'Atelier',
+        livre: false
       }],
       4: [{
         discId: 10,
@@ -8896,6 +8934,12 @@ var ALUNOS_DEF = {
         hi: '09:45',
         hf: '10:35',
         sala: '205',
+        livre: false
+      }, {
+        discId: 14,
+        hi: '13:15',
+        hf: '14:05',
+        sala: '210',
         livre: false
       }]
     },
@@ -9926,25 +9970,57 @@ function EscolarApp(_ref31) {
         }
       }, d));
     })), SWISS_SLOTS.map(function (slot, si) {
-      // Verificar se este slot tem alguma aula em qualquer dia
       var hasAny = [0, 1, 2, 3, 4].some(function (di) {
         return (aluno.horario[di] || []).some(function (a) {
           return a.hi <= slot.hi && a.hf > slot.hi;
         });
       });
-      if (!hasAny && si > 4) return null; // Omitir slots vazios no fim
-      return /*#__PURE__*/React.createElement("div", {
-        key: slot.id,
+      var isAlmoco = !!slot.almoco;
+      var isTardeStart = slot.hi === '13:15';
+      return /*#__PURE__*/React.createElement(React.Fragment, {
+        key: slot.id
+      }, isTardeStart && /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: 'grid',
+          gridTemplateColumns: '50px repeat(5,1fr)',
+          background: 'rgba(124,58,237,0.05)',
+          borderTop: "2px dashed ".concat(E.purple, "33"),
+          borderBottom: "1px solid ".concat(E.border)
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          padding: '3px',
+          textAlign: 'center',
+          fontSize: 8,
+          color: E.muted
+        }
+      }, "\uD83C\uDF7D"), [0, 1, 2, 3, 4].map(function (di) {
+        return /*#__PURE__*/React.createElement("div", {
+          key: di,
+          style: {
+            borderLeft: "1px solid ".concat(E.border),
+            padding: '3px',
+            textAlign: 'center'
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 7,
+            color: 'rgba(150,150,150,0.5)',
+            fontWeight: 600
+          }
+        }, "Almo\xE7o"));
+      })), /*#__PURE__*/React.createElement("div", {
         style: {
           display: 'grid',
           gridTemplateColumns: '50px repeat(5,1fr)',
           borderBottom: "1px solid ".concat(E.border),
-          minHeight: 52
+          minHeight: isAlmoco ? 36 : 52,
+          background: isAlmoco && !hasAny ? 'rgba(100,100,100,0.03)' : 'transparent'
         }
       }, /*#__PURE__*/React.createElement("div", {
         style: {
-          padding: '4px 4px',
-          background: E.surface2,
+          padding: '3px',
+          background: isAlmoco ? 'rgba(100,100,100,0.06)' : E.surface2,
           borderRight: "1px solid ".concat(E.border),
           display: 'flex',
           flexDirection: 'column',
@@ -9953,13 +10029,14 @@ function EscolarApp(_ref31) {
         }
       }, /*#__PURE__*/React.createElement("p", {
         style: {
-          fontSize: 9,
+          fontSize: 8,
           fontWeight: 800,
-          color: E.purple
+          color: isAlmoco ? E.muted : E.purple,
+          lineHeight: 1.2
         }
       }, slot.hi), /*#__PURE__*/React.createElement("p", {
         style: {
-          fontSize: 8,
+          fontSize: 7,
           color: E.muted
         }
       }, "\u2192", slot.hf)), [0, 1, 2, 3, 4].map(function (di) {
@@ -9967,7 +10044,6 @@ function EscolarApp(_ref31) {
           return a.hi <= slot.hi && a.hf > slot.hi;
         });
         var disc = aula ? getDisc(aula.discId) : null;
-        // Verificar se é continuação (mesma aula que já apareceu numa linha anterior)
         var isFirst = aula && aula.hi === slot.hi;
         var isMiddle = aula && aula.hi < slot.hi;
         return /*#__PURE__*/React.createElement("div", {
@@ -9981,12 +10057,11 @@ function EscolarApp(_ref31) {
           style: {
             borderLeft: "1px solid ".concat(E.border),
             padding: '3px',
-            background: aula ? isFirst ? "".concat(disc.cor, "18") : "".concat(disc.cor, "08") : isMiddle ? 'transparent' : 'transparent',
+            background: aula ? isFirst ? "".concat(disc.cor, "18") : "".concat(disc.cor, "06") : 'transparent',
             cursor: aula ? 'pointer' : 'default',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
-            position: 'relative'
+            justifyContent: 'center'
           }
         }, isFirst && disc && /*#__PURE__*/React.createElement("div", {
           style: {
@@ -9994,7 +10069,6 @@ function EscolarApp(_ref31) {
             borderRadius: 7,
             background: "".concat(disc.cor, "25"),
             border: "1px solid ".concat(disc.cor, "44"),
-            height: '100%',
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
@@ -10016,21 +10090,27 @@ function EscolarApp(_ref31) {
           }
         }, "S.", aula.sala)), isMiddle && disc && /*#__PURE__*/React.createElement("div", {
           style: {
-            height: '100%',
             background: "".concat(disc.cor, "10"),
             borderRadius: 4,
             borderLeft: "2px solid ".concat(disc.cor, "55"),
             paddingLeft: 3,
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
+            height: '100%'
           }
         }, /*#__PURE__*/React.createElement("p", {
           style: {
             fontSize: 8,
             color: "".concat(disc.cor, "88")
           }
-        }, "\u2195")));
-      }));
+        }, "\u2195")), !aula && isAlmoco && /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 7,
+            textAlign: 'center',
+            color: 'rgba(150,150,150,0.25)'
+          }
+        }, "\u2014"));
+      })));
     })), /*#__PURE__*/React.createElement("p", {
       style: {
         color: E.muted,

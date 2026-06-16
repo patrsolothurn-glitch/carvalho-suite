@@ -6142,32 +6142,39 @@ function FamiliaApp(_ref19) {
     _useState116 = _slicedToArray(_useState115, 2),
     weekStart = _useState116[0],
     setWeekStart = _useState116[1];
-  var members = [{
-    id: 'todos',
-    name: 'Todos',
-    emoji: '👨‍👩‍👧‍👦',
-    color: F.coral
-  }, {
-    id: 'patricio',
-    name: 'Patricio',
-    emoji: '👨‍💼',
-    color: F.gold
-  }, {
-    id: 'esposa',
-    name: 'Esposa',
-    emoji: '👩',
-    color: F.blue
-  }, {
-    id: 'lucas',
-    name: 'Lucas',
-    emoji: '👦',
-    color: F.orange
-  }, {
-    id: 'liam',
-    name: 'Liam',
-    emoji: '👦',
-    color: F.green
-  }];
+  var _useState117 = (0, _react.useState)([{
+      id: 'todos',
+      name: 'Todos',
+      emoji: '👨‍👩‍👧‍👦',
+      color: F.coral
+    }, {
+      id: 'patricio',
+      name: 'Patricio',
+      emoji: '👨‍💼',
+      color: F.gold
+    }, {
+      id: 'esposa',
+      name: 'Esposa',
+      emoji: '👩',
+      color: F.blue
+    }, {
+      id: 'lucas',
+      name: 'Lucas',
+      emoji: '👦',
+      color: F.orange
+    }, {
+      id: 'liam',
+      name: 'Liam',
+      emoji: '👦',
+      color: F.green
+    }]),
+    _useState118 = _slicedToArray(_useState117, 2),
+    members = _useState118[0],
+    setMembers = _useState118[1];
+  var _useState119 = (0, _react.useState)(null),
+    _useState120 = _slicedToArray(_useState119, 2),
+    editMemberId = _useState120[0],
+    setEditMemberId = _useState120[1];
   var yr = curMonth.getFullYear(),
     mo = curMonth.getMonth();
   var daysInMo = new Date(yr, mo + 1, 0).getDate();
@@ -6383,7 +6390,8 @@ function FamiliaApp(_ref19) {
         flexDirection: 'column',
         alignItems: 'center',
         gap: 4,
-        flex: 1
+        flex: 1,
+        position: 'relative'
       }
     }, /*#__PURE__*/React.createElement("div", {
       style: {
@@ -6447,13 +6455,131 @@ function FamiliaApp(_ref19) {
       onChange: function onChange(e) {
         return handlePhotoUpload(m.id, e);
       }
-    }))), /*#__PURE__*/React.createElement("span", {
+    }))), editMemberId === m.id ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: 60,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: F.surface,
+        border: "1px solid ".concat(m.color),
+        borderRadius: 12,
+        padding: 8,
+        zIndex: 300,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+        minWidth: 130
+      },
+      onClick: function onClick(e) {
+        return e.stopPropagation();
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      id: "member-name-".concat(m.id),
+      defaultValue: m.name,
+      autoComplete: "off",
+      style: {
+        width: '100%',
+        background: F.surface2,
+        border: "1px solid ".concat(m.color),
+        borderRadius: 8,
+        padding: '5px 8px',
+        color: F.text,
+        fontSize: 12,
+        outline: 'none',
+        boxSizing: 'border-box',
+        marginBottom: 6
+      }
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 4,
+        marginBottom: 4
+      }
+    }, ['👨‍💼', '👩', '👦', '👧', '👴', '👵', '🧑', '👶'].map(function (e) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: e,
+        onClick: function onClick() {
+          return setMembers(function (p) {
+            return p.map(function (x) {
+              return x.id === m.id ? _objectSpread(_objectSpread({}, x), {}, {
+                emoji: e
+              }) : x;
+            });
+          });
+        },
+        style: {
+          background: m.emoji === e ? "".concat(m.color, "22") : 'transparent',
+          border: 'none',
+          borderRadius: 6,
+          padding: '2px',
+          fontSize: 14,
+          cursor: 'pointer'
+        }
+      }, e);
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 4
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setEditMemberId(null);
+      },
+      style: {
+        flex: 1,
+        background: F.surface2,
+        border: "1px solid ".concat(F.border),
+        borderRadius: 7,
+        padding: '5px',
+        color: F.muted,
+        fontSize: 10,
+        cursor: 'pointer'
+      }
+    }, "\u2715"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        var _document$getElementB;
+        var val = (((_document$getElementB = document.getElementById("member-name-".concat(m.id))) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.value) || '').trim();
+        if (val) setMembers(function (p) {
+          return p.map(function (x) {
+            return x.id === m.id ? _objectSpread(_objectSpread({}, x), {}, {
+              name: val
+            }) : x;
+          });
+        });
+        setEditMemberId(null);
+      },
+      style: {
+        flex: 2,
+        background: m.color,
+        border: 'none',
+        borderRadius: 7,
+        padding: '5px',
+        color: '#fff',
+        fontSize: 10,
+        fontWeight: 800,
+        cursor: 'pointer'
+      }
+    }, "\u2713 OK"))) : /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
+        cursor: 'pointer'
+      },
+      onClick: function onClick() {
+        return m.id !== 'todos' && setEditMemberId(m.id);
+      }
+    }, /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 10,
         fontWeight: 700,
         color: selMember === m.id ? m.color : F.muted
       }
-    }, m.name));
+    }, m.name), m.id !== 'todos' && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 8,
+        color: F.muted
+      }
+    }, "\u270E")));
   })), mainView === 'semana' && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '14px 16px 0'
@@ -7244,11 +7370,11 @@ function FamiliaApp(_ref19) {
       }
     }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        var _document$getElementB, _document$getElementB2, _document$getElementB3, _document$getElementB4, _members$find;
-        var titulo = ((_document$getElementB = document.getElementById("ev-t-".concat(evKey))) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.value.trim()) || ev.t;
-        var hora = ((_document$getElementB2 = document.getElementById("ev-h-".concat(evKey))) === null || _document$getElementB2 === void 0 ? void 0 : _document$getElementB2.value) || ev.hora || '';
-        var who = ((_document$getElementB3 = document.getElementById("ev-w-".concat(evKey))) === null || _document$getElementB3 === void 0 ? void 0 : _document$getElementB3.value) || ev.who;
-        var nota = ((_document$getElementB4 = document.getElementById("ev-n-".concat(evKey))) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.value.trim()) || '';
+        var _document$getElementB2, _document$getElementB3, _document$getElementB4, _document$getElementB5, _members$find;
+        var titulo = ((_document$getElementB2 = document.getElementById("ev-t-".concat(evKey))) === null || _document$getElementB2 === void 0 ? void 0 : _document$getElementB2.value.trim()) || ev.t;
+        var hora = ((_document$getElementB3 = document.getElementById("ev-h-".concat(evKey))) === null || _document$getElementB3 === void 0 ? void 0 : _document$getElementB3.value) || ev.hora || '';
+        var who = ((_document$getElementB4 = document.getElementById("ev-w-".concat(evKey))) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.value) || ev.who;
+        var nota = ((_document$getElementB5 = document.getElementById("ev-n-".concat(evKey))) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.value.trim()) || '';
         var newColor = ((_members$find = members.find(function (x) {
           return x.id === who;
         })) === null || _members$find === void 0 ? void 0 : _members$find.color) || ev.color;
@@ -7851,19 +7977,19 @@ function FamiliaApp(_ref19) {
 // ── NUTRIGUIMA ──────────────────────────────────────────────────────
 function NutriguimaApp(_ref29) {
   var onBack = _ref29.onBack;
-  var _useState117 = (0, _react.useState)({}),
-    _useState118 = _slicedToArray(_useState117, 2),
-    cart = _useState118[0],
-    setCart = _useState118[1];
-  var _useState119 = (0, _react.useState)(''),
-    _useState120 = _slicedToArray(_useState119, 2),
-    search = _useState120[0],
-    setSearch = _useState120[1];
-  var _useState121 = (0, _react.useState)('loja'),
+  var _useState121 = (0, _react.useState)({}),
     _useState122 = _slicedToArray(_useState121, 2),
-    tab = _useState122[0],
-    setTab = _useState122[1]; // loja | stock
-  var _useState123 = (0, _react.useState)({
+    cart = _useState122[0],
+    setCart = _useState122[1];
+  var _useState123 = (0, _react.useState)(''),
+    _useState124 = _slicedToArray(_useState123, 2),
+    search = _useState124[0],
+    setSearch = _useState124[1];
+  var _useState125 = (0, _react.useState)('loja'),
+    _useState126 = _slicedToArray(_useState125, 2),
+    tab = _useState126[0],
+    setTab = _useState126[1]; // loja | stock
+  var _useState127 = (0, _react.useState)({
       1: 5,
       2: 1,
       3: 0,
@@ -7871,28 +7997,28 @@ function NutriguimaApp(_ref29) {
       5: 8,
       6: 1
     }),
-    _useState124 = _slicedToArray(_useState123, 2),
-    stock = _useState124[0],
-    setStock = _useState124[1];
-  var _useState125 = (0, _react.useState)(null),
-    _useState126 = _slicedToArray(_useState125, 2),
-    editStock = _useState126[0],
-    setEditStock = _useState126[1];
-  var _useState127 = (0, _react.useState)(false),
     _useState128 = _slicedToArray(_useState127, 2),
-    showAddProd = _useState128[0],
-    setShowAddProd = _useState128[1];
+    stock = _useState128[0],
+    setStock = _useState128[1];
+  var _useState129 = (0, _react.useState)(null),
+    _useState130 = _slicedToArray(_useState129, 2),
+    editStock = _useState130[0],
+    setEditStock = _useState130[1];
+  var _useState131 = (0, _react.useState)(false),
+    _useState132 = _slicedToArray(_useState131, 2),
+    showAddProd = _useState132[0],
+    setShowAddProd = _useState132[1];
   var novoNomeRef = React.useRef(null);
   var novoPrecoRef = React.useRef(null);
-  var _useState129 = (0, _react.useState)('💊'),
-    _useState130 = _slicedToArray(_useState129, 2),
-    novoEmoji = _useState130[0],
-    setNovoEmoji = _useState130[1];
-  var _useState131 = (0, _react.useState)('Proteína'),
-    _useState132 = _slicedToArray(_useState131, 2),
-    novoCat = _useState132[0],
-    setNovoCat = _useState132[1];
-  var _useState133 = (0, _react.useState)([{
+  var _useState133 = (0, _react.useState)('💊'),
+    _useState134 = _slicedToArray(_useState133, 2),
+    novoEmoji = _useState134[0],
+    setNovoEmoji = _useState134[1];
+  var _useState135 = (0, _react.useState)('Proteína'),
+    _useState136 = _slicedToArray(_useState135, 2),
+    novoCat = _useState136[0],
+    setNovoCat = _useState136[1];
+  var _useState137 = (0, _react.useState)([{
       id: 1,
       name: 'Whey Protein 1kg',
       price: 24.9,
@@ -7929,9 +8055,9 @@ function NutriguimaApp(_ref29) {
       emoji: '🔥',
       cat: 'Força'
     }]),
-    _useState134 = _slicedToArray(_useState133, 2),
-    products = _useState134[0],
-    setProducts = _useState134[1];
+    _useState138 = _slicedToArray(_useState137, 2),
+    products = _useState138[0],
+    setProducts = _useState138[1];
   var addProduto = function addProduto() {
     var _novoNomeRef$current, _novoPrecoRef$current;
     var name = (((_novoNomeRef$current = novoNomeRef.current) === null || _novoNomeRef$current === void 0 ? void 0 : _novoNomeRef$current.value) || '').trim();
@@ -9799,88 +9925,88 @@ function EscolarApp(_ref31) {
     activeUser = _ref31$activeUser === void 0 ? 'patricio' : _ref31$activeUser;
   var isAdmin = activeUser === 'patricio';
   var defaultAluno = activeUser === 'liam' ? 'liam' : 'lucas';
-  var _useState135 = (0, _react.useState)(defaultAluno),
-    _useState136 = _slicedToArray(_useState135, 2),
-    alunoKey = _useState136[0],
-    setAlunoKey = _useState136[1];
-  var _useState137 = (0, _react.useState)('horario'),
-    _useState138 = _slicedToArray(_useState137, 2),
-    tab = _useState138[0],
-    setTab = _useState138[1];
-  var _useState139 = (0, _react.useState)('semana'),
+  var _useState139 = (0, _react.useState)(defaultAluno),
     _useState140 = _slicedToArray(_useState139, 2),
-    horView = _useState140[0],
-    setHorView = _useState140[1]; // 'semana' | 'dia'
-  var _useState141 = (0, _react.useState)(function () {
+    alunoKey = _useState140[0],
+    setAlunoKey = _useState140[1];
+  var _useState141 = (0, _react.useState)('horario'),
+    _useState142 = _slicedToArray(_useState141, 2),
+    tab = _useState142[0],
+    setTab = _useState142[1];
+  var _useState143 = (0, _react.useState)('semana'),
+    _useState144 = _slicedToArray(_useState143, 2),
+    horView = _useState144[0],
+    setHorView = _useState144[1]; // 'semana' | 'dia'
+  var _useState145 = (0, _react.useState)(function () {
       var d = new Date().getDay();
       return d === 0 ? 4 : d - 1 > 4 ? 0 : d - 1;
     }),
-    _useState142 = _slicedToArray(_useState141, 2),
-    dayIdx = _useState142[0],
-    setDayIdx = _useState142[1];
-  var _useState143 = (0, _react.useState)(1),
-    _useState144 = _slicedToArray(_useState143, 2),
-    semestre = _useState144[0],
-    setSemestre = _useState144[1];
-  var _useState145 = (0, _react.useState)(false),
     _useState146 = _slicedToArray(_useState145, 2),
-    showAddDisc = _useState146[0],
-    setShowAddDisc = _useState146[1];
-  var _useState147 = (0, _react.useState)(null),
+    dayIdx = _useState146[0],
+    setDayIdx = _useState146[1];
+  var _useState147 = (0, _react.useState)(1),
     _useState148 = _slicedToArray(_useState147, 2),
-    showAddNota = _useState148[0],
-    setShowAddNota = _useState148[1];
+    semestre = _useState148[0],
+    setSemestre = _useState148[1];
   var _useState149 = (0, _react.useState)(false),
     _useState150 = _slicedToArray(_useState149, 2),
-    showAddTPC = _useState150[0],
-    setShowAddTPC = _useState150[1];
+    showAddDisc = _useState150[0],
+    setShowAddDisc = _useState150[1];
   var _useState151 = (0, _react.useState)(null),
     _useState152 = _slicedToArray(_useState151, 2),
-    editAula = _useState152[0],
-    setEditAula = _useState152[1];
+    showAddNota = _useState152[0],
+    setShowAddNota = _useState152[1];
   var _useState153 = (0, _react.useState)(false),
     _useState154 = _slicedToArray(_useState153, 2),
-    editKlasse = _useState154[0],
-    setEditKlasse = _useState154[1];
+    showAddTPC = _useState154[0],
+    setShowAddTPC = _useState154[1];
   var _useState155 = (0, _react.useState)(null),
     _useState156 = _slicedToArray(_useState155, 2),
-    editKlasseKey = _useState156[0],
-    setEditKlasseKey = _useState156[1];
-  var _useState157 = (0, _react.useState)(new Date(2026, 5, 1)),
+    editAula = _useState156[0],
+    setEditAula = _useState156[1];
+  var _useState157 = (0, _react.useState)(false),
     _useState158 = _slicedToArray(_useState157, 2),
-    calMonth = _useState158[0],
-    setCalMonth = _useState158[1];
+    editKlasse = _useState158[0],
+    setEditKlasse = _useState158[1];
   var _useState159 = (0, _react.useState)(null),
     _useState160 = _slicedToArray(_useState159, 2),
-    selDay = _useState160[0],
-    setSelDay = _useState160[1];
-  var _useState161 = (0, _react.useState)(''),
+    editKlasseKey = _useState160[0],
+    setEditKlasseKey = _useState160[1];
+  var _useState161 = (0, _react.useState)(new Date(2026, 5, 1)),
     _useState162 = _slicedToArray(_useState161, 2),
-    novaNotaVal = _useState162[0],
-    setNovaNotaVal = _useState162[1];
-  var _useState163 = (0, _react.useState)({
+    calMonth = _useState162[0],
+    setCalMonth = _useState162[1];
+  var _useState163 = (0, _react.useState)(null),
+    _useState164 = _slicedToArray(_useState163, 2),
+    selDay = _useState164[0],
+    setSelDay = _useState164[1];
+  var _useState165 = (0, _react.useState)(''),
+    _useState166 = _slicedToArray(_useState165, 2),
+    novaNotaVal = _useState166[0],
+    setNovaNotaVal = _useState166[1];
+  var _useState167 = (0, _react.useState)({
       nome: '',
       prof: '',
       tel: '',
       emoji: '📚',
       cor: '#7C3AED'
     }),
-    _useState164 = _slicedToArray(_useState163, 2),
-    novaDisc = _useState164[0],
-    setNovaDisc = _useState164[1];
-  var _useState165 = (0, _react.useState)({
+    _useState168 = _slicedToArray(_useState167, 2),
+    novaDisc = _useState168[0],
+    setNovaDisc = _useState168[1];
+  var _useState169 = (0, _react.useState)({
       discId: 1,
       titulo: '',
       data: '',
       feito: false
     }),
-    _useState166 = _slicedToArray(_useState165, 2),
-    novaTPC = _useState166[0],
-    setNovaTPC = _useState166[1];
-  var _useState167 = (0, _react.useState)([]),
-    _useState168 = _slicedToArray(_useState167, 2),
-    escolarToasts = _useState168[0],
-    setEscolarToasts = _useState168[1];
+    _useState170 = _slicedToArray(_useState169, 2),
+    novaTPC = _useState170[0],
+    setNovaTPC = _useState170[1];
+  var _useState171 = (0, _react.useState)([]),
+    _useState172 = _slicedToArray(_useState171, 2),
+    escolarToasts = _useState172[0],
+    setEscolarToasts = _useState172[1];
   var addEscolarToast = function addEscolarToast(msg) {
     var sub = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var id = Date.now() + Math.random();
@@ -9913,10 +10039,10 @@ function EscolarApp(_ref31) {
   }, [alunoKey]);
 
   // Per-student state
-  var _useState169 = (0, _react.useState)(ALUNOS_DEF),
-    _useState170 = _slicedToArray(_useState169, 2),
-    alunosData = _useState170[0],
-    setAlunosData = _useState170[1];
+  var _useState173 = (0, _react.useState)(ALUNOS_DEF),
+    _useState174 = _slicedToArray(_useState173, 2),
+    alunosData = _useState174[0],
+    setAlunosData = _useState174[1];
   var aluno = alunosData[alunoKey];
   var setAluno = function setAluno(fn) {
     return setAlunosData(function (p) {
@@ -10168,8 +10294,8 @@ function EscolarApp(_ref31) {
     }, k);
   })), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      var _document$getElementB5;
-      var val = (((_document$getElementB5 = document.getElementById('klasse-input')) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.value) || '').trim();
+      var _document$getElementB6;
+      var val = (((_document$getElementB6 = document.getElementById('klasse-input')) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.value) || '').trim();
       if (val) setAluno(function (al) {
         return _objectSpread(_objectSpread({}, al), {}, {
           klasse: val
@@ -10426,9 +10552,9 @@ function EscolarApp(_ref31) {
       }
     }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        var _document$getElementB6, _document$getElementB7;
-        var klasse = (((_document$getElementB6 = document.getElementById("klasse-inp-".concat(k))) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.value) || '').trim();
-        var cidade = (((_document$getElementB7 = document.getElementById("cidade-inp-".concat(k))) === null || _document$getElementB7 === void 0 ? void 0 : _document$getElementB7.value) || '').trim();
+        var _document$getElementB7, _document$getElementB8;
+        var klasse = (((_document$getElementB7 = document.getElementById("klasse-inp-".concat(k))) === null || _document$getElementB7 === void 0 ? void 0 : _document$getElementB7.value) || '').trim();
+        var cidade = (((_document$getElementB8 = document.getElementById("cidade-inp-".concat(k))) === null || _document$getElementB8 === void 0 ? void 0 : _document$getElementB8.value) || '').trim();
         setAlunosData(function (p) {
           return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, k, _objectSpread(_objectSpread({}, p[k]), {}, {
             klasse: klasse || p[k].klasse,
@@ -12509,45 +12635,45 @@ function EscolarApp(_ref31) {
 // ══════════════════════════════════════════════════════════════════
 function CarvalhoSuite() {
   useFont();
-  var _useState171 = (0, _react.useState)('login'),
-    _useState172 = _slicedToArray(_useState171, 2),
-    screen = _useState172[0],
-    setScreen = _useState172[1];
-  var _useState173 = (0, _react.useState)('Pc12345'),
-    _useState174 = _slicedToArray(_useState173, 2),
-    pass = _useState174[0],
-    setPass = _useState174[1];
-  var _useState175 = (0, _react.useState)(''),
+  var _useState175 = (0, _react.useState)('login'),
     _useState176 = _slicedToArray(_useState175, 2),
-    passErr = _useState176[0],
-    setPassErr = _useState176[1];
-  var _useState177 = (0, _react.useState)(true),
+    screen = _useState176[0],
+    setScreen = _useState176[1];
+  var _useState177 = (0, _react.useState)('Pc12345'),
     _useState178 = _slicedToArray(_useState177, 2),
-    online = _useState178[0],
-    setOnline = _useState178[1];
-  var _useState179 = (0, _react.useState)(USERS_DEF),
+    pass = _useState178[0],
+    setPass = _useState178[1];
+  var _useState179 = (0, _react.useState)(''),
     _useState180 = _slicedToArray(_useState179, 2),
-    users = _useState180[0],
-    setUsers = _useState180[1];
-  var _useState181 = (0, _react.useState)(PERMS_DEF),
+    passErr = _useState180[0],
+    setPassErr = _useState180[1];
+  var _useState181 = (0, _react.useState)(true),
     _useState182 = _slicedToArray(_useState181, 2),
-    perms = _useState182[0],
-    setPerms = _useState182[1];
-  var _useState183 = (0, _react.useState)('patricio'),
+    online = _useState182[0],
+    setOnline = _useState182[1];
+  var _useState183 = (0, _react.useState)(USERS_DEF),
     _useState184 = _slicedToArray(_useState183, 2),
-    activeUser = _useState184[0],
-    setUser = _useState184[1];
-  var _useState185 = (0, _react.useState)(null),
+    users = _useState184[0],
+    setUsers = _useState184[1];
+  var _useState185 = (0, _react.useState)(PERMS_DEF),
     _useState186 = _slicedToArray(_useState185, 2),
-    activeApp = _useState186[0],
-    setApp = _useState186[1];
+    perms = _useState186[0],
+    setPerms = _useState186[1];
+  var _useState187 = (0, _react.useState)('patricio'),
+    _useState188 = _slicedToArray(_useState187, 2),
+    activeUser = _useState188[0],
+    setUser = _useState188[1];
+  var _useState189 = (0, _react.useState)(null),
+    _useState190 = _slicedToArray(_useState189, 2),
+    activeApp = _useState190[0],
+    setApp = _useState190[1];
   // Estado partilhado entre TODAS as apps
-  var _useState187 = (0, _react.useState)([
+  var _useState191 = (0, _react.useState)([
       // Exemplo: {date:'2026-06-20', tipo:'ferias', nome:'Férias Verão', addedBy:'patricio'}
     ]),
-    _useState188 = _slicedToArray(_useState187, 2),
-    sharedDias = _useState188[0],
-    setSharedDias = _useState188[1];
+    _useState192 = _slicedToArray(_useState191, 2),
+    sharedDias = _useState192[0],
+    setSharedDias = _useState192[1];
   var addSharedDia = function addSharedDia(dia) {
     return setSharedDias(function (p) {
       if (p.some(function (x) {
@@ -12563,42 +12689,42 @@ function CarvalhoSuite() {
       });
     });
   };
-  var _useState189 = (0, _react.useState)(new Date()),
-    _useState190 = _slicedToArray(_useState189, 2),
-    time = _useState190[0],
-    setTime = _useState190[1];
-  var _useState191 = (0, _react.useState)(''),
-    _useState192 = _slicedToArray(_useState191, 2),
-    newName = _useState192[0],
-    setNewName = _useState192[1];
-  var _useState193 = (0, _react.useState)('Família'),
+  var _useState193 = (0, _react.useState)(new Date()),
     _useState194 = _slicedToArray(_useState193, 2),
-    newRole = _useState194[0],
-    setNewRole = _useState194[1];
-  var _useState195 = (0, _react.useState)('👤'),
+    time = _useState194[0],
+    setTime = _useState194[1];
+  var _useState195 = (0, _react.useState)(''),
     _useState196 = _slicedToArray(_useState195, 2),
-    newEmoji = _useState196[0],
-    setNewEmoji = _useState196[1];
-  var _useState197 = (0, _react.useState)(''),
+    newName = _useState196[0],
+    setNewName = _useState196[1];
+  var _useState197 = (0, _react.useState)('Família'),
     _useState198 = _slicedToArray(_useState197, 2),
-    newPwd = _useState198[0],
-    setNewPwd = _useState198[1];
-  var _useState199 = (0, _react.useState)(false),
+    newRole = _useState198[0],
+    setNewRole = _useState198[1];
+  var _useState199 = (0, _react.useState)('👤'),
     _useState200 = _slicedToArray(_useState199, 2),
-    showAddUser = _useState200[0],
-    setShowAddUser = _useState200[1];
-  var _useState201 = (0, _react.useState)(null),
+    newEmoji = _useState200[0],
+    setNewEmoji = _useState200[1];
+  var _useState201 = (0, _react.useState)(''),
     _useState202 = _slicedToArray(_useState201, 2),
-    expandedUser = _useState202[0],
-    setExpandedUser = _useState202[1];
-  var _useState203 = (0, _react.useState)(null),
+    newPwd = _useState202[0],
+    setNewPwd = _useState202[1];
+  var _useState203 = (0, _react.useState)(false),
     _useState204 = _slicedToArray(_useState203, 2),
-    editUser = _useState204[0],
-    setEditUser = _useState204[1]; // {id, name, role, emoji, pwd}
-  var _useState205 = (0, _react.useState)({}),
+    showAddUser = _useState204[0],
+    setShowAddUser = _useState204[1];
+  var _useState205 = (0, _react.useState)(null),
     _useState206 = _slicedToArray(_useState205, 2),
-    showPwd = _useState206[0],
-    setShowPwd = _useState206[1];
+    expandedUser = _useState206[0],
+    setExpandedUser = _useState206[1];
+  var _useState207 = (0, _react.useState)(null),
+    _useState208 = _slicedToArray(_useState207, 2),
+    editUser = _useState208[0],
+    setEditUser = _useState208[1]; // {id, name, role, emoji, pwd}
+  var _useState209 = (0, _react.useState)({}),
+    _useState210 = _slicedToArray(_useState209, 2),
+    showPwd = _useState210[0],
+    setShowPwd = _useState210[1];
   (0, _react.useEffect)(function () {
     var t = setInterval(function () {
       return setTime(new Date());

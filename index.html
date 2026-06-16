@@ -11987,10 +11987,14 @@ function CarvalhoSuite() {
     _useState202 = _slicedToArray(_useState201, 2),
     expandedUser = _useState202[0],
     setExpandedUser = _useState202[1];
-  var _useState203 = (0, _react.useState)({}),
+  var _useState203 = (0, _react.useState)(null),
     _useState204 = _slicedToArray(_useState203, 2),
-    showPwd = _useState204[0],
-    setShowPwd = _useState204[1];
+    editUser = _useState204[0],
+    setEditUser = _useState204[1]; // {id, name, role, emoji, pwd}
+  var _useState205 = (0, _react.useState)({}),
+    _useState206 = _slicedToArray(_useState205, 2),
+    showPwd = _useState206[0],
+    setShowPwd = _useState206[1];
   (0, _react.useEffect)(function () {
     var t = setInterval(function () {
       return setTime(new Date());
@@ -12485,6 +12489,7 @@ function CarvalhoSuite() {
   }, users.filter(function (u) {
     return u.id !== 'patricio';
   }).map(function (u) {
+    var isEditing = (editUser === null || editUser === void 0 ? void 0 : editUser.id) === u.id;
     return /*#__PURE__*/React.createElement("div", {
       key: u.id,
       style: {
@@ -12493,7 +12498,12 @@ function CarvalhoSuite() {
     }, /*#__PURE__*/React.createElement(Card, {
       style: {
         padding: '12px 16px',
-        marginBottom: 10,
+        marginBottom: isEditing ? 0 : 10,
+        border: "1px solid ".concat(isEditing ? T.gold : T.goldBrd),
+        borderRadius: isEditing ? '14px 14px 0 0' : '14px'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
         display: 'flex',
         alignItems: 'center',
         gap: 12
@@ -12502,7 +12512,11 @@ function CarvalhoSuite() {
       style: {
         fontSize: 22
       }
-    }, u.emoji), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    }, u.emoji), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
       style: {
         fontWeight: 800,
         fontSize: 15,
@@ -12513,7 +12527,213 @@ function CarvalhoSuite() {
         color: T.muted,
         fontSize: 12
       }
-    }, u.role, " \xB7 ", (perms[u.id] || []).length, " apps ativas"))), /*#__PURE__*/React.createElement("div", {
+    }, u.role, " \xB7 ", (perms[u.id] || []).length, " apps ativas")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 6
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setEditUser(isEditing ? null : {
+          id: u.id,
+          name: u.name,
+          role: u.role,
+          emoji: u.emoji,
+          pwd: u.pwd || 'Pc12345'
+        });
+      },
+      style: {
+        background: isEditing ? "".concat(T.gold, "22") : "rgba(201,168,71,0.08)",
+        border: "1px solid ".concat(isEditing ? T.gold : 'rgba(201,168,71,0.25)'),
+        borderRadius: 9,
+        padding: '6px 10px',
+        color: T.gold,
+        fontSize: 13,
+        cursor: 'pointer',
+        fontWeight: 700
+      }
+    }, isEditing ? '✕' : '✏️'), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        if (window.confirm ? window.confirm("Apagar ".concat(u.name, "?")) : true) {
+          setUsers(function (p) {
+            return p.filter(function (x) {
+              return x.id !== u.id;
+            });
+          });
+          setPerms(function (p) {
+            var c = _objectSpread({}, p);
+            delete c[u.id];
+            return c;
+          });
+        }
+      },
+      style: {
+        background: 'rgba(220,38,38,0.08)',
+        border: '1px solid rgba(220,38,38,0.2)',
+        borderRadius: 9,
+        padding: '6px 10px',
+        color: '#DC2626',
+        fontSize: 13,
+        cursor: 'pointer'
+      }
+    }, "\uD83D\uDDD1")))), isEditing && /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: T.surface,
+        border: "1px solid ".concat(T.gold),
+        borderTop: 'none',
+        borderRadius: '0 0 14px 14px',
+        padding: '14px 16px',
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: T.gold,
+        fontWeight: 800,
+        fontSize: 12,
+        textTransform: 'uppercase',
+        letterSpacing: '0.6px',
+        marginBottom: 10
+      }
+    }, "Editar utilizador"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 5,
+        marginBottom: 10
+      }
+    }, ['👤', '👨', '👩', '👦', '👧', '👴', '👵', '🧑', '👨‍💼', '👩‍💼'].map(function (e) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: e,
+        onClick: function onClick() {
+          return setEditUser(function (p) {
+            return _objectSpread(_objectSpread({}, p), {}, {
+              emoji: e
+            });
+          });
+        },
+        style: {
+          flex: 1,
+          background: editUser.emoji === e ? T.goldDim : T.surface2,
+          border: "1px solid ".concat(editUser.emoji === e ? T.gold : T.goldBrd),
+          borderRadius: 8,
+          padding: '5px 2px',
+          fontSize: 14,
+          cursor: 'pointer'
+        }
+      }, e);
+    })), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: T.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 3
+      }
+    }, "Nome"), /*#__PURE__*/React.createElement("input", {
+      value: editUser.name,
+      onChange: function onChange(e) {
+        return setEditUser(function (p) {
+          return _objectSpread(_objectSpread({}, p), {}, {
+            name: e.target.value
+          });
+        });
+      },
+      style: {
+        width: '100%',
+        background: T.surface2,
+        border: "1px solid ".concat(T.goldBrd),
+        borderRadius: 10,
+        padding: '10px 12px',
+        color: T.text,
+        fontSize: 14,
+        outline: 'none',
+        marginBottom: 8,
+        boxSizing: 'border-box'
+      }
+    }), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: T.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 3
+      }
+    }, "Fun\xE7\xE3o"), /*#__PURE__*/React.createElement("input", {
+      value: editUser.role,
+      onChange: function onChange(e) {
+        return setEditUser(function (p) {
+          return _objectSpread(_objectSpread({}, p), {}, {
+            role: e.target.value
+          });
+        });
+      },
+      placeholder: "Ex: Fam\xEDlia, Filho, Esposa...",
+      style: {
+        width: '100%',
+        background: T.surface2,
+        border: "1px solid ".concat(T.goldBrd),
+        borderRadius: 10,
+        padding: '10px 12px',
+        color: T.text,
+        fontSize: 14,
+        outline: 'none',
+        marginBottom: 8,
+        boxSizing: 'border-box'
+      }
+    }), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: T.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 3
+      }
+    }, "Password"), /*#__PURE__*/React.createElement("input", {
+      value: editUser.pwd,
+      onChange: function onChange(e) {
+        return setEditUser(function (p) {
+          return _objectSpread(_objectSpread({}, p), {}, {
+            pwd: e.target.value
+          });
+        });
+      },
+      style: {
+        width: '100%',
+        background: T.surface2,
+        border: "1px solid ".concat(T.goldBrd),
+        borderRadius: 10,
+        padding: '10px 12px',
+        color: T.text,
+        fontSize: 14,
+        outline: 'none',
+        marginBottom: 12,
+        boxSizing: 'border-box'
+      }
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        setUsers(function (p) {
+          return p.map(function (x) {
+            return x.id === editUser.id ? _objectSpread(_objectSpread({}, x), {}, {
+              name: editUser.name.trim(),
+              role: editUser.role,
+              emoji: editUser.emoji,
+              pwd: editUser.pwd
+            }) : x;
+          });
+        });
+        setEditUser(null);
+      },
+      style: {
+        width: '100%',
+        background: "linear-gradient(135deg,".concat(T.gold, ",").concat(T.goldL, ")"),
+        border: 'none',
+        borderRadius: 12,
+        padding: '12px',
+        color: T.bg,
+        fontSize: 14,
+        fontWeight: 800,
+        cursor: 'pointer'
+      }
+    }, "\u2713 Guardar altera\xE7\xF5es")), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         flexDirection: 'column',

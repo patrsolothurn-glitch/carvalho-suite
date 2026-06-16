@@ -11452,452 +11452,448 @@ function EscolarApp(_ref31) {
         cursor: 'pointer'
       }
     }, "\uFF0B Nota")));
-    {/* ═══ GRÁFICOS ═══ */}
-    {
-      tab === 'graficos' && /*#__PURE__*/React.createElement("div", {
-        style: {
-          padding: '0 14px'
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          display: 'flex',
-          gap: 8,
-          marginBottom: 12
-        }
-      }, [1, 2].map(function (s) {
-        return /*#__PURE__*/React.createElement("button", {
-          key: s,
-          onClick: function onClick() {
-            return setSemestre(s);
-          },
-          style: {
-            flex: 1,
-            background: semestre === s ? "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")") : E.surface,
-            border: "1px solid ".concat(semestre === s ? E.purple : E.border),
-            borderRadius: 12,
-            padding: '9px',
-            color: semestre === s ? '#fff' : E.muted,
-            fontSize: 13,
-            fontWeight: 800,
-            cursor: 'pointer'
-          }
-        }, s, "\xBA Semestre");
-      })), function () {
-        var mg = calcMediaGeral(semestre);
-        if (!mg) return null;
-        return /*#__PURE__*/React.createElement(ECard, {
-          style: {
-            padding: '14px',
-            marginBottom: 12,
-            border: "2px solid ".concat(mg.passa ? E.green : E.red)
-          }
-        }, /*#__PURE__*/React.createElement("p", {
-          style: {
-            color: E.purple,
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.8px',
-            marginBottom: 10
-          }
-        }, "\uD83D\uDCCB Resultados SEK P \xB7 ", semestre, "\xBA Semestre"), /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: 'flex',
-            gap: 10,
-            marginBottom: 10
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            flex: 1,
-            textAlign: 'center',
-            padding: '10px',
-            background: mg.passaDurchschnitt ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
-            borderRadius: 12,
-            border: "1px solid ".concat(mg.passaDurchschnitt ? E.green : E.red, "44")
-          }
-        }, /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 9,
-            color: E.muted,
-            fontWeight: 700,
-            textTransform: 'uppercase'
-          }
-        }, "Durchschnitt"), /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 28,
-            fontWeight: 900,
-            color: mg.passaDurchschnitt ? E.green : E.red,
-            margin: '3px 0'
-          }
-        }, mg.durchschnitt), /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 9,
-            color: mg.passaDurchschnitt ? E.green : E.red,
-            fontWeight: 700
-          }
-        }, "min. 4.0")), /*#__PURE__*/React.createElement("div", {
-          style: {
-            flex: 1,
-            textAlign: 'center',
-            padding: '10px',
-            background: mg.passaCinco ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
-            borderRadius: 12,
-            border: "1px solid ".concat(mg.passaCinco ? E.green : E.red, "44")
-          }
-        }, /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 9,
-            color: E.muted,
-            fontWeight: 700,
-            textTransform: 'uppercase'
-          }
-        }, "5 tiefste Noten"), /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 28,
-            fontWeight: 900,
-            color: mg.passaCinco ? E.green : E.red,
-            margin: '3px 0'
-          }
-        }, mg.somaCinco), /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 9,
-            color: mg.passaCinco ? E.green : E.red,
-            fontWeight: 700
-          }
-        }, "min. 19P"))), /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: 'flex',
-            gap: 5,
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            marginBottom: 10
-          }
-        }, mg.cincoMaisBaixas.map(function (d, i) {
-          return /*#__PURE__*/React.createElement("div", {
-            key: i,
-            style: {
-              background: "".concat(notaColor(d.m), "15"),
-              border: "1px solid ".concat(notaColor(d.m), "44"),
-              borderRadius: 8,
-              padding: '3px 10px',
-              textAlign: 'center'
-            }
-          }, /*#__PURE__*/React.createElement("p", {
-            style: {
-              fontSize: 9,
-              color: E.muted,
-              fontWeight: 700
-            }
-          }, d.abr || d.nome.slice(0, 3)), /*#__PURE__*/React.createElement("p", {
-            style: {
-              fontSize: 14,
-              fontWeight: 900,
-              color: notaColor(d.m)
-            }
-          }, d.m.toFixed(1)));
-        })), /*#__PURE__*/React.createElement("div", {
-          style: {
-            textAlign: 'center',
-            padding: '8px',
-            background: mg.passa ? 'rgba(22,163,74,0.12)' : 'rgba(220,38,38,0.12)',
-            borderRadius: 10,
-            border: "1px solid ".concat(mg.passa ? E.green : E.red)
-          }
-        }, /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 15,
-            fontWeight: 900,
-            color: mg.passa ? E.green : E.red
-          }
-        }, mg.passa ? '✅ APROVADO' : '❌ NÃO APROVADO')));
-      }(), /*#__PURE__*/React.createElement(ECard, {
-        style: {
-          padding: '14px',
-          marginBottom: 12
-        }
-      }, /*#__PURE__*/React.createElement("p", {
-        style: {
-          color: E.text,
-          fontWeight: 800,
-          fontSize: 13,
-          marginBottom: 12
-        }
-      }, "\uD83D\uDCCA Notas por disciplina"), /*#__PURE__*/React.createElement("div", {
-        style: {
-          overflowX: 'auto',
-          paddingBottom: 4
-        }
-      }, function () {
-        var w = Math.max(300, aluno.disciplinas.length * 46);
-        return /*#__PURE__*/React.createElement("svg", {
-          width: w,
-          height: "170",
-          style: {
-            display: 'block'
-          }
-        }, [2, 3, 4, 5, 6].map(function (g) {
-          var y = 140 - (g - 1) / 5 * 120;
-          return /*#__PURE__*/React.createElement("g", {
-            key: g
-          }, /*#__PURE__*/React.createElement("line", {
-            x1: "28",
-            y1: y,
-            x2: w,
-            y2: y,
-            stroke: "#2A2A3A",
-            strokeWidth: "1"
-          }), /*#__PURE__*/React.createElement("text", {
-            x: "24",
-            y: y + 4,
-            textAnchor: "end",
-            fontSize: "9",
-            fill: "#666"
-          }, g));
-        }), aluno.disciplinas.map(function (disc, i) {
-          var med = parseFloat(media(disc.id, semestre)) || 0;
-          var h = med > 0 ? (med - 1) / 5 * 120 : 0;
-          var x = 28 + i * 46 + 6;
-          return /*#__PURE__*/React.createElement("g", {
-            key: disc.id
-          }, /*#__PURE__*/React.createElement("rect", {
-            x: x,
-            y: med > 0 ? 140 - h : 132,
-            width: "32",
-            height: med > 0 ? h : 8,
-            rx: "5",
-            fill: med > 0 ? disc.cor : '#333',
-            opacity: med > 0 ? 0.85 : 0.4
-          }), med > 0 && /*#__PURE__*/React.createElement("text", {
-            x: x + 16,
-            y: 140 - h - 5,
-            textAnchor: "middle",
-            fontSize: "10",
-            fontWeight: "800",
-            fill: notaColor(med)
-          }, med.toFixed(1)), /*#__PURE__*/React.createElement("text", {
-            x: x + 16,
-            y: 158,
-            textAnchor: "middle",
-            fontSize: "8",
-            fill: "#555"
-          }, disc.nome.slice(0, 5)));
-        }), /*#__PURE__*/React.createElement("line", {
-          x1: "28",
-          y1: 140 - (4 - 1) / 5 * 120,
-          x2: w,
-          y2: 140 - (4 - 1) / 5 * 120,
-          stroke: "#F97316",
-          strokeWidth: "1.5",
-          strokeDasharray: "5,3"
-        }));
-      }()), /*#__PURE__*/React.createElement("p", {
-        style: {
-          color: E.muted,
-          fontSize: 10,
-          marginTop: 4
-        }
-      }, "\uD83D\uDFE0 Linha laranja = m\xEDnimo (4.0)")), /*#__PURE__*/React.createElement(ECard, {
-        style: {
-          padding: '14px',
-          marginBottom: 12
-        }
-      }, /*#__PURE__*/React.createElement("p", {
-        style: {
-          color: E.text,
-          fontWeight: 800,
-          fontSize: 13,
-          marginBottom: 12
-        }
-      }, "\uD83D\uDCC8 Evolu\xE7\xE3o S1 \u2192 S2"), aluno.disciplinas.filter(function (d) {
-        return parseFloat(media(d.id, 1)) && parseFloat(media(d.id, 2));
-      }).map(function (disc) {
-        var m1 = parseFloat(media(disc.id, 1));
-        var m2 = parseFloat(media(disc.id, 2));
-        var diff = m2 - m1;
-        return /*#__PURE__*/React.createElement("div", {
-          key: disc.id,
-          style: {
-            marginBottom: 10
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 4
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6
-          }
-        }, /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 14
-          }
-        }, disc.emoji), /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 12,
-            fontWeight: 700,
-            color: E.text
-          }
-        }, disc.nome)), /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8
-          }
-        }, /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 11,
-            color: notaColor(m1),
-            fontWeight: 700
-          }
-        }, m1.toFixed(1)), /*#__PURE__*/React.createElement("span", {
-          style: {
-            color: E.muted,
-            fontSize: 11
-          }
-        }, "\u2192"), /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 11,
-            color: notaColor(m2),
-            fontWeight: 700
-          }
-        }, m2.toFixed(1)), /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 13,
-            fontWeight: 900,
-            color: diff > 0 ? E.green : diff < 0 ? E.red : E.muted,
-            minWidth: 32,
-            textAlign: 'right'
-          }
-        }, diff > 0 ? "\u2191".concat(diff.toFixed(1)) : diff < 0 ? "\u2193".concat(Math.abs(diff).toFixed(1)) : '='))), /*#__PURE__*/React.createElement("div", {
-          style: {
-            height: 7,
-            background: E.surface2,
-            borderRadius: 6,
-            overflow: 'hidden',
-            position: 'relative'
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: "".concat((m1 - 1) / 5 * 100, "%"),
-            background: notaColor(m1),
-            borderRadius: '6px 0 0 6px',
-            opacity: 0.5
-          }
-        }), /*#__PURE__*/React.createElement("div", {
-          style: {
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: "".concat((m2 - 1) / 5 * 100, "%"),
-            background: notaColor(m2),
-            borderRadius: 6,
-            opacity: 0.7
-          }
-        })));
-      }), !aluno.disciplinas.some(function (d) {
-        return parseFloat(media(d.id, 1)) && parseFloat(media(d.id, 2));
-      }) && /*#__PURE__*/React.createElement("p", {
-        style: {
-          color: E.muted,
-          fontSize: 12,
-          textAlign: 'center',
-          padding: '10px'
-        }
-      }, "Precisa de notas nos 2 semestres para comparar")), /*#__PURE__*/React.createElement(ECard, {
-        style: {
-          padding: '14px'
-        }
-      }, /*#__PURE__*/React.createElement("p", {
-        style: {
-          color: E.text,
-          fontWeight: 800,
-          fontSize: 13,
-          marginBottom: 12
-        }
-      }, "\uD83D\uDD14 Notifica\xE7\xF5es activas"), [{
-        emoji: '📋',
-        txt: 'TPC para hoje',
-        c: E.red
-      }, {
-        emoji: '⏰',
-        txt: 'TPC amanhã',
-        c: E.orange
-      }, {
-        emoji: '📊',
-        txt: 'Nota adicionada',
-        c: E.purple
-      }, {
-        emoji: '📅',
-        txt: 'Dias livres partilhados',
-        c: E.gold
-      }].map(function (n, i, arr) {
-        return /*#__PURE__*/React.createElement("div", {
-          key: i,
-          style: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            padding: '9px 0',
-            borderBottom: i < arr.length - 1 ? "1px solid ".concat(E.border) : 'none'
-          }
-        }, /*#__PURE__*/React.createElement("span", {
-          style: {
-            fontSize: 18
-          }
-        }, n.emoji), /*#__PURE__*/React.createElement("span", {
-          style: {
-            flex: 1,
-            fontSize: 13,
-            color: E.text
-          }
-        }, n.txt), /*#__PURE__*/React.createElement("div", {
-          style: {
-            width: 40,
-            height: 22,
-            borderRadius: 11,
-            background: n.c,
-            position: 'relative'
-          }
-        }, /*#__PURE__*/React.createElement("div", {
-          style: {
-            position: 'absolute',
-            top: 3,
-            right: 3,
-            width: 16,
-            height: 16,
-            borderRadius: '50%',
-            background: '#fff'
-          }
-        })));
-      }), /*#__PURE__*/React.createElement("button", {
-        onClick: function onClick() {
-          return addEscolarToast("\uD83D\uDD14 ".concat(aluno.nome, " \u2014 TPC amanh\xE3!"), 'Vocabulary Unit 5 · Englisch');
-        },
-        style: {
-          width: '100%',
-          marginTop: 12,
-          background: "".concat(E.purple, "22"),
-          border: "1px solid ".concat(E.purple, "44"),
-          borderRadius: 10,
-          padding: '10px',
-          color: E.purple,
-          fontSize: 12,
-          fontWeight: 700,
-          cursor: 'pointer'
-        }
-      }, "\uD83D\uDD14 Testar aviso agora")));
+  })), tab === 'graficos' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '0 14px'
     }
-  })));
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      marginBottom: 12
+    }
+  }, [1, 2].map(function (s) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: s,
+      onClick: function onClick() {
+        return setSemestre(s);
+      },
+      style: {
+        flex: 1,
+        background: semestre === s ? "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")") : E.surface,
+        border: "1px solid ".concat(semestre === s ? E.purple : E.border),
+        borderRadius: 12,
+        padding: '9px',
+        color: semestre === s ? '#fff' : E.muted,
+        fontSize: 13,
+        fontWeight: 800,
+        cursor: 'pointer'
+      }
+    }, s, "\xBA Semestre");
+  })), function () {
+    var mg = calcMediaGeral(semestre);
+    if (!mg) return null;
+    return /*#__PURE__*/React.createElement(ECard, {
+      style: {
+        padding: '14px',
+        marginBottom: 12,
+        border: "2px solid ".concat(mg.passa ? E.green : E.red)
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.purple,
+        fontSize: 11,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        letterSpacing: '0.8px',
+        marginBottom: 10
+      }
+    }, "\uD83D\uDCCB Resultados SEK P \xB7 ", semestre, "\xBA Semestre"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 10,
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        textAlign: 'center',
+        padding: '10px',
+        background: mg.passaDurchschnitt ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+        borderRadius: 12,
+        border: "1px solid ".concat(mg.passaDurchschnitt ? E.green : E.red, "44")
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 9,
+        color: E.muted,
+        fontWeight: 700,
+        textTransform: 'uppercase'
+      }
+    }, "Durchschnitt"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 28,
+        fontWeight: 900,
+        color: mg.passaDurchschnitt ? E.green : E.red,
+        margin: '3px 0'
+      }
+    }, mg.durchschnitt), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 9,
+        color: mg.passaDurchschnitt ? E.green : E.red,
+        fontWeight: 700
+      }
+    }, "min. 4.0")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        textAlign: 'center',
+        padding: '10px',
+        background: mg.passaCinco ? 'rgba(22,163,74,0.1)' : 'rgba(220,38,38,0.1)',
+        borderRadius: 12,
+        border: "1px solid ".concat(mg.passaCinco ? E.green : E.red, "44")
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 9,
+        color: E.muted,
+        fontWeight: 700,
+        textTransform: 'uppercase'
+      }
+    }, "5 tiefste Noten"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 28,
+        fontWeight: 900,
+        color: mg.passaCinco ? E.green : E.red,
+        margin: '3px 0'
+      }
+    }, mg.somaCinco), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 9,
+        color: mg.passaCinco ? E.green : E.red,
+        fontWeight: 700
+      }
+    }, "min. 19P"))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 5,
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        marginBottom: 10
+      }
+    }, mg.cincoMaisBaixas.map(function (d, i) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: {
+          background: "".concat(notaColor(d.m), "15"),
+          border: "1px solid ".concat(notaColor(d.m), "44"),
+          borderRadius: 8,
+          padding: '3px 10px',
+          textAlign: 'center'
+        }
+      }, /*#__PURE__*/React.createElement("p", {
+        style: {
+          fontSize: 9,
+          color: E.muted,
+          fontWeight: 700
+        }
+      }, d.abr || d.nome.slice(0, 3)), /*#__PURE__*/React.createElement("p", {
+        style: {
+          fontSize: 14,
+          fontWeight: 900,
+          color: notaColor(d.m)
+        }
+      }, d.m.toFixed(1)));
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'center',
+        padding: '8px',
+        background: mg.passa ? 'rgba(22,163,74,0.12)' : 'rgba(220,38,38,0.12)',
+        borderRadius: 10,
+        border: "1px solid ".concat(mg.passa ? E.green : E.red)
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontSize: 15,
+        fontWeight: 900,
+        color: mg.passa ? E.green : E.red
+      }
+    }, mg.passa ? '✅ APROVADO' : '❌ NÃO APROVADO')));
+  }(), /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      padding: '14px',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.text,
+      fontWeight: 800,
+      fontSize: 13,
+      marginBottom: 12
+    }
+  }, "\uD83D\uDCCA Notas por disciplina"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      overflowX: 'auto',
+      paddingBottom: 4
+    }
+  }, function () {
+    var w = Math.max(300, aluno.disciplinas.length * 46);
+    return /*#__PURE__*/React.createElement("svg", {
+      width: w,
+      height: "170",
+      style: {
+        display: 'block'
+      }
+    }, [2, 3, 4, 5, 6].map(function (g) {
+      var y = 140 - (g - 1) / 5 * 120;
+      return /*#__PURE__*/React.createElement("g", {
+        key: g
+      }, /*#__PURE__*/React.createElement("line", {
+        x1: "28",
+        y1: y,
+        x2: w,
+        y2: y,
+        stroke: "#2A2A3A",
+        strokeWidth: "1"
+      }), /*#__PURE__*/React.createElement("text", {
+        x: "24",
+        y: y + 4,
+        textAnchor: "end",
+        fontSize: "9",
+        fill: "#666"
+      }, g));
+    }), aluno.disciplinas.map(function (disc, i) {
+      var med = parseFloat(media(disc.id, semestre)) || 0;
+      var h = med > 0 ? (med - 1) / 5 * 120 : 0;
+      var x = 28 + i * 46 + 6;
+      return /*#__PURE__*/React.createElement("g", {
+        key: disc.id
+      }, /*#__PURE__*/React.createElement("rect", {
+        x: x,
+        y: med > 0 ? 140 - h : 132,
+        width: "32",
+        height: med > 0 ? h : 8,
+        rx: "5",
+        fill: med > 0 ? disc.cor : '#333',
+        opacity: med > 0 ? 0.85 : 0.4
+      }), med > 0 && /*#__PURE__*/React.createElement("text", {
+        x: x + 16,
+        y: 140 - h - 5,
+        textAnchor: "middle",
+        fontSize: "10",
+        fontWeight: "800",
+        fill: notaColor(med)
+      }, med.toFixed(1)), /*#__PURE__*/React.createElement("text", {
+        x: x + 16,
+        y: 158,
+        textAnchor: "middle",
+        fontSize: "8",
+        fill: "#555"
+      }, disc.nome.slice(0, 5)));
+    }), /*#__PURE__*/React.createElement("line", {
+      x1: "28",
+      y1: 140 - (4 - 1) / 5 * 120,
+      x2: w,
+      y2: 140 - (4 - 1) / 5 * 120,
+      stroke: "#F97316",
+      strokeWidth: "1.5",
+      strokeDasharray: "5,3"
+    }));
+  }()), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      marginTop: 4
+    }
+  }, "\uD83D\uDFE0 Linha laranja = m\xEDnimo (4.0)")), /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      padding: '14px',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.text,
+      fontWeight: 800,
+      fontSize: 13,
+      marginBottom: 12
+    }
+  }, "\uD83D\uDCC8 Evolu\xE7\xE3o S1 \u2192 S2"), aluno.disciplinas.filter(function (d) {
+    return parseFloat(media(d.id, 1)) && parseFloat(media(d.id, 2));
+  }).map(function (disc) {
+    var m1 = parseFloat(media(disc.id, 1));
+    var m2 = parseFloat(media(disc.id, 2));
+    var diff = m2 - m1;
+    return /*#__PURE__*/React.createElement("div", {
+      key: disc.id,
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 4
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 14
+      }
+    }, disc.emoji), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 12,
+        fontWeight: 700,
+        color: E.text
+      }
+    }, disc.nome)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: notaColor(m1),
+        fontWeight: 700
+      }
+    }, m1.toFixed(1)), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: E.muted,
+        fontSize: 11
+      }
+    }, "\u2192"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11,
+        color: notaColor(m2),
+        fontWeight: 700
+      }
+    }, m2.toFixed(1)), /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        fontWeight: 900,
+        color: diff > 0 ? E.green : diff < 0 ? E.red : E.muted,
+        minWidth: 32,
+        textAlign: 'right'
+      }
+    }, diff > 0 ? "\u2191".concat(diff.toFixed(1)) : diff < 0 ? "\u2193".concat(Math.abs(diff).toFixed(1)) : '='))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        height: 7,
+        background: E.surface2,
+        borderRadius: 6,
+        overflow: 'hidden',
+        position: 'relative'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: "".concat((m1 - 1) / 5 * 100, "%"),
+        background: notaColor(m1),
+        borderRadius: '6px 0 0 6px',
+        opacity: 0.5
+      }
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: "".concat((m2 - 1) / 5 * 100, "%"),
+        background: notaColor(m2),
+        borderRadius: 6,
+        opacity: 0.7
+      }
+    })));
+  }), !aluno.disciplinas.some(function (d) {
+    return parseFloat(media(d.id, 1)) && parseFloat(media(d.id, 2));
+  }) && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 12,
+      textAlign: 'center',
+      padding: '10px'
+    }
+  }, "Precisa de notas nos 2 semestres para comparar")), /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      padding: '14px'
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.text,
+      fontWeight: 800,
+      fontSize: 13,
+      marginBottom: 12
+    }
+  }, "\uD83D\uDD14 Notifica\xE7\xF5es activas"), [{
+    emoji: '📋',
+    txt: 'TPC para hoje',
+    c: E.red
+  }, {
+    emoji: '⏰',
+    txt: 'TPC amanhã',
+    c: E.orange
+  }, {
+    emoji: '📊',
+    txt: 'Nota adicionada',
+    c: E.purple
+  }, {
+    emoji: '📅',
+    txt: 'Dias livres partilhados',
+    c: E.gold
+  }].map(function (n, i, arr) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '9px 0',
+        borderBottom: i < arr.length - 1 ? "1px solid ".concat(E.border) : 'none'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 18
+      }
+    }, n.emoji), /*#__PURE__*/React.createElement("span", {
+      style: {
+        flex: 1,
+        fontSize: 13,
+        color: E.text
+      }
+    }, n.txt), /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 40,
+        height: 22,
+        borderRadius: 11,
+        background: n.c,
+        position: 'relative'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: 3,
+        right: 3,
+        width: 16,
+        height: 16,
+        borderRadius: '50%',
+        background: '#fff'
+      }
+    })));
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return addEscolarToast("\uD83D\uDD14 ".concat(aluno.nome, " \u2014 TPC amanh\xE3!"), 'Vocabulary Unit 5 · Englisch');
+    },
+    style: {
+      width: '100%',
+      marginTop: 12,
+      background: "".concat(E.purple, "22"),
+      border: "1px solid ".concat(E.purple, "44"),
+      borderRadius: 10,
+      padding: '10px',
+      color: E.purple,
+      fontSize: 12,
+      fontWeight: 700,
+      cursor: 'pointer'
+    }
+  }, "\uD83D\uDD14 Testar aviso agora"))));
 }
 
 // ══════════════════════════════════════════════════════════════════

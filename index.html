@@ -317,20 +317,22 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
     tipos = _ref8.tipos,
     projList = _ref8.projList,
     calcHoras = _ref8.calcHoras,
-    H = _ref8.H;
-  var _React$useState = React.useState('Spleisser'),
+    H = _ref8.H,
+    _ref8$editData = _ref8.editData,
+    editData = _ref8$editData === void 0 ? null : _ref8$editData;
+  var _React$useState = React.useState((editData === null || editData === void 0 ? void 0 : editData.tipo) || 'Spleisser'),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     tipo = _React$useState2[0],
     setTipo = _React$useState2[1];
-  var _React$useState3 = React.useState(((_projList$ = projList[0]) === null || _projList$ === void 0 ? void 0 : _projList$.name) || 'POP GREN04'),
+  var _React$useState3 = React.useState((editData === null || editData === void 0 ? void 0 : editData.proj) || ((_projList$ = projList[0]) === null || _projList$ === void 0 ? void 0 : _projList$.name) || 'POP GREN04'),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     proj = _React$useState4[0],
     setProj = _React$useState4[1];
-  var _React$useState5 = React.useState('07:00'),
+  var _React$useState5 = React.useState((editData === null || editData === void 0 ? void 0 : editData.hi) || '07:00'),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     hi = _React$useState6[0],
     setHi = _React$useState6[1];
-  var _React$useState7 = React.useState('12:00'),
+  var _React$useState7 = React.useState((editData === null || editData === void 0 ? void 0 : editData.hf) || '12:00'),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     hf = _React$useState8[0],
     setHf = _React$useState8[1];
@@ -339,6 +341,7 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
   var projs = projList.map(function (p) {
     return p.name;
   });
+  var isEdit = !!editData;
   var guardar = function guardar() {
     var _moradaRef$current;
     if (horas <= 0) return;
@@ -352,26 +355,28 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       morada: morada
     });
   };
-  var inputStyle = {
-    width: '100%',
-    background: H.surface2,
-    border: "1px solid ".concat(H.border),
-    borderRadius: 12,
-    padding: '12px 14px',
-    color: H.text,
-    fontSize: 15,
-    outline: 'none',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit'
-  };
-  var labelStyle = {
-    color: H.muted,
-    fontSize: 10,
-    fontWeight: 700,
-    textTransform: 'uppercase',
-    letterSpacing: '0.6px',
-    marginBottom: 5,
-    display: 'block'
+  var S = {
+    input: {
+      width: '100%',
+      background: H.surface2,
+      border: "1px solid ".concat(H.border),
+      borderRadius: 12,
+      padding: '12px 14px',
+      color: H.text,
+      fontSize: 15,
+      outline: 'none',
+      boxSizing: 'border-box',
+      fontFamily: 'inherit'
+    },
+    label: {
+      color: H.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      letterSpacing: '0.6px',
+      marginBottom: 5,
+      display: 'block'
+    }
   };
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -389,10 +394,7 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
     onClick: onClose,
     style: {
       position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      inset: 0,
       background: 'rgba(0,0,0,0.55)'
     }
   }), /*#__PURE__*/React.createElement("div", {
@@ -402,23 +404,28 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       borderRadius: '24px 24px 0 0',
       border: "2px solid ".concat(H.gold),
       borderBottom: 'none',
-      padding: '24px 20px 40px',
+      maxHeight: '92vh',
+      display: 'flex',
+      flexDirection: 'column',
       boxShadow: '0 -12px 40px rgba(0,0,0,0.25)'
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      width: 40,
-      height: 4,
+      width: 44,
+      height: 5,
       background: H.border,
-      borderRadius: 2,
-      margin: '-12px auto 20px'
+      borderRadius: 3,
+      margin: '12px auto 0',
+      flexShrink: 0
     }
   }), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 20
+      padding: '16px 20px 12px',
+      flexShrink: 0,
+      borderBottom: "1px solid ".concat(H.border)
     }
   }, /*#__PURE__*/React.createElement("p", {
     style: {
@@ -426,7 +433,7 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       fontWeight: 900,
       fontSize: 18
     }
-  }, "Novo registo"), /*#__PURE__*/React.createElement("button", {
+  }, isEdit ? 'Editar registo' : 'Novo registo'), /*#__PURE__*/React.createElement("button", {
     onClick: onClose,
     style: {
       background: H.surface2,
@@ -439,10 +446,15 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       fontSize: 20,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      fontWeight: 300
+      justifyContent: 'center'
     }
   }, "\xD7")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      overflowY: 'auto',
+      padding: '16px 20px',
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 10,
@@ -453,13 +465,13 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       flex: 1
     }
   }, /*#__PURE__*/React.createElement("label", {
-    style: labelStyle
+    style: S.label
   }, "Tipo"), /*#__PURE__*/React.createElement("select", {
     value: tipo,
     onChange: function onChange(e) {
       return setTipo(e.target.value);
     },
-    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+    style: _objectSpread(_objectSpread({}, S.input), {}, {
       padding: '11px 14px'
     })
   }, tipos.map(function (t) {
@@ -471,13 +483,13 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       flex: 1
     }
   }, /*#__PURE__*/React.createElement("label", {
-    style: labelStyle
+    style: S.label
   }, "Projeto"), /*#__PURE__*/React.createElement("select", {
     value: proj,
     onChange: function onChange(e) {
       return setProj(e.target.value);
     },
-    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+    style: _objectSpread(_objectSpread({}, S.input), {}, {
       padding: '11px 14px'
     })
   }, projs.map(function (p) {
@@ -489,7 +501,7 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       marginBottom: 14
     }
   }, /*#__PURE__*/React.createElement("label", {
-    style: labelStyle
+    style: S.label
   }, "Hor\xE1rio"), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
@@ -502,7 +514,7 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
     onChange: function onChange(e) {
       return setHi(e.target.value);
     },
-    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+    style: _objectSpread(_objectSpread({}, S.input), {}, {
       flex: 1,
       padding: '11px 12px'
     })
@@ -510,7 +522,8 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
     style: {
       color: H.muted,
       fontSize: 14,
-      fontWeight: 700
+      fontWeight: 700,
+      flexShrink: 0
     }
   }, "\u2192"), /*#__PURE__*/React.createElement("input", {
     type: "time",
@@ -518,37 +531,39 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
     onChange: function onChange(e) {
       return setHf(e.target.value);
     },
-    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
+    style: _objectSpread(_objectSpread({}, S.input), {}, {
       flex: 1,
       padding: '11px 12px'
     })
   }), /*#__PURE__*/React.createElement("div", {
     style: {
-      background: horas > 0 ? "rgba(184,150,46,0.12)" : H.surface2,
+      background: horas > 0 ? 'rgba(184,150,46,0.12)' : H.surface2,
       border: "1px solid ".concat(horas > 0 ? H.gold : H.border),
       borderRadius: 12,
-      padding: '11px 12px',
-      minWidth: 54,
-      textAlign: 'center'
+      padding: '11px 10px',
+      minWidth: 50,
+      textAlign: 'center',
+      flexShrink: 0
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
       color: horas > 0 ? H.gold : H.muted,
       fontWeight: 900,
-      fontSize: 15
+      fontSize: 14
     }
   }, horas > 0 ? "".concat(horas, "h") : '—')))), /*#__PURE__*/React.createElement("div", {
     style: {
-      marginBottom: 22
+      marginBottom: 6
     }
   }, /*#__PURE__*/React.createElement("label", {
-    style: labelStyle
-  }, "Morada do trabalho"), /*#__PURE__*/React.createElement("div", {
+    style: S.label
+  }, "\uD83D\uDCCD Morada do trabalho"), /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'relative'
     }
   }, /*#__PURE__*/React.createElement("input", {
     ref: moradaRef,
+    defaultValue: (editData === null || editData === void 0 ? void 0 : editData.morada) || '',
     autoComplete: "off",
     autoCorrect: "off",
     spellCheck: false,
@@ -556,8 +571,8 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
     inputMode: "text",
     type: "text",
     placeholder: "Ex: D\xE4derizstrasse 21, Grenchen",
-    style: _objectSpread(_objectSpread({}, inputStyle), {}, {
-      paddingRight: 40
+    style: _objectSpread(_objectSpread({}, S.input), {}, {
+      paddingRight: 44
     })
   }), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
@@ -574,8 +589,8 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       background: 'rgba(0,0,0,0.07)',
       border: 'none',
       borderRadius: '50%',
-      width: 26,
-      height: 26,
+      width: 28,
+      height: 28,
       cursor: 'pointer',
       color: H.muted,
       fontSize: 14,
@@ -583,23 +598,28 @@ var EntryFormModal = React.memo(function EntryFormModal(_ref8) {
       alignItems: 'center',
       justifyContent: 'center'
     }
-  }, "\u2715"))), /*#__PURE__*/React.createElement("button", {
+  }, "\u2715")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '12px 20px 32px',
+      flexShrink: 0,
+      borderTop: "1px solid ".concat(H.border)
+    }
+  }, /*#__PURE__*/React.createElement("button", {
     onClick: guardar,
     disabled: horas <= 0,
     style: {
       width: '100%',
-      background: horas > 0 ? "linear-gradient(135deg,".concat(H.gold, ",").concat(H.goldL, ")") : '#ccc',
+      background: horas > 0 ? "linear-gradient(135deg,".concat(H.gold, ",").concat(H.goldL, ")") : '#ddd',
       border: 'none',
       borderRadius: 16,
-      padding: '15px',
-      color: horas > 0 ? '#fff' : '#999',
+      padding: '16px',
+      color: horas > 0 ? '#fff' : '#aaa',
       fontSize: 16,
       fontWeight: 900,
       cursor: horas > 0 ? 'pointer' : 'default',
-      boxShadow: horas > 0 ? "0 6px 20px rgba(184,150,46,0.35)" : 'none',
-      letterSpacing: '0.3px'
+      boxShadow: horas > 0 ? "0 6px 20px rgba(184,150,46,0.35)" : 'none'
     }
-  }, "\u2713 Guardar registo ", horas > 0 ? "\xB7 ".concat(horas, "h") : '')));
+  }, isEdit ? '✓ Guardar alterações' : '✓ Guardar registo', horas > 0 ? " \xB7 ".concat(horas, "h") : ''))));
 });
 function HorasProApp(_ref9) {
   var onBack = _ref9.onBack,
@@ -629,29 +649,33 @@ function HorasProApp(_ref9) {
   var _useState9 = (0, _react.useState)(new Date(2026, 5, 1)),
     _useState0 = _slicedToArray(_useState9, 2),
     menuMonth = _useState0[0],
-    setMenuMonth = _useState0[1]; // Junho 2026
+    setMenuMonth = _useState0[1];
   var _useState1 = (0, _react.useState)(false),
     _useState10 = _slicedToArray(_useState1, 2),
     showAdd = _useState10[0],
     setShowAdd = _useState10[1];
-  var _useState11 = (0, _react.useState)('Spleisser'),
+  var _useState11 = (0, _react.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    newTipo = _useState12[0],
-    setNewTipo = _useState12[1];
-  var _useState13 = (0, _react.useState)('POP GREN04'),
+    editEntry = _useState12[0],
+    setEditEntry = _useState12[1];
+  var _useState13 = (0, _react.useState)('Spleisser'),
     _useState14 = _slicedToArray(_useState13, 2),
-    newProj = _useState14[0],
-    setNewProj = _useState14[1];
-  var _useState15 = (0, _react.useState)('07:00'),
+    newTipo = _useState14[0],
+    setNewTipo = _useState14[1];
+  var _useState15 = (0, _react.useState)('POP GREN04'),
     _useState16 = _slicedToArray(_useState15, 2),
-    newHi = _useState16[0],
-    setNewHi = _useState16[1];
-  var _useState17 = (0, _react.useState)('12:00'),
+    newProj = _useState16[0],
+    setNewProj = _useState16[1];
+  var _useState17 = (0, _react.useState)('07:00'),
     _useState18 = _slicedToArray(_useState17, 2),
-    newHf = _useState18[0],
-    setNewHf = _useState18[1];
+    newHi = _useState18[0],
+    setNewHi = _useState18[1];
+  var _useState19 = (0, _react.useState)('12:00'),
+    _useState20 = _slicedToArray(_useState19, 2),
+    newHf = _useState20[0],
+    setNewHf = _useState20[1];
   var newMoradaRef = React.useRef(null);
-  var _useState19 = (0, _react.useState)([{
+  var _useState21 = (0, _react.useState)([{
       id: 1,
       date: '2026-06-01',
       tipo: 'Spleisser',
@@ -708,9 +732,9 @@ function HorasProApp(_ref9) {
       hf: '16:00',
       horas: 3.0
     }]),
-    _useState20 = _slicedToArray(_useState19, 2),
-    entries = _useState20[0],
-    setEntries = _useState20[1];
+    _useState22 = _slicedToArray(_useState21, 2),
+    entries = _useState22[0],
+    setEntries = _useState22[1];
   var fmt = function fmt(d) {
     return d.toISOString().split('T')[0];
   };
@@ -767,7 +791,7 @@ function HorasProApp(_ref9) {
   });
   var dayLabelCap = dayLabel.charAt(0).toUpperCase() + dayLabel.slice(1);
   var tipos = ['Spleisser', 'Instalação', 'Reparação', 'Inspeção', 'Manutenção'];
-  var _useState21 = (0, _react.useState)([{
+  var _useState23 = (0, _react.useState)([{
       id: 'p1',
       name: 'POP GREN04',
       color: H.blue,
@@ -783,33 +807,33 @@ function HorasProApp(_ref9) {
       color: H.green,
       desc: 'Grenchen - Zona 1'
     }]),
-    _useState22 = _slicedToArray(_useState21, 2),
-    projList = _useState22[0],
-    setProjList = _useState22[1];
-  var _useState23 = (0, _react.useState)('Todos'),
     _useState24 = _slicedToArray(_useState23, 2),
-    projFilter = _useState24[0],
-    setProjFilter = _useState24[1];
-  var _useState25 = (0, _react.useState)(false),
+    projList = _useState24[0],
+    setProjList = _useState24[1];
+  var _useState25 = (0, _react.useState)('Todos'),
     _useState26 = _slicedToArray(_useState25, 2),
-    showAddProj = _useState26[0],
-    setShowAddProj = _useState26[1];
-  var _useState27 = (0, _react.useState)(null),
+    projFilter = _useState26[0],
+    setProjFilter = _useState26[1];
+  var _useState27 = (0, _react.useState)(false),
     _useState28 = _slicedToArray(_useState27, 2),
-    editProj = _useState28[0],
-    setEditProj = _useState28[1];
-  var _useState29 = (0, _react.useState)(''),
+    showAddProj = _useState28[0],
+    setShowAddProj = _useState28[1];
+  var _useState29 = (0, _react.useState)(null),
     _useState30 = _slicedToArray(_useState29, 2),
-    newProjName = _useState30[0],
-    setNewProjName = _useState30[1];
+    editProj = _useState30[0],
+    setEditProj = _useState30[1];
   var _useState31 = (0, _react.useState)(''),
     _useState32 = _slicedToArray(_useState31, 2),
-    newProjDesc = _useState32[0],
-    setNewProjDesc = _useState32[1];
-  var _useState33 = (0, _react.useState)(H.blue),
+    newProjName = _useState32[0],
+    setNewProjName = _useState32[1];
+  var _useState33 = (0, _react.useState)(''),
     _useState34 = _slicedToArray(_useState33, 2),
-    newProjColor = _useState34[0],
-    setNewProjColor = _useState34[1];
+    newProjDesc = _useState34[0],
+    setNewProjDesc = _useState34[1];
+  var _useState35 = (0, _react.useState)(H.blue),
+    _useState36 = _slicedToArray(_useState35, 2),
+    newProjColor = _useState36[0],
+    setNewProjColor = _useState36[1];
   var projNameRef = React.useRef(null);
   var projDescRef = React.useRef(null);
 
@@ -863,34 +887,34 @@ function HorasProApp(_ref9) {
     date: '2026-12-26',
     nome: 'Stephanstag'
   }];
-  var _useState35 = (0, _react.useState)([]),
-    _useState36 = _slicedToArray(_useState35, 2),
-    diasLivres = _useState36[0],
-    setDiasLivres = _useState36[1];
-  var _useState37 = (0, _react.useState)(false),
+  var _useState37 = (0, _react.useState)([]),
     _useState38 = _slicedToArray(_useState37, 2),
-    showDiaLivre = _useState38[0],
-    setShowDiaLivre = _useState38[1];
-  var _useState39 = (0, _react.useState)('dia'),
+    diasLivres = _useState38[0],
+    setDiasLivres = _useState38[1];
+  var _useState39 = (0, _react.useState)(false),
     _useState40 = _slicedToArray(_useState39, 2),
-    dlTipo = _useState40[0],
-    setDlTipo = _useState40[1];
-  var _useState41 = (0, _react.useState)(''),
+    showDiaLivre = _useState40[0],
+    setShowDiaLivre = _useState40[1];
+  var _useState41 = (0, _react.useState)('dia'),
     _useState42 = _slicedToArray(_useState41, 2),
-    dlDe = _useState42[0],
-    setDlDe = _useState42[1];
+    dlTipo = _useState42[0],
+    setDlTipo = _useState42[1];
   var _useState43 = (0, _react.useState)(''),
     _useState44 = _slicedToArray(_useState43, 2),
-    dlAte = _useState44[0],
-    setDlAte = _useState44[1];
-  var _useState45 = (0, _react.useState)(false),
+    dlDe = _useState44[0],
+    setDlDe = _useState44[1];
+  var _useState45 = (0, _react.useState)(''),
     _useState46 = _slicedToArray(_useState45, 2),
-    showFeriados = _useState46[0],
-    setShowFeriados = _useState46[1];
-  var _useState47 = (0, _react.useState)(true),
+    dlAte = _useState46[0],
+    setDlAte = _useState46[1];
+  var _useState47 = (0, _react.useState)(false),
     _useState48 = _slicedToArray(_useState47, 2),
-    sextaLivre = _useState48[0],
-    setSextaLivre = _useState48[1]; // Sextas automaticamente livres
+    showFeriados = _useState48[0],
+    setShowFeriados = _useState48[1];
+  var _useState49 = (0, _react.useState)(true),
+    _useState50 = _slicedToArray(_useState49, 2),
+    sextaLivre = _useState50[0],
+    setSextaLivre = _useState50[1]; // Sextas automaticamente livres
 
   // Auto-adicionar sextas como dia livre remunerado
   (0, _react.useEffect)(function () {
@@ -2046,28 +2070,31 @@ function HorasProApp(_ref9) {
           gap: 4
         }
       }, !e.isAuto && /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return setEditEntry(e);
+        },
         style: {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          padding: '4px',
-          opacity: 0.5
+          padding: '4px'
         }
       }, /*#__PURE__*/React.createElement("div", {
         style: {
-          width: 18,
-          height: 18,
-          borderRadius: 4,
-          border: "1.5px solid ".concat(H.muted),
+          width: 28,
+          height: 28,
+          borderRadius: 8,
+          border: "1.5px solid ".concat(H.border),
+          background: H.surface2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
         }
       }, /*#__PURE__*/React.createElement("span", {
         style: {
-          fontSize: 10
+          fontSize: 13
         }
-      }, "\u270F"))), /*#__PURE__*/React.createElement("button", {
+      }, "\u270F\uFE0F"))), /*#__PURE__*/React.createElement("button", {
         onClick: function onClick() {
           setEntries(function (p) {
             return p.filter(function (x) {
@@ -3046,7 +3073,37 @@ function HorasProApp(_ref9) {
     projList: projList,
     calcHoras: calcHoras,
     H: H
-  }), ")}", showMenu && /*#__PURE__*/React.createElement("div", {
+  }), editEntry && /*#__PURE__*/React.createElement(EntryFormModal, {
+    editData: editEntry,
+    onSave: function onSave(_ref10) {
+      var tipo = _ref10.tipo,
+        proj = _ref10.proj,
+        hi = _ref10.hi,
+        hf = _ref10.hf,
+        horas = _ref10.horas,
+        morada = _ref10.morada;
+      setEntries(function (p) {
+        return p.map(function (x) {
+          return x.id === editEntry.id ? _objectSpread(_objectSpread({}, x), {}, {
+            tipo: tipo,
+            proj: proj,
+            hi: hi,
+            hf: hf,
+            horas: horas,
+            morada: morada
+          }) : x;
+        });
+      });
+      setEditEntry(null);
+    },
+    onClose: function onClose() {
+      return setEditEntry(null);
+    },
+    tipos: tipos,
+    projList: projList,
+    calcHoras: calcHoras,
+    H: H
+  }), showMenu && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -3132,10 +3189,10 @@ function HorasProApp(_ref9) {
         color: H.gold
       }
     }, d);
-  })), [[23, [1, 2, 3, 4, 5, 6, 7]], [24, [8, 9, 10, 11, 12, 13, 14]], [25, [15, 16, 17, 18, 19, 20, 21]], [26, [22, 23, 24, 25, 26, 27, 28]], [27, [29, 30]]].map(function (_ref10) {
-    var _ref11 = _slicedToArray(_ref10, 2),
-      kw2 = _ref11[0],
-      ds = _ref11[1];
+  })), [[23, [1, 2, 3, 4, 5, 6, 7]], [24, [8, 9, 10, 11, 12, 13, 14]], [25, [15, 16, 17, 18, 19, 20, 21]], [26, [22, 23, 24, 25, 26, 27, 28]], [27, [29, 30]]].map(function (_ref11) {
+    var _ref12 = _slicedToArray(_ref11, 2),
+      kw2 = _ref12[0],
+      ds = _ref12[1];
     return /*#__PURE__*/React.createElement("div", {
       key: kw2,
       style: {
@@ -3440,15 +3497,15 @@ var STATUS = {
     icon: '⚠️'
   }
 };
-function AgendaProApp(_ref12) {
-  var onBack = _ref12.onBack,
-    _ref12$sharedDias = _ref12.sharedDias,
-    sharedDias = _ref12$sharedDias === void 0 ? [] : _ref12$sharedDias,
-    _ref12$addSharedDia = _ref12.addSharedDia,
-    addSharedDia = _ref12$addSharedDia === void 0 ? function () {} : _ref12$addSharedDia,
-    _ref12$removeSharedDi = _ref12.removeSharedDia,
-    removeSharedDia = _ref12$removeSharedDi === void 0 ? function () {} : _ref12$removeSharedDi;
-  var _useState49 = (0, _react.useState)([{
+function AgendaProApp(_ref13) {
+  var onBack = _ref13.onBack,
+    _ref13$sharedDias = _ref13.sharedDias,
+    sharedDias = _ref13$sharedDias === void 0 ? [] : _ref13$sharedDias,
+    _ref13$addSharedDia = _ref13.addSharedDia,
+    addSharedDia = _ref13$addSharedDia === void 0 ? function () {} : _ref13$addSharedDia,
+    _ref13$removeSharedDi = _ref13.removeSharedDia,
+    removeSharedDia = _ref13$removeSharedDi === void 0 ? function () {} : _ref13$removeSharedDi;
+  var _useState51 = (0, _react.useState)([{
       id: 1,
       date: '2026-06-15',
       hi: '08:00',
@@ -3526,38 +3583,38 @@ function AgendaProApp(_ref12) {
       status: 'problema',
       nota: 'Acesso bloqueado'
     }]),
-    _useState50 = _slicedToArray(_useState49, 2),
-    appts = _useState50[0],
-    setAppts = _useState50[1];
-  var _useState51 = (0, _react.useState)('Todos'),
     _useState52 = _slicedToArray(_useState51, 2),
-    filter = _useState52[0],
-    setFilter = _useState52[1];
-  var _useState53 = (0, _react.useState)(''),
+    appts = _useState52[0],
+    setAppts = _useState52[1];
+  var _useState53 = (0, _react.useState)('Todos'),
     _useState54 = _slicedToArray(_useState53, 2),
-    search = _useState54[0],
-    setSearch = _useState54[1];
-  var _useState55 = (0, _react.useState)(new Date()),
+    filter = _useState54[0],
+    setFilter = _useState54[1];
+  var _useState55 = (0, _react.useState)(''),
     _useState56 = _slicedToArray(_useState55, 2),
-    curDate = _useState56[0],
-    setCurDate = _useState56[1];
-  var _useState57 = (0, _react.useState)('lista'),
+    search = _useState56[0],
+    setSearch = _useState56[1];
+  var _useState57 = (0, _react.useState)(new Date()),
     _useState58 = _slicedToArray(_useState57, 2),
-    calView = _useState58[0],
-    setCalView = _useState58[1]; // lista | cal
-  var _useState59 = (0, _react.useState)(false),
+    curDate = _useState58[0],
+    setCurDate = _useState58[1];
+  var _useState59 = (0, _react.useState)('lista'),
     _useState60 = _slicedToArray(_useState59, 2),
-    showAdd = _useState60[0],
-    setShowAdd = _useState60[1];
-  var _useState61 = (0, _react.useState)(null),
+    calView = _useState60[0],
+    setCalView = _useState60[1]; // lista | cal
+  var _useState61 = (0, _react.useState)(false),
     _useState62 = _slicedToArray(_useState61, 2),
-    editId = _useState62[0],
-    setEditId = _useState62[1];
+    showAdd = _useState62[0],
+    setShowAdd = _useState62[1];
   var _useState63 = (0, _react.useState)(null),
     _useState64 = _slicedToArray(_useState63, 2),
-    openId = _useState64[0],
-    setOpenId = _useState64[1];
-  var _useState65 = (0, _react.useState)({
+    editId = _useState64[0],
+    setEditId = _useState64[1];
+  var _useState65 = (0, _react.useState)(null),
+    _useState66 = _slicedToArray(_useState65, 2),
+    openId = _useState66[0],
+    setOpenId = _useState66[1];
+  var _useState67 = (0, _react.useState)({
       date: '',
       hi: '08:00',
       hf: '10:00',
@@ -3568,10 +3625,10 @@ function AgendaProApp(_ref12) {
       nota: '',
       status: 'aberto'
     }),
-    _useState66 = _slicedToArray(_useState65, 2),
-    form = _useState66[0],
-    setForm = _useState66[1];
-  var _useState67 = (0, _react.useState)([{
+    _useState68 = _slicedToArray(_useState67, 2),
+    form = _useState68[0],
+    setForm = _useState68[1];
+  var _useState69 = (0, _react.useState)([{
       id: 'm1',
       name: 'Patricio',
       emoji: '👨‍🔧',
@@ -3586,51 +3643,51 @@ function AgendaProApp(_ref12) {
       notif: true,
       cor: A.blue
     }]),
-    _useState68 = _slicedToArray(_useState67, 2),
-    monteurs = _useState68[0],
-    setMonteurs = _useState68[1];
-  var _useState69 = (0, _react.useState)(false),
     _useState70 = _slicedToArray(_useState69, 2),
-    showMonteurs = _useState70[0],
-    setShowMonteurs = _useState70[1];
-  var _useState71 = (0, _react.useState)(null),
+    monteurs = _useState70[0],
+    setMonteurs = _useState70[1];
+  var _useState71 = (0, _react.useState)(false),
     _useState72 = _slicedToArray(_useState71, 2),
-    editMonteur = _useState72[0],
-    setEditMonteur = _useState72[1];
-  var _useState73 = (0, _react.useState)({
+    showMonteurs = _useState72[0],
+    setShowMonteurs = _useState72[1];
+  var _useState73 = (0, _react.useState)(null),
+    _useState74 = _slicedToArray(_useState73, 2),
+    editMonteur = _useState74[0],
+    setEditMonteur = _useState74[1];
+  var _useState75 = (0, _react.useState)({
       name: '',
       emoji: '👷',
       tel: '',
       notif: true,
       cor: A.blue
     }),
-    _useState74 = _slicedToArray(_useState73, 2),
-    mForm = _useState74[0],
-    setMForm = _useState74[1];
-  var _useState75 = (0, _react.useState)(true),
     _useState76 = _slicedToArray(_useState75, 2),
-    avisosAtivos = _useState76[0],
-    setAvisosAtivos = _useState76[1];
-  var _useState77 = (0, _react.useState)(30),
+    mForm = _useState76[0],
+    setMForm = _useState76[1];
+  var _useState77 = (0, _react.useState)(true),
     _useState78 = _slicedToArray(_useState77, 2),
-    avisoMin = _useState78[0],
-    setAvisoMin = _useState78[1];
-  var _useState79 = (0, _react.useState)({}),
+    avisosAtivos = _useState78[0],
+    setAvisosAtivos = _useState78[1];
+  var _useState79 = (0, _react.useState)(30),
     _useState80 = _slicedToArray(_useState79, 2),
-    ultimoAviso = _useState80[0],
-    setUltimoAviso = _useState80[1];
-  var _useState81 = (0, _react.useState)([]),
+    avisoMin = _useState80[0],
+    setAvisoMin = _useState80[1];
+  var _useState81 = (0, _react.useState)({}),
     _useState82 = _slicedToArray(_useState81, 2),
-    inAppNotifs = _useState82[0],
-    setInAppNotifs = _useState82[1];
-  var _useState83 = (0, _react.useState)(false),
+    ultimoAviso = _useState82[0],
+    setUltimoAviso = _useState82[1];
+  var _useState83 = (0, _react.useState)([]),
     _useState84 = _slicedToArray(_useState83, 2),
-    showNotifPanel = _useState84[0],
-    setShowNotifPanel = _useState84[1];
-  var _useState85 = (0, _react.useState)([]),
+    inAppNotifs = _useState84[0],
+    setInAppNotifs = _useState84[1];
+  var _useState85 = (0, _react.useState)(false),
     _useState86 = _slicedToArray(_useState85, 2),
-    toasts = _useState86[0],
-    setToasts = _useState86[1];
+    showNotifPanel = _useState86[0],
+    setShowNotifPanel = _useState86[1];
+  var _useState87 = (0, _react.useState)([]),
+    _useState88 = _slicedToArray(_useState87, 2),
+    toasts = _useState88[0],
+    setToasts = _useState88[1];
   var addToast = function addToast(msg) {
     var sub = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var tipo = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'info';
@@ -3842,10 +3899,10 @@ function AgendaProApp(_ref12) {
       });
     });
   };
-  var ACard = function ACard(_ref13) {
-    var children = _ref13.children,
-      _ref13$style = _ref13.style,
-      style = _ref13$style === void 0 ? {} : _ref13$style;
+  var ACard = function ACard(_ref14) {
+    var children = _ref14.children,
+      _ref14$style = _ref14.style,
+      style = _ref14$style === void 0 ? {} : _ref14$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: A.surface,
@@ -4408,119 +4465,255 @@ function AgendaProApp(_ref12) {
     style: {
       padding: '0 16px 12px'
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: prevDay,
-    style: {
-      background: A.surface,
-      border: "1px solid ".concat(A.border),
-      borderRadius: 10,
-      width: 36,
-      height: 36,
-      color: A.orange,
-      fontSize: 18,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontWeight: 700
-    }
-  }, "\u2039"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: A.text,
-      fontWeight: 800,
-      fontSize: 15
-    }
-  }, curDate.toLocaleDateString('pt-PT', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long'
-  }).replace(/^\w/, function (c) {
-    return c.toUpperCase();
-  })), /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: A.muted,
-      fontSize: 12
-    }
-  }, appts.filter(function (a) {
-    return a.date === todayStr;
-  }).length, " compromisso(s)")), /*#__PURE__*/React.createElement("button", {
-    onClick: nextDay,
-    style: {
-      background: A.surface,
-      border: "1px solid ".concat(A.border),
-      borderRadius: 10,
-      width: 36,
-      height: 36,
-      color: A.orange,
-      fontSize: 18,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontWeight: 700
-    }
-  }, "\u203A")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 5,
-      marginBottom: 14
-    }
-  }, ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map(function (d, i) {
-    var date = new Date(curDate);
-    date.setDate(date.getDate() - date.getDay() + 1 + i);
-    var dStr = fmt(date);
-    var hasAppt = appts.some(function (a) {
-      return a.date === dStr;
+  }, function () {
+    var calMo = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
+    var daysInMo = new Date(calMo.getFullYear(), calMo.getMonth() + 1, 0).getDate();
+    var firstDow = (new Date(calMo).getDay() + 6) % 7; // 0=Seg
+    var getWeekNum = function getWeekNum(d) {
+      var date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      var dayNum = date.getUTCDay() || 7;
+      date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+      var yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+      return Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+    };
+    var prevMo = function prevMo() {
+      return setCurDate(function (d) {
+        var n = new Date(d);
+        n.setMonth(n.getMonth() - 1);
+        n.setDate(1);
+        return n;
+      });
+    };
+    var nextMo = function nextMo() {
+      return setCurDate(function (d) {
+        var n = new Date(d);
+        n.setMonth(n.getMonth() + 1);
+        n.setDate(1);
+        return n;
+      });
+    };
+    var moName = curDate.toLocaleDateString('pt-PT', {
+      month: 'long',
+      year: 'numeric'
+    }).replace(/^\w/, function (c) {
+      return c.toUpperCase();
     });
-    var isToday = dStr === todayStr;
+
+    // Build weeks
+    var cells = [];
+    for (var i = 0; i < firstDow; i++) cells.push(null);
+    for (var d = 1; d <= daysInMo; d++) cells.push(d);
+    while (cells.length % 7 !== 0) cells.push(null);
+    var weeks = [];
+    for (var _i = 0; _i < cells.length; _i += 7) weeks.push(cells.slice(_i, _i + 7));
     return /*#__PURE__*/React.createElement("div", {
-      key: d,
-      onClick: function onClick() {
-        return setCurDate(new Date(dStr + 'T12:00:00'));
-      },
       style: {
-        flex: 1,
+        background: A.surface,
+        borderRadius: 18,
+        border: "1px solid ".concat(A.border),
+        overflow: 'hidden',
+        marginBottom: 12,
+        boxShadow: '0 1px 6px rgba(0,0,0,0.06)'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '12px 16px',
+        borderBottom: "1px solid ".concat(A.border)
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      onClick: prevMo,
+      style: {
+        background: A.surface2,
+        border: "1px solid ".concat(A.border),
+        borderRadius: 9,
+        width: 34,
+        height: 34,
+        color: A.orange,
+        fontSize: 18,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700
+      }
+    }, "\u2039"), /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 800,
+        fontSize: 15,
+        color: A.text
+      }
+    }, moName), /*#__PURE__*/React.createElement("button", {
+      onClick: nextMo,
+      style: {
+        background: A.surface2,
+        border: "1px solid ".concat(A.border),
+        borderRadius: 9,
+        width: 34,
+        height: 34,
+        color: A.orange,
+        fontSize: 18,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700
+      }
+    }, "\u203A")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'grid',
+        gridTemplateColumns: '32px repeat(7,1fr)',
+        padding: '6px 8px 4px'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
         textAlign: 'center',
-        padding: '6px 2px',
-        borderRadius: 10,
-        background: isToday ? A.orange : hasAppt ? 'rgba(217,119,6,0.1)' : 'transparent',
-        border: hasAppt && !isToday ? "1px solid rgba(217,119,6,0.3)" : 'none',
-        cursor: 'pointer'
+        fontSize: 9,
+        color: A.muted,
+        fontWeight: 700
+      }
+    }, "Sem"), ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map(function (d) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: d,
+        style: {
+          textAlign: 'center',
+          fontSize: 9,
+          color: A.muted,
+          fontWeight: 700,
+          padding: '2px 0'
+        }
+      }, d);
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: '0 8px 10px'
+      }
+    }, weeks.map(function (week, wi) {
+      var firstReal = week.find(function (d) {
+        return d;
+      });
+      var weekDate = firstReal ? new Date(curDate.getFullYear(), curDate.getMonth(), firstReal) : null;
+      var weekNum = weekDate ? getWeekNum(weekDate) : '';
+      return /*#__PURE__*/React.createElement("div", {
+        key: wi,
+        style: {
+          display: 'grid',
+          gridTemplateColumns: '32px repeat(7,1fr)',
+          marginBottom: 3
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 9,
+          fontWeight: 800,
+          color: A.muted,
+          background: A.surface2,
+          borderRadius: 5,
+          padding: '2px 4px'
+        }
+      }, weekNum)), week.map(function (day, di) {
+        if (!day) return /*#__PURE__*/React.createElement("div", {
+          key: di
+        });
+        var dStr = "".concat(curDate.getFullYear(), "-").concat(String(curDate.getMonth() + 1).padStart(2, '0'), "-").concat(String(day).padStart(2, '0'));
+        var dayAppts = appts.filter(function (a) {
+          return a.date === dStr && (filter === 'Todos' || a.status === filter.toLowerCase());
+        });
+        var hasAppt = appts.some(function (a) {
+          return a.date === dStr;
+        });
+        var isSel = dStr === todayStr;
+        var isWeekend = di >= 5;
+        var statusColors = _toConsumableArray(new Set(appts.filter(function (a) {
+          return a.date === dStr;
+        }).map(function (a) {
+          var _STATUS$a$status;
+          return (_STATUS$a$status = STATUS[a.status]) === null || _STATUS$a$status === void 0 ? void 0 : _STATUS$a$status.color;
+        }))).slice(0, 3);
+        return /*#__PURE__*/React.createElement("div", {
+          key: di,
+          onClick: function onClick() {
+            return setCurDate(new Date(dStr + 'T12:00:00'));
+          },
+          style: {
+            textAlign: 'center',
+            padding: '4px 1px',
+            borderRadius: 9,
+            cursor: 'pointer',
+            background: isSel ? A.orange : 'transparent',
+            border: hasAppt && !isSel ? "1px solid rgba(217,119,6,0.25)" : '1px solid transparent',
+            minHeight: 38,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            fontWeight: isSel || hasAppt ? 800 : 400,
+            color: isSel ? '#fff' : isWeekend ? A.orange : A.text,
+            lineHeight: 1.4
+          }
+        }, day), hasAppt && !isSel && /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            gap: 2,
+            justifyContent: 'center'
+          }
+        }, statusColors.map(function (c, ci) {
+          return /*#__PURE__*/React.createElement("div", {
+            key: ci,
+            style: {
+              width: 5,
+              height: 5,
+              borderRadius: '50%',
+              background: c
+            }
+          });
+        })), hasAppt && isSel && /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 5,
+            height: 5,
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.7)'
+          }
+        }));
+      }));
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        padding: '8px 14px 12px',
+        borderTop: "1px solid ".concat(A.border),
+        background: A.surface2
       }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
-        fontSize: 9,
-        color: isToday ? '#fff' : A.muted,
-        fontWeight: 700
-      }
-    }, d), /*#__PURE__*/React.createElement("p", {
-      style: {
-        fontSize: 13,
         fontWeight: 800,
-        color: isToday ? '#fff' : A.text,
-        marginTop: 2
+        fontSize: 13,
+        color: A.text
       }
-    }, date.getDate()), hasAppt && !isToday && /*#__PURE__*/React.createElement("div", {
+    }, curDate.toLocaleDateString('pt-PT', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long'
+    }).replace(/^\w/, function (c) {
+      return c.toUpperCase();
+    }), /*#__PURE__*/React.createElement("span", {
       style: {
-        width: 4,
-        height: 4,
-        background: A.orange,
-        borderRadius: '50%',
-        margin: '2px auto 0'
+        color: A.muted,
+        fontWeight: 400,
+        fontSize: 12
       }
-    }));
-  }))), showMonteurs && /*#__PURE__*/React.createElement("div", {
+    }, " \xB7 ", appts.filter(function (a) {
+      return a.date === todayStr;
+    }).length, " marca\xE7\xE3o(\xF5es)"))));
+  }()), showMonteurs && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       top: 0,
@@ -5148,10 +5341,10 @@ function AgendaProApp(_ref12) {
       gap: 7,
       marginBottom: 16
     }
-  }, Object.entries(STATUS).map(function (_ref14) {
-    var _ref15 = _slicedToArray(_ref14, 2),
-      k = _ref15[0],
-      s = _ref15[1];
+  }, Object.entries(STATUS).map(function (_ref15) {
+    var _ref16 = _slicedToArray(_ref15, 2),
+      k = _ref16[0],
+      s = _ref16[1];
     return /*#__PURE__*/React.createElement("button", {
       key: k,
       onClick: function onClick() {
@@ -5405,10 +5598,10 @@ function AgendaProApp(_ref12) {
           gap: 6,
           marginBottom: 12
         }
-      }, Object.entries(STATUS).map(function (_ref16) {
-        var _ref17 = _slicedToArray(_ref16, 2),
-          k = _ref17[0],
-          s = _ref17[1];
+      }, Object.entries(STATUS).map(function (_ref17) {
+        var _ref18 = _slicedToArray(_ref17, 2),
+          k = _ref18[0],
+          s = _ref18[1];
         return /*#__PURE__*/React.createElement("button", {
           key: k,
           onClick: function onClick() {
@@ -5546,31 +5739,31 @@ var MEMBER_COLORS = {
   lucas: '#E8773A',
   liam: '#2D8A4E'
 };
-function FamiliaApp(_ref18) {
-  var onBack = _ref18.onBack,
-    _ref18$sharedDias = _ref18.sharedDias,
-    sharedDias = _ref18$sharedDias === void 0 ? [] : _ref18$sharedDias,
-    _ref18$addSharedDia = _ref18.addSharedDia,
-    addSharedDia = _ref18$addSharedDia === void 0 ? function () {} : _ref18$addSharedDia,
-    _ref18$removeSharedDi = _ref18.removeSharedDia,
-    removeSharedDia = _ref18$removeSharedDi === void 0 ? function () {} : _ref18$removeSharedDi;
-  var _useState87 = (0, _react.useState)(new Date(2026, 5, 1)),
-    _useState88 = _slicedToArray(_useState87, 2),
-    curMonth = _useState88[0],
-    setCurMonth = _useState88[1];
-  var _useState89 = (0, _react.useState)(15),
+function FamiliaApp(_ref19) {
+  var onBack = _ref19.onBack,
+    _ref19$sharedDias = _ref19.sharedDias,
+    sharedDias = _ref19$sharedDias === void 0 ? [] : _ref19$sharedDias,
+    _ref19$addSharedDia = _ref19.addSharedDia,
+    addSharedDia = _ref19$addSharedDia === void 0 ? function () {} : _ref19$addSharedDia,
+    _ref19$removeSharedDi = _ref19.removeSharedDia,
+    removeSharedDia = _ref19$removeSharedDi === void 0 ? function () {} : _ref19$removeSharedDi;
+  var _useState89 = (0, _react.useState)(new Date(2026, 5, 1)),
     _useState90 = _slicedToArray(_useState89, 2),
-    selDay = _useState90[0],
-    setSelDay = _useState90[1];
-  var _useState91 = (0, _react.useState)(false),
+    curMonth = _useState90[0],
+    setCurMonth = _useState90[1];
+  var _useState91 = (0, _react.useState)(15),
     _useState92 = _slicedToArray(_useState91, 2),
-    showAdd = _useState92[0],
-    setShowAdd = _useState92[1];
-  var _useState93 = (0, _react.useState)('todos'),
+    selDay = _useState92[0],
+    setSelDay = _useState92[1];
+  var _useState93 = (0, _react.useState)(false),
     _useState94 = _slicedToArray(_useState93, 2),
-    selMember = _useState94[0],
-    setSelMember = _useState94[1];
-  var _useState95 = (0, _react.useState)({
+    showAdd = _useState94[0],
+    setShowAdd = _useState94[1];
+  var _useState95 = (0, _react.useState)('todos'),
+    _useState96 = _slicedToArray(_useState95, 2),
+    selMember = _useState96[0],
+    setSelMember = _useState96[1];
+  var _useState97 = (0, _react.useState)({
       '2026-06-14': [{
         t: 'Domingo em família',
         emoji: '🏠',
@@ -5607,10 +5800,10 @@ function FamiliaApp(_ref18) {
         color: F.purple
       }]
     }),
-    _useState96 = _slicedToArray(_useState95, 2),
-    events = _useState96[0],
-    setEvents = _useState96[1];
-  var _useState97 = (0, _react.useState)({
+    _useState98 = _slicedToArray(_useState97, 2),
+    events = _useState98[0],
+    setEvents = _useState98[1];
+  var _useState99 = (0, _react.useState)({
       titulo: '',
       emoji: '📅',
       who: 'todos',
@@ -5618,13 +5811,13 @@ function FamiliaApp(_ref18) {
       hora: '',
       nota: ''
     }),
-    _useState98 = _slicedToArray(_useState97, 2),
-    form = _useState98[0],
-    setForm = _useState98[1];
-  var _useState99 = (0, _react.useState)({}),
     _useState100 = _slicedToArray(_useState99, 2),
-    memberPhotos = _useState100[0],
-    setMemberPhotos = _useState100[1];
+    form = _useState100[0],
+    setForm = _useState100[1];
+  var _useState101 = (0, _react.useState)({}),
+    _useState102 = _slicedToArray(_useState101, 2),
+    memberPhotos = _useState102[0],
+    setMemberPhotos = _useState102[1];
   var handlePhotoUpload = function handlePhotoUpload(memberId, e) {
     var file = e.target.files[0];
     if (!file) return;
@@ -5636,22 +5829,22 @@ function FamiliaApp(_ref18) {
     };
     reader.readAsDataURL(file);
   };
-  var _useState101 = (0, _react.useState)('Semana'),
-    _useState102 = _slicedToArray(_useState101, 2),
-    timeTab = _useState102[0],
-    setTimeTab = _useState102[1];
-  var _useState103 = (0, _react.useState)('semana'),
+  var _useState103 = (0, _react.useState)('Semana'),
     _useState104 = _slicedToArray(_useState103, 2),
-    mainView = _useState104[0],
-    setMainView = _useState104[1]; // semana | mes
-  var _useState105 = (0, _react.useState)(function () {
+    timeTab = _useState104[0],
+    setTimeTab = _useState104[1];
+  var _useState105 = (0, _react.useState)('semana'),
+    _useState106 = _slicedToArray(_useState105, 2),
+    mainView = _useState106[0],
+    setMainView = _useState106[1]; // semana | mes
+  var _useState107 = (0, _react.useState)(function () {
       var d = new Date(2026, 5, 15); // 15 Jun 2026
       d.setDate(d.getDate() - d.getDay() + 1); // Monday
       return d;
     }),
-    _useState106 = _slicedToArray(_useState105, 2),
-    weekStart = _useState106[0],
-    setWeekStart = _useState106[1];
+    _useState108 = _slicedToArray(_useState107, 2),
+    weekStart = _useState108[0],
+    setWeekStart = _useState108[1];
   var members = [{
     id: 'todos',
     name: 'Todos',
@@ -5734,10 +5927,10 @@ function FamiliaApp(_ref18) {
     });
     setShowAdd(false);
   };
-  var FCard = function FCard(_ref19) {
-    var children = _ref19.children,
-      _ref19$style = _ref19.style,
-      style = _ref19$style === void 0 ? {} : _ref19$style;
+  var FCard = function FCard(_ref20) {
+    var children = _ref20.children,
+      _ref20$style = _ref20.style,
+      style = _ref20$style === void 0 ? {} : _ref20$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: F.surface,
@@ -6606,10 +6799,10 @@ function FamiliaApp(_ref18) {
     var monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     // Collect all events with dates
-    var allEvs = Object.entries(events).flatMap(function (_ref20) {
-      var _ref21 = _slicedToArray(_ref20, 2),
-        date = _ref21[0],
-        evs = _ref21[1];
+    var allEvs = Object.entries(events).flatMap(function (_ref21) {
+      var _ref22 = _slicedToArray(_ref21, 2),
+        date = _ref22[0],
+        evs = _ref22[1];
       return evs.map(function (ev) {
         return _objectSpread(_objectSpread({}, ev), {}, {
           date: date
@@ -6655,16 +6848,16 @@ function FamiliaApp(_ref18) {
       (acc[ev.date] = acc[ev.date] || []).push(ev);
       return acc;
     }, {});
-    return Object.entries(grouped2).sort(function (_ref22, _ref23) {
-      var _ref24 = _slicedToArray(_ref22, 1),
-        a = _ref24[0];
+    return Object.entries(grouped2).sort(function (_ref23, _ref24) {
       var _ref25 = _slicedToArray(_ref23, 1),
-        b = _ref25[0];
+        a = _ref25[0];
+      var _ref26 = _slicedToArray(_ref24, 1),
+        b = _ref26[0];
       return a.localeCompare(b);
-    }).map(function (_ref26) {
-      var _ref27 = _slicedToArray(_ref26, 2),
-        date = _ref27[0],
-        evs = _ref27[1];
+    }).map(function (_ref27) {
+      var _ref28 = _slicedToArray(_ref27, 2),
+        date = _ref28[0],
+        evs = _ref28[1];
       var d = new Date(date + 'T12:00:00');
       var isToday2 = date === todayStr2;
       var dayLabel = d.toLocaleDateString('pt-PT', {
@@ -6992,21 +7185,21 @@ function FamiliaApp(_ref18) {
 }
 
 // ── NUTRIGUIMA ──────────────────────────────────────────────────────
-function NutriguimaApp(_ref28) {
-  var onBack = _ref28.onBack;
-  var _useState107 = (0, _react.useState)({}),
-    _useState108 = _slicedToArray(_useState107, 2),
-    cart = _useState108[0],
-    setCart = _useState108[1];
-  var _useState109 = (0, _react.useState)(''),
+function NutriguimaApp(_ref29) {
+  var onBack = _ref29.onBack;
+  var _useState109 = (0, _react.useState)({}),
     _useState110 = _slicedToArray(_useState109, 2),
-    search = _useState110[0],
-    setSearch = _useState110[1];
-  var _useState111 = (0, _react.useState)('loja'),
+    cart = _useState110[0],
+    setCart = _useState110[1];
+  var _useState111 = (0, _react.useState)(''),
     _useState112 = _slicedToArray(_useState111, 2),
-    tab = _useState112[0],
-    setTab = _useState112[1]; // loja | stock
-  var _useState113 = (0, _react.useState)({
+    search = _useState112[0],
+    setSearch = _useState112[1];
+  var _useState113 = (0, _react.useState)('loja'),
+    _useState114 = _slicedToArray(_useState113, 2),
+    tab = _useState114[0],
+    setTab = _useState114[1]; // loja | stock
+  var _useState115 = (0, _react.useState)({
       1: 5,
       2: 1,
       3: 0,
@@ -7014,17 +7207,17 @@ function NutriguimaApp(_ref28) {
       5: 8,
       6: 1
     }),
-    _useState114 = _slicedToArray(_useState113, 2),
-    stock = _useState114[0],
-    setStock = _useState114[1];
-  var _useState115 = (0, _react.useState)(null),
     _useState116 = _slicedToArray(_useState115, 2),
-    editStock = _useState116[0],
-    setEditStock = _useState116[1];
-  var _useState117 = (0, _react.useState)(''),
+    stock = _useState116[0],
+    setStock = _useState116[1];
+  var _useState117 = (0, _react.useState)(null),
     _useState118 = _slicedToArray(_useState117, 2),
-    stockVal = _useState118[0],
-    setStockVal = _useState118[1];
+    editStock = _useState118[0],
+    setEditStock = _useState118[1];
+  var _useState119 = (0, _react.useState)(''),
+    _useState120 = _slicedToArray(_useState119, 2),
+    stockVal = _useState120[0],
+    setStockVal = _useState120[1];
   var products = [{
     id: 1,
     name: 'Whey Protein 1kg',
@@ -7092,10 +7285,10 @@ function NutriguimaApp(_ref28) {
     green: '#16A34A',
     red: '#DC2626'
   };
-  var NCard = function NCard(_ref29) {
-    var children = _ref29.children,
-      _ref29$style = _ref29.style,
-      style = _ref29$style === void 0 ? {} : _ref29$style;
+  var NCard = function NCard(_ref30) {
+    var children = _ref30.children,
+      _ref30$style = _ref30.style,
+      style = _ref30$style === void 0 ? {} : _ref30$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: N.surface,
@@ -8123,83 +8316,83 @@ var ALUNOS_DEF = {
     }]
   }
 };
-function EscolarApp(_ref30) {
-  var onBack = _ref30.onBack,
-    _ref30$sharedDias = _ref30.sharedDias,
-    sharedDias = _ref30$sharedDias === void 0 ? [] : _ref30$sharedDias,
-    _ref30$addSharedDia = _ref30.addSharedDia,
-    addSharedDia = _ref30$addSharedDia === void 0 ? function () {} : _ref30$addSharedDia,
-    _ref30$activeUser = _ref30.activeUser,
-    activeUser = _ref30$activeUser === void 0 ? 'patricio' : _ref30$activeUser;
+function EscolarApp(_ref31) {
+  var onBack = _ref31.onBack,
+    _ref31$sharedDias = _ref31.sharedDias,
+    sharedDias = _ref31$sharedDias === void 0 ? [] : _ref31$sharedDias,
+    _ref31$addSharedDia = _ref31.addSharedDia,
+    addSharedDia = _ref31$addSharedDia === void 0 ? function () {} : _ref31$addSharedDia,
+    _ref31$activeUser = _ref31.activeUser,
+    activeUser = _ref31$activeUser === void 0 ? 'patricio' : _ref31$activeUser;
   var isAdmin = activeUser === 'patricio';
   var defaultAluno = activeUser === 'liam' ? 'liam' : 'lucas';
-  var _useState119 = (0, _react.useState)(defaultAluno),
-    _useState120 = _slicedToArray(_useState119, 2),
-    alunoKey = _useState120[0],
-    setAlunoKey = _useState120[1];
-  var _useState121 = (0, _react.useState)('horario'),
+  var _useState121 = (0, _react.useState)(defaultAluno),
     _useState122 = _slicedToArray(_useState121, 2),
-    tab = _useState122[0],
-    setTab = _useState122[1];
-  var _useState123 = (0, _react.useState)(0),
+    alunoKey = _useState122[0],
+    setAlunoKey = _useState122[1];
+  var _useState123 = (0, _react.useState)('horario'),
     _useState124 = _slicedToArray(_useState123, 2),
-    dayIdx = _useState124[0],
-    setDayIdx = _useState124[1];
-  var _useState125 = (0, _react.useState)(1),
+    tab = _useState124[0],
+    setTab = _useState124[1];
+  var _useState125 = (0, _react.useState)(0),
     _useState126 = _slicedToArray(_useState125, 2),
-    semestre = _useState126[0],
-    setSemestre = _useState126[1];
-  var _useState127 = (0, _react.useState)(false),
+    dayIdx = _useState126[0],
+    setDayIdx = _useState126[1];
+  var _useState127 = (0, _react.useState)(1),
     _useState128 = _slicedToArray(_useState127, 2),
-    showAddDisc = _useState128[0],
-    setShowAddDisc = _useState128[1];
-  var _useState129 = (0, _react.useState)(null),
+    semestre = _useState128[0],
+    setSemestre = _useState128[1];
+  var _useState129 = (0, _react.useState)(false),
     _useState130 = _slicedToArray(_useState129, 2),
-    showAddNota = _useState130[0],
-    setShowAddNota = _useState130[1];
-  var _useState131 = (0, _react.useState)(false),
+    showAddDisc = _useState130[0],
+    setShowAddDisc = _useState130[1];
+  var _useState131 = (0, _react.useState)(null),
     _useState132 = _slicedToArray(_useState131, 2),
-    showAddTPC = _useState132[0],
-    setShowAddTPC = _useState132[1];
-  var _useState133 = (0, _react.useState)(null),
+    showAddNota = _useState132[0],
+    setShowAddNota = _useState132[1];
+  var _useState133 = (0, _react.useState)(false),
     _useState134 = _slicedToArray(_useState133, 2),
-    editAula = _useState134[0],
-    setEditAula = _useState134[1];
-  var _useState135 = (0, _react.useState)(new Date(2026, 5, 1)),
+    showAddTPC = _useState134[0],
+    setShowAddTPC = _useState134[1];
+  var _useState135 = (0, _react.useState)(null),
     _useState136 = _slicedToArray(_useState135, 2),
-    calMonth = _useState136[0],
-    setCalMonth = _useState136[1];
-  var _useState137 = (0, _react.useState)(null),
+    editAula = _useState136[0],
+    setEditAula = _useState136[1];
+  var _useState137 = (0, _react.useState)(new Date(2026, 5, 1)),
     _useState138 = _slicedToArray(_useState137, 2),
-    selDay = _useState138[0],
-    setSelDay = _useState138[1];
-  var _useState139 = (0, _react.useState)(''),
+    calMonth = _useState138[0],
+    setCalMonth = _useState138[1];
+  var _useState139 = (0, _react.useState)(null),
     _useState140 = _slicedToArray(_useState139, 2),
-    novaNotaVal = _useState140[0],
-    setNovaNotaVal = _useState140[1];
-  var _useState141 = (0, _react.useState)({
+    selDay = _useState140[0],
+    setSelDay = _useState140[1];
+  var _useState141 = (0, _react.useState)(''),
+    _useState142 = _slicedToArray(_useState141, 2),
+    novaNotaVal = _useState142[0],
+    setNovaNotaVal = _useState142[1];
+  var _useState143 = (0, _react.useState)({
       nome: '',
       prof: '',
       tel: '',
       emoji: '📚',
       cor: '#7C3AED'
     }),
-    _useState142 = _slicedToArray(_useState141, 2),
-    novaDisc = _useState142[0],
-    setNovaDisc = _useState142[1];
-  var _useState143 = (0, _react.useState)({
+    _useState144 = _slicedToArray(_useState143, 2),
+    novaDisc = _useState144[0],
+    setNovaDisc = _useState144[1];
+  var _useState145 = (0, _react.useState)({
       discId: 1,
       titulo: '',
       data: '',
       feito: false
     }),
-    _useState144 = _slicedToArray(_useState143, 2),
-    novaTPC = _useState144[0],
-    setNovaTPC = _useState144[1];
-  var _useState145 = (0, _react.useState)([]),
     _useState146 = _slicedToArray(_useState145, 2),
-    escolarToasts = _useState146[0],
-    setEscolarToasts = _useState146[1];
+    novaTPC = _useState146[0],
+    setNovaTPC = _useState146[1];
+  var _useState147 = (0, _react.useState)([]),
+    _useState148 = _slicedToArray(_useState147, 2),
+    escolarToasts = _useState148[0],
+    setEscolarToasts = _useState148[1];
   var addEscolarToast = function addEscolarToast(msg) {
     var sub = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var id = Date.now() + Math.random();
@@ -8232,10 +8425,10 @@ function EscolarApp(_ref30) {
   }, [alunoKey]);
 
   // Per-student state
-  var _useState147 = (0, _react.useState)(ALUNOS_DEF),
-    _useState148 = _slicedToArray(_useState147, 2),
-    alunosData = _useState148[0],
-    setAlunosData = _useState148[1];
+  var _useState149 = (0, _react.useState)(ALUNOS_DEF),
+    _useState150 = _slicedToArray(_useState149, 2),
+    alunosData = _useState150[0],
+    setAlunosData = _useState150[1];
   var aluno = alunosData[alunoKey];
   var setAluno = function setAluno(fn) {
     return setAlunosData(function (p) {
@@ -8323,10 +8516,10 @@ function EscolarApp(_ref30) {
     gold: '#C9A847',
     orange: '#F97316'
   };
-  var ECard = function ECard(_ref31) {
-    var children = _ref31.children,
-      _ref31$style = _ref31.style,
-      style = _ref31$style === void 0 ? {} : _ref31$style;
+  var ECard = function ECard(_ref32) {
+    var children = _ref32.children,
+      _ref32$style = _ref32.style,
+      style = _ref32$style === void 0 ? {} : _ref32$style;
     return /*#__PURE__*/React.createElement("div", {
       style: _objectSpread({
         background: E.surface,
@@ -10276,45 +10469,45 @@ function EscolarApp(_ref30) {
 // ══════════════════════════════════════════════════════════════════
 function CarvalhoSuite() {
   useFont();
-  var _useState149 = (0, _react.useState)('login'),
-    _useState150 = _slicedToArray(_useState149, 2),
-    screen = _useState150[0],
-    setScreen = _useState150[1];
-  var _useState151 = (0, _react.useState)('Pc12345'),
+  var _useState151 = (0, _react.useState)('login'),
     _useState152 = _slicedToArray(_useState151, 2),
-    pass = _useState152[0],
-    setPass = _useState152[1];
-  var _useState153 = (0, _react.useState)(''),
+    screen = _useState152[0],
+    setScreen = _useState152[1];
+  var _useState153 = (0, _react.useState)('Pc12345'),
     _useState154 = _slicedToArray(_useState153, 2),
-    passErr = _useState154[0],
-    setPassErr = _useState154[1];
-  var _useState155 = (0, _react.useState)(true),
+    pass = _useState154[0],
+    setPass = _useState154[1];
+  var _useState155 = (0, _react.useState)(''),
     _useState156 = _slicedToArray(_useState155, 2),
-    online = _useState156[0],
-    setOnline = _useState156[1];
-  var _useState157 = (0, _react.useState)(USERS_DEF),
+    passErr = _useState156[0],
+    setPassErr = _useState156[1];
+  var _useState157 = (0, _react.useState)(true),
     _useState158 = _slicedToArray(_useState157, 2),
-    users = _useState158[0],
-    setUsers = _useState158[1];
-  var _useState159 = (0, _react.useState)(PERMS_DEF),
+    online = _useState158[0],
+    setOnline = _useState158[1];
+  var _useState159 = (0, _react.useState)(USERS_DEF),
     _useState160 = _slicedToArray(_useState159, 2),
-    perms = _useState160[0],
-    setPerms = _useState160[1];
-  var _useState161 = (0, _react.useState)('patricio'),
+    users = _useState160[0],
+    setUsers = _useState160[1];
+  var _useState161 = (0, _react.useState)(PERMS_DEF),
     _useState162 = _slicedToArray(_useState161, 2),
-    activeUser = _useState162[0],
-    setUser = _useState162[1];
-  var _useState163 = (0, _react.useState)(null),
+    perms = _useState162[0],
+    setPerms = _useState162[1];
+  var _useState163 = (0, _react.useState)('patricio'),
     _useState164 = _slicedToArray(_useState163, 2),
-    activeApp = _useState164[0],
-    setApp = _useState164[1];
+    activeUser = _useState164[0],
+    setUser = _useState164[1];
+  var _useState165 = (0, _react.useState)(null),
+    _useState166 = _slicedToArray(_useState165, 2),
+    activeApp = _useState166[0],
+    setApp = _useState166[1];
   // Estado partilhado entre TODAS as apps
-  var _useState165 = (0, _react.useState)([
+  var _useState167 = (0, _react.useState)([
       // Exemplo: {date:'2026-06-20', tipo:'ferias', nome:'Férias Verão', addedBy:'patricio'}
     ]),
-    _useState166 = _slicedToArray(_useState165, 2),
-    sharedDias = _useState166[0],
-    setSharedDias = _useState166[1];
+    _useState168 = _slicedToArray(_useState167, 2),
+    sharedDias = _useState168[0],
+    setSharedDias = _useState168[1];
   var addSharedDia = function addSharedDia(dia) {
     return setSharedDias(function (p) {
       if (p.some(function (x) {
@@ -10330,26 +10523,26 @@ function CarvalhoSuite() {
       });
     });
   };
-  var _useState167 = (0, _react.useState)(new Date()),
-    _useState168 = _slicedToArray(_useState167, 2),
-    time = _useState168[0],
-    setTime = _useState168[1];
-  var _useState169 = (0, _react.useState)(''),
+  var _useState169 = (0, _react.useState)(new Date()),
     _useState170 = _slicedToArray(_useState169, 2),
-    newName = _useState170[0],
-    setNewName = _useState170[1];
-  var _useState171 = (0, _react.useState)('Família'),
+    time = _useState170[0],
+    setTime = _useState170[1];
+  var _useState171 = (0, _react.useState)(''),
     _useState172 = _slicedToArray(_useState171, 2),
-    newRole = _useState172[0],
-    setNewRole = _useState172[1];
-  var _useState173 = (0, _react.useState)('👤'),
+    newName = _useState172[0],
+    setNewName = _useState172[1];
+  var _useState173 = (0, _react.useState)('Família'),
     _useState174 = _slicedToArray(_useState173, 2),
-    newEmoji = _useState174[0],
-    setNewEmoji = _useState174[1];
-  var _useState175 = (0, _react.useState)(false),
+    newRole = _useState174[0],
+    setNewRole = _useState174[1];
+  var _useState175 = (0, _react.useState)('👤'),
     _useState176 = _slicedToArray(_useState175, 2),
-    showAddUser = _useState176[0],
-    setShowAddUser = _useState176[1];
+    newEmoji = _useState176[0],
+    setNewEmoji = _useState176[1];
+  var _useState177 = (0, _react.useState)(false),
+    _useState178 = _slicedToArray(_useState177, 2),
+    showAddUser = _useState178[0],
+    setShowAddUser = _useState178[1];
   (0, _react.useEffect)(function () {
     var t = setInterval(function () {
       return setTime(new Date());

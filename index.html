@@ -8630,74 +8630,91 @@ function NutriguimaApp(_ref29) {
 var DISC_CORES = ['#7C3AED', '#2563EB', '#DC2626', '#D97706', '#16A34A', '#DB2777', '#0891B2', '#65A30D', '#9333EA', '#EA580C'];
 
 // Horários Suíços - Lektionen Grenchen
-// Slots Grenchen — Lucas começa 07:40, Liam 08:10
-// Cada aluno tem os seus próprios slots definidos em ALUNOS_DEF
+// Slots Grenchen — 45 min por lição
 var SWISS_SLOTS_LUCAS = [{
   id: 1,
   hi: '07:40',
-  hf: '08:30'
+  hf: '08:25'
 }, {
   id: 2,
-  hi: '08:35',
-  hf: '09:25'
+  hi: '08:30',
+  hf: '09:15'
 }, {
   id: 3,
-  hi: '09:35',
-  hf: '10:25'
+  hi: '09:20',
+  hf: '10:05'
 }, {
   id: 4,
-  hi: '10:30',
-  hf: '11:20'
+  hi: '10:10',
+  hf: '10:55'
 }, {
   id: 5,
-  hi: '11:20',
+  hi: '11:00',
   hf: '11:45'
 }, {
+  id: 'a',
+  hi: '11:45',
+  hf: '13:45',
+  almoco: true
+},
+// almoço — pode ter aulas
+{
   id: 6,
   hi: '13:45',
-  hf: '14:35',
+  hf: '14:30',
   tarde: true
 }, {
   id: 7,
-  hi: '14:40',
-  hf: '15:30',
+  hi: '14:35',
+  hf: '15:20',
   tarde: true
 }, {
   id: 8,
-  hi: '15:35',
-  hf: '16:20',
+  hi: '15:25',
+  hf: '16:10',
   tarde: true
 }];
 var SWISS_SLOTS_LIAM = [{
   id: 1,
   hi: '08:10',
-  hf: '09:00'
+  hf: '08:55'
 }, {
   id: 2,
-  hi: '09:05',
-  hf: '09:55'
+  hi: '09:00',
+  hf: '09:45'
 }, {
   id: 3,
-  hi: '10:05',
-  hf: '10:55'
+  hi: '09:50',
+  hf: '10:35'
 }, {
   id: 4,
-  hi: '11:00',
+  hi: '10:40',
+  hf: '11:25'
+}, {
+  id: 5,
+  hi: '11:25',
   hf: '11:45'
+},
+// última manhã
+{
+  id: 'a',
+  hi: '11:45',
+  hf: '13:45',
+  almoco: true
 }, {
   id: 6,
   hi: '13:45',
-  hf: '14:35',
+  hf: '14:30',
   tarde: true
 }, {
   id: 7,
-  hi: '14:40',
-  hf: '15:30',
+  hi: '14:35',
+  hf: '15:20',
   tarde: true
 }, {
   id: 8,
-  hi: '15:35',
-  hf: '16:20',
+  hi: '15:25',
+  hf: '16:10',
   tarde: true
 }];
 var SWISS_SLOTS = SWISS_SLOTS_LUCAS; // default
@@ -8708,6 +8725,7 @@ var ALUNOS_DEF = {
     emoji: '👦',
     cor: '#F97316',
     klasse: 'SEK P',
+    cidade: 'Grenchen',
     disciplinas: [{
       id: 1,
       abr: 'D',
@@ -9034,6 +9052,7 @@ var ALUNOS_DEF = {
     emoji: '👦',
     cor: '#22C55E',
     klasse: 'SEK B',
+    cidade: 'Selzach',
     disciplinas: [{
       id: 1,
       abr: 'D',
@@ -9723,7 +9742,7 @@ function EscolarApp(_ref31) {
         fontSize: 10,
         color: E.muted
       }
-    }, al.klasse || 'SEK P', " \xB7 Grenchen"), isAdmin && /*#__PURE__*/React.createElement("span", {
+    }, al.klasse || 'SEK P', " \xB7 ", al.cidade || 'Grenchen'), isAdmin && /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 9,
         color: "".concat(E.purple, "88")
@@ -9760,47 +9779,114 @@ function EscolarApp(_ref31) {
         textTransform: 'uppercase',
         marginBottom: 6
       }
-    }, "Turma de ", al.nome), /*#__PURE__*/React.createElement("input", {
+    }, "Escola \xB7 ", al.nome), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 6,
+        marginBottom: 6
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 8,
+        fontWeight: 700,
+        marginBottom: 3
+      }
+    }, "TURMA"), /*#__PURE__*/React.createElement("input", {
       id: "klasse-inp-".concat(k),
       defaultValue: al.klasse || 'SEK P',
       autoComplete: "off",
-      placeholder: "Ex: SEK B, 3b, Pri 5...",
+      placeholder: "Ex: SEK B",
       style: {
         width: '100%',
         background: E.surface2,
         border: "1px solid ".concat(E.purple),
         borderRadius: 8,
-        padding: '8px 10px',
+        padding: '7px 9px',
         color: E.text,
-        fontSize: 14,
+        fontSize: 13,
         outline: 'none',
-        boxSizing: 'border-box',
-        marginBottom: 8
+        boxSizing: 'border-box'
       }
-    }), /*#__PURE__*/React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 8,
+        fontWeight: 700,
+        marginBottom: 3
+      }
+    }, "CIDADE"), /*#__PURE__*/React.createElement("input", {
+      id: "cidade-inp-".concat(k),
+      defaultValue: al.cidade || 'Grenchen',
+      autoComplete: "off",
+      placeholder: "Ex: Selzach",
+      style: {
+        width: '100%',
+        background: E.surface2,
+        border: "1px solid ".concat(E.purple),
+        borderRadius: 8,
+        padding: '7px 9px',
+        color: E.text,
+        fontSize: 13,
+        outline: 'none',
+        boxSizing: 'border-box'
+      }
+    }))), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
-        gap: 4,
+        gap: 3,
         flexWrap: 'wrap',
-        marginBottom: 8
+        marginBottom: 4
       }
-    }, ['SEK P', 'SEK A', 'SEK B', 'SEK C', 'Pri 5', 'Pri 6', 'Real'].map(function (preset) {
+    }, ['SEK P', 'SEK A', 'SEK B', 'SEK C', 'Pri 5', 'Pri 6'].map(function (p) {
       return /*#__PURE__*/React.createElement("button", {
-        key: preset,
+        key: p,
         onClick: function onClick() {
-          var inp = document.getElementById("klasse-inp-".concat(k));
-          if (inp) inp.value = preset;
+          var i = document.getElementById("klasse-inp-".concat(k));
+          if (i) i.value = p;
         },
         style: {
           background: E.surface2,
           border: "1px solid ".concat(E.border),
           borderRadius: 6,
-          padding: '3px 7px',
+          padding: '2px 6px',
           color: E.muted,
-          fontSize: 10,
+          fontSize: 9,
           cursor: 'pointer'
         }
-      }, preset);
+      }, p);
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 3,
+        flexWrap: 'wrap',
+        marginBottom: 8
+      }
+    }, ['Grenchen', 'Selzach', 'Bettlach', 'Solothurn', 'Biel'].map(function (c) {
+      return /*#__PURE__*/React.createElement("button", {
+        key: c,
+        onClick: function onClick() {
+          var i = document.getElementById("cidade-inp-".concat(k));
+          if (i) i.value = c;
+        },
+        style: {
+          background: E.surface2,
+          border: "1px solid ".concat(E.border),
+          borderRadius: 6,
+          padding: '2px 6px',
+          color: E.muted,
+          fontSize: 9,
+          cursor: 'pointer'
+        }
+      }, c);
     })), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
@@ -9822,11 +9908,13 @@ function EscolarApp(_ref31) {
       }
     }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
-        var _document$getElementB6;
-        var val = (((_document$getElementB6 = document.getElementById("klasse-inp-".concat(k))) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.value) || '').trim();
-        if (val) setAlunosData(function (p) {
+        var _document$getElementB6, _document$getElementB7;
+        var klasse = (((_document$getElementB6 = document.getElementById("klasse-inp-".concat(k))) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.value) || '').trim();
+        var cidade = (((_document$getElementB7 = document.getElementById("cidade-inp-".concat(k))) === null || _document$getElementB7 === void 0 ? void 0 : _document$getElementB7.value) || '').trim();
+        setAlunosData(function (p) {
           return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, k, _objectSpread(_objectSpread({}, p[k]), {}, {
-            klasse: val
+            klasse: klasse || p[k].klasse,
+            cidade: cidade || p[k].cidade
           })));
         });
         setEditKlasseKey(null);

@@ -9442,9 +9442,9 @@ function EscolarApp(_ref31) {
       background: E.surface,
       border: "1px solid ".concat(E.purple),
       borderRadius: 12,
-      padding: 8,
+      padding: 10,
       zIndex: 300,
-      minWidth: 160,
+      minWidth: 200,
       boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
     }
   }, /*#__PURE__*/React.createElement("p", {
@@ -9455,32 +9455,70 @@ function EscolarApp(_ref31) {
       textTransform: 'uppercase',
       marginBottom: 6
     }
-  }, "Alterar turma"), ['SEK P', 'SEK A', 'SEK B', 'SEK C', 'Pri 5', 'Pri 6', 'Real'].map(function (k) {
+  }, "Nome da turma"), /*#__PURE__*/React.createElement("input", {
+    defaultValue: aluno.klasse || 'SEK P',
+    id: "klasse-input",
+    autoComplete: "off",
+    placeholder: "Ex: SEK B, Pri 5, 3b...",
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.purple),
+      borderRadius: 8,
+      padding: '8px 10px',
+      color: E.text,
+      fontSize: 14,
+      outline: 'none',
+      boxSizing: 'border-box',
+      marginBottom: 8
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 5,
+      flexWrap: 'wrap',
+      marginBottom: 8
+    }
+  }, ['SEK P', 'SEK A', 'SEK B', 'SEK C', 'Pri 5', 'Pri 6', 'Real'].map(function (k) {
     return /*#__PURE__*/React.createElement("button", {
       key: k,
       onClick: function onClick() {
-        setAluno(function (al) {
-          return _objectSpread(_objectSpread({}, al), {}, {
-            klasse: k
-          });
-        });
-        setEditKlasse(false);
+        var inp = document.getElementById('klasse-input');
+        if (inp) inp.value = k;
       },
       style: {
-        display: 'block',
-        width: '100%',
-        background: (aluno.klasse || 'SEK P') === k ? "".concat(E.purple, "22") : 'none',
-        border: 'none',
-        borderRadius: 8,
-        padding: '7px 10px',
-        color: (aluno.klasse || 'SEK P') === k ? E.purple : E.text,
-        fontSize: 13,
-        fontWeight: (aluno.klasse || 'SEK P') === k ? 800 : 400,
-        cursor: 'pointer',
-        textAlign: 'left'
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 6,
+        padding: '4px 8px',
+        color: E.muted,
+        fontSize: 11,
+        cursor: 'pointer'
       }
     }, k);
-  })))), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      var _document$getElementB5;
+      var val = (((_document$getElementB5 = document.getElementById('klasse-input')) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.value) || '').trim();
+      if (val) setAluno(function (al) {
+        return _objectSpread(_objectSpread({}, al), {}, {
+          klasse: val
+        });
+      });
+      setEditKlasse(false);
+    },
+    style: {
+      width: '100%',
+      background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+      border: 'none',
+      borderRadius: 8,
+      padding: '8px',
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\u2713 Guardar")))), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '10px 14px',
       display: 'flex',
@@ -9523,7 +9561,8 @@ function EscolarApp(_ref31) {
       }
     }, al.emoji)), /*#__PURE__*/React.createElement("div", {
       style: {
-        textAlign: 'left'
+        textAlign: 'left',
+        flex: 1
       }
     }, /*#__PURE__*/React.createElement("p", {
       style: {
@@ -9536,13 +9575,13 @@ function EscolarApp(_ref31) {
         fontSize: 10,
         color: E.muted
       }
-    }, "SEK P \xB7 Grenchen")), isSel && /*#__PURE__*/React.createElement("div", {
+    }, al.klasse || 'SEK P', " \xB7 Grenchen")), isSel && /*#__PURE__*/React.createElement("div", {
       style: {
         width: 7,
         height: 7,
         borderRadius: '50%',
         background: E.green,
-        marginLeft: 'auto'
+        flexShrink: 0
       }
     }));
   }), /*#__PURE__*/React.createElement("div", {

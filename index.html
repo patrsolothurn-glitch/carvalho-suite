@@ -6014,6 +6014,7 @@ var F = {
   muted: '#9A7B6A',
   border: '#EAD5C0',
   coral: '#E8773A',
+  orange: '#F97316',
   gold: '#C9972A',
   green: '#2D8A4E',
   blue: '#2563EB',
@@ -6115,13 +6116,85 @@ function FamiliaApp(_ref19) {
     _useState110 = _slicedToArray(_useState109, 2),
     memberPhotos = _useState110[0],
     setMemberPhotos = _useState110[1];
+  var famStorageGet = function famStorageGet(key) {
+    try {
+      if (typeof window !== 'undefined' && window.storage && window.storage.get) {
+        return window.storage.get(key).then(function (r) {
+          return r ? r.value : null;
+        }).catch(function () {
+          return null;
+        });
+      }
+    } catch (e) {}
+    try {
+      return Promise.resolve(window.localStorage.getItem(key));
+    } catch (e) {
+      return Promise.resolve(null);
+    }
+  };
+  var famStorageSet = function famStorageSet(key, value) {
+    try {
+      if (typeof window !== 'undefined' && window.storage && window.storage.set) {
+        return window.storage.set(key, value).catch(function () {});
+      }
+    } catch (e) {}
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (e) {}
+    return Promise.resolve();
+  };
+  var resizeImage = function resizeImage(dataUrl, maxSize) {
+    return new Promise(function (resolve) {
+      try {
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var size = maxSize || 220;
+            var canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            var ctx = canvas.getContext('2d');
+            var scale = Math.max(size / img.width, size / img.height);
+            var w = img.width * scale,
+              h = img.height * scale;
+            var x = (size - w) / 2,
+              y = (size - h) / 2;
+            ctx.drawImage(img, x, y, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.82));
+          } catch (e) {
+            resolve(dataUrl);
+          }
+        };
+        img.onerror = function () {
+          resolve(dataUrl);
+        };
+        img.src = dataUrl;
+      } catch (e) {
+        resolve(dataUrl);
+      }
+    });
+  };
+  // Carregar fotos guardadas ao abrir a app
+  (0, _react.useEffect)(function () {
+    famStorageGet('familia_member_photos').then(function (val) {
+      if (val) {
+        try {
+          setMemberPhotos(JSON.parse(val));
+        } catch (e) {}
+      }
+    });
+  }, []);
   var handlePhotoUpload = function handlePhotoUpload(memberId, e) {
     var file = e.target.files[0];
     if (!file) return;
     var reader = new FileReader();
     reader.onload = function (ev) {
-      return setMemberPhotos(function (p) {
-        return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, memberId, ev.target.result));
+      resizeImage(ev.target.result, 220).then(function (resized) {
+        setMemberPhotos(function (p) {
+          var next = _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, memberId, resized));
+          famStorageSet('familia_member_photos', JSON.stringify(next));
+          return next;
+        });
       });
     };
     reader.readAsDataURL(file);
@@ -6426,27 +6499,37 @@ function FamiliaApp(_ref19) {
       style: {
         fontSize: 24
       }
-    }, m.emoji)), m.id !== 'todos' && /*#__PURE__*/React.createElement("label", {
+    }, m.emoji)), m.id !== 'todos' && /*#__PURE__*/React.createElement("button", {
+      type: "button",
+      onClick: function onClick(ev) {
+        ev.stopPropagation();
+        var input = document.getElementById("photo-input-".concat(m.id));
+        if (input) input.click();
+      },
       style: {
         position: 'absolute',
         bottom: -4,
         right: -4,
-        width: 18,
-        height: 18,
+        width: 22,
+        height: 22,
         borderRadius: '50%',
         background: F.coral,
         border: "2px solid ".concat(F.surface),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        padding: 0,
+        zIndex: 5
       }
     }, /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: 9,
-        color: '#fff'
+        fontSize: 10,
+        color: '#fff',
+        pointerEvents: 'none'
       }
     }, "\uD83D\uDCF7"), /*#__PURE__*/React.createElement("input", {
+      id: "photo-input-".concat(m.id),
       type: "file",
       accept: "image/*",
       style: {
@@ -10011,6 +10094,32 @@ function EscolarApp(_ref31) {
     _useState174 = _slicedToArray(_useState173, 2),
     escolarToasts = _useState174[0],
     setEscolarToasts = _useState174[1];
+  var _useStateAddAula = (0, _react.useState)(false),
+    _useStateAddAula2 = _slicedToArray(_useStateAddAula, 2),
+    showAddAula = _useStateAddAula2[0],
+    setShowAddAula = _useStateAddAula2[1];
+  var _useStateNovaAula = (0, _react.useState)({
+      discId: 1,
+      hi: '',
+      hf: '',
+      sala: '',
+      livre: false
+    }),
+    _useStateNovaAula2 = _slicedToArray(_useStateNovaAula, 2),
+    novaAula = _useStateNovaAula2[0],
+    setNovaAula = _useStateNovaAula2[1];
+  var _useStateEditTpc = (0, _react.useState)(null),
+    _useStateEditTpc2 = _slicedToArray(_useStateEditTpc, 2),
+    editTpcId = _useStateEditTpc2[0],
+    setEditTpcId = _useStateEditTpc2[1];
+  var _useStateEditNota = (0, _react.useState)(null),
+    _useStateEditNota2 = _slicedToArray(_useStateEditNota, 2),
+    editNotaKey = _useStateEditNota2[0],
+    setEditNotaKey = _useStateEditNota2[1];
+  var _useStateEditNotaVal = (0, _react.useState)(''),
+    _useStateEditNotaVal2 = _slicedToArray(_useStateEditNotaVal, 2),
+    editNotaVal = _useStateEditNotaVal2[0],
+    setEditNotaVal = _useStateEditNotaVal2[1];
   var addEscolarToast = function addEscolarToast(msg) {
     var sub = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     var id = Date.now() + Math.random();
@@ -10734,14 +10843,36 @@ function EscolarApp(_ref31) {
     }, t.l);
   })), horView === 'semana' && function () {
     var dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'];
-    // Calcular todas as horas que existem para definir as linhas
-    var allTimes = new Set();
-    Object.values(aluno.horario).forEach(function (aulas) {
-      return aulas.forEach(function (a) {
-        allTimes.add(a.hi);
+    // Linhas dinâmicas: base de horários do aluno + qualquer hora real usada nas aulas,
+    // para que uma aula adicionada em qualquer horário apareça sempre na grelha.
+    var baseSlots = aluno.slots || SWISS_SLOTS;
+    var boundsSet = new Set();
+    baseSlots.forEach(function (s) {
+      boundsSet.add(s.hi);
+      boundsSet.add(s.hf);
+    });
+    [0, 1, 2, 3, 4].forEach(function (di) {
+      (aluno.horario[di] || []).forEach(function (a) {
+        boundsSet.add(a.hi);
+        boundsSet.add(a.hf);
       });
     });
-    var sortedTimes = _toConsumableArray(allTimes).sort();
+    var bounds = _toConsumableArray(boundsSet).sort();
+    var mergedSlots = [];
+    for (var bi = 0; bi < bounds.length - 1; bi++) {
+      var rHi = bounds[bi];
+      var rHf = bounds[bi + 1];
+      var matchBase = baseSlots.find(function (s) {
+        return s.hi === rHi;
+      });
+      mergedSlots.push({
+        id: 'row' + bi,
+        hi: rHi,
+        hf: rHf,
+        almoco: matchBase ? !!matchBase.almoco : rHi >= '11:30' && rHi < '14:00',
+        tarde: matchBase ? !!matchBase.tarde : false
+      });
+    }
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
       style: {
         background: E.surface,
@@ -10790,7 +10921,7 @@ function EscolarApp(_ref31) {
           color: E.purple
         }
       }, d));
-    })), (aluno.slots || SWISS_SLOTS).map(function (slot, si) {
+    })), mergedSlots.map(function (slot, si) {
       var _ref33;
       var hasAny = [0, 1, 2, 3, 4].some(function (di) {
         return (aluno.horario[di] || []).some(function (a) {
@@ -10798,7 +10929,7 @@ function EscolarApp(_ref31) {
         });
       });
       var isAlmoco = !!slot.almoco;
-      var isTardeStart = !!slot.tarde && si > 0 && !((_ref33 = (aluno.slots || SWISS_SLOTS)[si - 1]) !== null && _ref33 !== void 0 && _ref33.tarde);
+      var isTardeStart = !!slot.tarde && si > 0 && !((_ref33 = mergedSlots[si - 1]) !== null && _ref33 !== void 0 && _ref33.tarde);
       return /*#__PURE__*/React.createElement(React.Fragment, {
         key: slot.id
       }, isTardeStart && /*#__PURE__*/React.createElement("div", {
@@ -10862,11 +10993,13 @@ function EscolarApp(_ref31) {
           color: E.muted
         }
       }, "\u2192", slot.hf)), [0, 1, 2, 3, 4].map(function (di) {
-        var aula = isAlmoco ? (aluno.horario[di] || []).find(function (a) {
+        var arrDia = aluno.horario[di] || [];
+        var aulaIdx = isAlmoco ? arrDia.findIndex(function (a) {
           return a.hi >= '11:45' && a.hi < '13:45';
-        }) : (aluno.horario[di] || []).find(function (a) {
+        }) : arrDia.findIndex(function (a) {
           return a.hi <= slot.hi && a.hf > slot.hi;
         });
+        var aula = aulaIdx >= 0 ? arrDia[aulaIdx] : null;
         var disc = aula ? getDisc(aula.discId) : null;
         var isFirst = aula && (isAlmoco ? true : aula.hi === slot.hi);
         var isMiddle = !isAlmoco && aula && aula.hi < slot.hi;
@@ -10875,6 +11008,21 @@ function EscolarApp(_ref31) {
           onClick: function onClick() {
             setHorView('dia');
             setDayIdx(di);
+            if (aula) {
+              setShowAddAula(false);
+              setEditAula("".concat(alunoKey, "-").concat(di, "-").concat(aulaIdx));
+            } else {
+              var _aluno$disciplinas$2;
+              setEditAula(null);
+              setNovaAula({
+                discId: ((_aluno$disciplinas$2 = aluno.disciplinas[0]) === null || _aluno$disciplinas$2 === void 0 ? void 0 : _aluno$disciplinas$2.id) || 1,
+                hi: slot.hi,
+                hf: slot.hf,
+                sala: '',
+                livre: false
+              });
+              setShowAddAula(true);
+            }
           },
           style: {
             borderLeft: "1px solid ".concat(E.border),
@@ -10927,7 +11075,7 @@ function EscolarApp(_ref31) {
             fontSize: 8,
             color: '#fff'
           }
-        }, "\u2195")), isAlmoco && !aula && /*#__PURE__*/React.createElement("p", {
+        }, "\u2195")), !aula && /*#__PURE__*/React.createElement("p", {
           style: {
             fontSize: 10,
             textAlign: 'center',
@@ -10942,7 +11090,7 @@ function EscolarApp(_ref31) {
         textAlign: 'center',
         marginBottom: 10
       }
-    }, "Toca num dia para ver detalhes"));
+    }, "Toca numa aula para editar \xB7 toca num espa\xE7o vazio para adicionar"));
   }(), horView === 'dia' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
@@ -11382,6 +11530,239 @@ function EscolarApp(_ref31) {
       }
     }, "\uD83D\uDDD1"))));
   }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setShowAddAula(function (v) {
+        return !v;
+      });
+    },
+    style: {
+      width: '100%',
+      background: 'none',
+      border: "1px dashed ".concat(E.purple, "55"),
+      borderRadius: 13,
+      padding: '11px',
+      color: E.purple,
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: 'pointer',
+      marginTop: 4,
+      marginBottom: 10
+    }
+  }, showAddAula ? '✕ Fechar' : '＋ Adicionar aula'), showAddAula && /*#__PURE__*/React.createElement(ECard, {
+    style: {
+      padding: '14px',
+      marginBottom: 10,
+      border: "1px solid ".concat(E.purple)
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.purple,
+      fontWeight: 800,
+      fontSize: 13,
+      marginBottom: 10
+    }
+  }, "Nova aula \u2014 ", dias[dayIdx]), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8,
+      marginBottom: 8
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 3
+    }
+  }, "In\xEDcio"), /*#__PURE__*/React.createElement("input", {
+    type: "time",
+    value: novaAula.hi,
+    onChange: function onChange(e) {
+      return setNovaAula(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          hi: e.target.value
+        });
+      });
+    },
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '7px 8px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 3
+    }
+  }, "Fim"), /*#__PURE__*/React.createElement("input", {
+    type: "time",
+    value: novaAula.hf,
+    onChange: function onChange(e) {
+      return setNovaAula(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          hf: e.target.value
+        });
+      });
+    },
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '7px 8px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 3
+    }
+  }, "Sala"), /*#__PURE__*/React.createElement("input", {
+    value: novaAula.sala,
+    onChange: function onChange(e) {
+      return setNovaAula(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          sala: e.target.value
+        });
+      });
+    },
+    placeholder: "Ex: 213",
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '7px 8px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: E.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 4
+    }
+  }, "Disciplina"), /*#__PURE__*/React.createElement("select", {
+    value: novaAula.livre ? 'livre' : novaAula.discId,
+    onChange: function onChange(e) {
+      var v = e.target.value;
+      return setNovaAula(function (p) {
+        return v === 'livre' ? _objectSpread(_objectSpread({}, p), {}, {
+          livre: true
+        }) : _objectSpread(_objectSpread({}, p), {}, {
+          livre: false,
+          discId: parseInt(v)
+        });
+      });
+    },
+    style: {
+      width: '100%',
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 9,
+      padding: '8px 10px',
+      color: E.text,
+      fontSize: 13,
+      outline: 'none'
+    }
+  }, /*#__PURE__*/React.createElement("option", {
+    value: "livre"
+  }, "\u23F8 Hora livre"), aluno.disciplinas.map(function (d) {
+    return /*#__PURE__*/React.createElement("option", {
+      key: d.id,
+      value: d.id
+    }, d.emoji, " ", d.nome);
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setShowAddAula(false);
+    },
+    style: {
+      flex: 1,
+      background: E.surface2,
+      border: "1px solid ".concat(E.border),
+      borderRadius: 10,
+      padding: '10px',
+      color: E.muted,
+      fontSize: 13,
+      fontWeight: 700,
+      cursor: 'pointer'
+    }
+  }, "Cancelar"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      if (!novaAula.hi || !novaAula.hf) return;
+      setAluno(function (al) {
+        var h = _objectSpread({}, al.horario);
+        var d = _toConsumableArray(h[dayIdx] || []);
+        d.push(_objectSpread({}, novaAula));
+        d.sort(function (a, b) {
+          return a.hi.localeCompare(b.hi);
+        });
+        return _objectSpread(_objectSpread({}, al), {}, {
+          horario: _objectSpread(_objectSpread({}, h), {}, _defineProperty({}, dayIdx, d))
+        });
+      });
+      setNovaAula({
+        discId: aluno.disciplinas[0] && aluno.disciplinas[0].id || 1,
+        hi: '',
+        hf: '',
+        sala: '',
+        livre: false
+      });
+      setShowAddAula(false);
+    },
+    style: {
+      flex: 2,
+      background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+      border: 'none',
+      borderRadius: 10,
+      padding: '10px',
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "\u2713 Guardar"))), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       return setShowAddDisc(function (v) {
         return !v;
@@ -12251,6 +12632,7 @@ function EscolarApp(_ref31) {
   }).map(function (t) {
     var d = getDisc(t.discId);
     var overdue = t.data && t.data < '2026-06-15';
+    var isEdTpc = editTpcId === t.id;
     return /*#__PURE__*/React.createElement(ECard, {
       key: t.id,
       style: {
@@ -12313,8 +12695,152 @@ function EscolarApp(_ref31) {
         fontWeight: 700,
         cursor: 'pointer'
       }
-    }, "Feito \u2713")));
+    }, "Feito \u2713"), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return setEditTpcId(isEdTpc ? null : t.id);
+      },
+      style: {
+        background: isEdTpc ? "".concat(E.purple, "22") : 'none',
+        border: "1px solid ".concat(isEdTpc ? E.purple : E.border),
+        borderRadius: 8,
+        padding: '6px 8px',
+        color: isEdTpc ? E.purple : E.muted,
+        fontSize: 12,
+        cursor: 'pointer'
+      }
+    }, isEdTpc ? '✕' : '✏️'), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        setAluno(function (al) {
+          return _objectSpread(_objectSpread({}, al), {}, {
+            tpc: al.tpc.filter(function (x) {
+              return x.id !== t.id;
+            })
+          });
+        });
+        setEditTpcId(null);
+      },
+      style: {
+        background: 'rgba(220,38,38,0.1)',
+        border: '1px solid rgba(220,38,38,0.2)',
+        borderRadius: 8,
+        padding: '6px 9px',
+        color: '#DC2626',
+        fontSize: 12,
+        cursor: 'pointer'
+      }
+    }, "\uD83D\uDDD1")), isEdTpc && /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderTop: "1px solid ".concat(E.border),
+        padding: '10px 14px'
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 4
+      }
+    }, "Disciplina"), /*#__PURE__*/React.createElement("select", {
+      defaultValue: t.discId,
+      id: "tpc-disc-".concat(t.id),
+      style: {
+        width: '100%',
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 10px',
+        color: E.text,
+        fontSize: 13,
+        outline: 'none',
+        marginBottom: 8
+      }
+    }, aluno.disciplinas.map(function (dd) {
+      return /*#__PURE__*/React.createElement("option", {
+        key: dd.id,
+        value: dd.id
+      }, dd.emoji, " ", dd.nome);
+    })), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 4
+      }
+    }, "Descri\xE7\xE3o"), /*#__PURE__*/React.createElement("input", {
+      defaultValue: t.titulo,
+      id: "tpc-titulo-".concat(t.id),
+      autoComplete: "off",
+      style: {
+        width: '100%',
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 11px',
+        color: E.text,
+        fontSize: 13,
+        outline: 'none',
+        marginBottom: 8,
+        boxSizing: 'border-box'
+      }
+    }), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: E.muted,
+        fontSize: 10,
+        fontWeight: 700,
+        textTransform: 'uppercase',
+        marginBottom: 4
+      }
+    }, "Para quando"), /*#__PURE__*/React.createElement("input", {
+      type: "date",
+      defaultValue: t.data,
+      id: "tpc-data-".concat(t.id),
+      style: {
+        width: '100%',
+        background: E.surface2,
+        border: "1px solid ".concat(E.border),
+        borderRadius: 9,
+        padding: '8px 11px',
+        color: E.text,
+        fontSize: 13,
+        outline: 'none',
+        marginBottom: 10,
+        boxSizing: 'border-box'
+      }
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        var _document$getElementBT, _document$getElementBT2, _document$getElementBT3;
+        var discId = parseInt(((_document$getElementBT = document.getElementById("tpc-disc-".concat(t.id))) === null || _document$getElementBT === void 0 ? void 0 : _document$getElementBT.value) || t.discId);
+        var titulo = ((_document$getElementBT2 = document.getElementById("tpc-titulo-".concat(t.id))) === null || _document$getElementBT2 === void 0 ? void 0 : _document$getElementBT2.value) || t.titulo;
+        var data = ((_document$getElementBT3 = document.getElementById("tpc-data-".concat(t.id))) === null || _document$getElementBT3 === void 0 ? void 0 : _document$getElementBT3.value) || t.data;
+        setAluno(function (al) {
+          return _objectSpread(_objectSpread({}, al), {}, {
+            tpc: al.tpc.map(function (x) {
+              return x.id === t.id ? _objectSpread(_objectSpread({}, x), {}, {
+                discId: discId,
+                titulo: titulo,
+                data: data
+              }) : x;
+            })
+          });
+        });
+        setEditTpcId(null);
+      },
+      style: {
+        width: '100%',
+        background: "linear-gradient(135deg,".concat(E.purple, ",").concat(E.purpleL, ")"),
+        border: 'none',
+        borderRadius: 9,
+        padding: '9px',
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 800,
+        cursor: 'pointer'
+      }
+    }, "\u2713 Guardar altera\xE7\xF5es")));
   }), aluno.tpc.some(function (t) {
+
     return t.feito;
   }) && /*#__PURE__*/React.createElement("div", {
     style: {
@@ -12440,13 +12966,13 @@ function EscolarApp(_ref31) {
       style: {
         fontSize: 38,
         fontWeight: 900,
-        color: notaColor(mg.valor)
+        color: notaColor(mg.durchschnitt)
       }
-    }, mg.valor), /*#__PURE__*/React.createElement("div", {
+    }, mg.durchschnitt), /*#__PURE__*/React.createElement("div", {
       style: {
         flex: 1
       }
-    }, mg.discs.map(function (d, i) {
+    }, mg.cincoMaisBaixas.map(function (d, i) {
       return /*#__PURE__*/React.createElement("div", {
         key: i,
         style: {
@@ -12544,6 +13070,8 @@ function EscolarApp(_ref31) {
         marginBottom: 8
       }
     }, ns.map(function (n, i) {
+      var notaKey = "".concat(disc.id, "-").concat(semestre, "-").concat(i);
+      var isEditingThis = editNotaKey === notaKey;
       return /*#__PURE__*/React.createElement("div", {
         key: i,
         style: {
@@ -12555,11 +13083,71 @@ function EscolarApp(_ref31) {
           alignItems: 'center',
           gap: 5
         }
-      }, /*#__PURE__*/React.createElement("span", {
+      }, isEditingThis ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("input", {
+        type: "number",
+        step: "0.5",
+        min: "1",
+        max: "6",
+        autoFocus: true,
+        value: editNotaVal,
+        onChange: function onChange(e) {
+          return setEditNotaVal(e.target.value);
+        },
+        style: {
+          width: 46,
+          background: E.surface,
+          border: "1px solid ".concat(notaColor(n)),
+          borderRadius: 6,
+          padding: '2px 4px',
+          color: E.text,
+          fontSize: 12,
+          outline: 'none'
+        }
+      }), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          var v = parseFloat(editNotaVal);
+          if (isNaN(v) || v < 1 || v > 6) return;
+          setAluno(function (al) {
+            var _al$notas$disc$id3;
+            var copy = _objectSpread(_objectSpread({}, al), {}, {
+              notas: _objectSpread(_objectSpread({}, al.notas), {}, _defineProperty({}, disc.id, _objectSpread(_objectSpread({}, al.notas[disc.id] || {}), {}, _defineProperty({}, semestre, _toConsumableArray(((_al$notas$disc$id3 = al.notas[disc.id]) === null || _al$notas$disc$id3 === void 0 ? void 0 : _al$notas$disc$id3[semestre]) || [])))))
+            });
+            copy.notas[disc.id][semestre][i] = v;
+            return copy;
+          });
+          setEditNotaKey(null);
+        },
+        style: {
+          background: 'none',
+          border: 'none',
+          color: E.green,
+          fontSize: 14,
+          fontWeight: 900,
+          cursor: 'pointer',
+          padding: 0
+        }
+      }, "\u2713"), /*#__PURE__*/React.createElement("button", {
+        onClick: function onClick() {
+          return setEditNotaKey(null);
+        },
+        style: {
+          background: 'none',
+          border: 'none',
+          color: E.muted,
+          fontSize: 11,
+          cursor: 'pointer',
+          padding: 0
+        }
+      }, "\u2715")) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+        onClick: function onClick() {
+          setEditNotaKey(notaKey);
+          setEditNotaVal(String(n));
+        },
         style: {
           fontSize: 13,
           fontWeight: 900,
-          color: notaColor(n)
+          color: notaColor(n),
+          cursor: 'pointer'
         }
       }, n.toFixed(1)), /*#__PURE__*/React.createElement("button", {
         onClick: function onClick() {
@@ -12580,7 +13168,7 @@ function EscolarApp(_ref31) {
           cursor: 'pointer',
           padding: 0
         }
-      }, "\u2715"));
+      }, "\u2715")));
     })), isAddNota ? /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',

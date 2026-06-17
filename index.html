@@ -4148,7 +4148,6 @@ function AgendaProApp(_ref13) {
     addToast(msg, body, 'notif');
   };
   var saveForm = function saveForm() {
-    if (!form.morada || !form.date) return;
     if (editId) {
       setAppts(function (p) {
         return p.map(function (a) {

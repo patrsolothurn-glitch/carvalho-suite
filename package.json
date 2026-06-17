@@ -1,0 +1,13 @@
+{
+  "name": "carvalho-suite-tests",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node tests/verify.js"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-test-renderer": "^18.2.0"
+  }
+}

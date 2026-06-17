@@ -13791,10 +13791,10 @@ function CarvalhoSuite() {
     _useStateAuthMode2 = _slicedToArray(_useStateAuthMode, 2),
     authMode = _useStateAuthMode2[0],
     setAuthMode = _useStateAuthMode2[1];
-  var _useStateAuthMember = (0, _react.useState)('patricio'),
+  var _useStateAuthMember = (0, _react.useState)(''),
     _useStateAuthMember2 = _slicedToArray(_useStateAuthMember, 2),
-    signupMember = _useStateAuthMember2[0],
-    setSignupMember = _useStateAuthMember2[1];
+    signupName = _useStateAuthMember2[0],
+    setSignupName = _useStateAuthMember2[1];
   var _useStateAuthLoading = (0, _react.useState)(false),
     _useStateAuthLoading2 = _slicedToArray(_useStateAuthLoading, 2),
     authLoading = _useStateAuthLoading2[0],
@@ -13925,6 +13925,8 @@ function CarvalhoSuite() {
   var user = users.find(function (u) {
     return u.id === activeUser;
   }) || users[0];
+  var myDisplayName = (profile && (profile.display_name || profile.email)) || user.name;
+  var myEmoji = profile && profile.is_admin ? '👑' : '👤';
   var isAdmin = !!(profile && profile.is_admin);
   var myAllowedApps = (profile && profile.allowed_apps) || [];
   var visApps = APPS_DATA.filter(function (a) {
@@ -14032,6 +14034,10 @@ function CarvalhoSuite() {
       setPassErr('Sem ligação ao servidor.');
       return;
     }
+    if (!signupName.trim()) {
+      setPassErr('Escreve o teu nome.');
+      return;
+    }
     if (!email || !pass) {
       setPassErr('Preenche o email e a palavra-passe.');
       return;
@@ -14047,7 +14053,7 @@ function CarvalhoSuite() {
       password: pass,
       options: {
         data: {
-          member_id: signupMember
+          display_name: signupName.trim()
         }
       }
     }).then(function (res) {
@@ -14268,42 +14274,26 @@ function CarvalhoSuite() {
       textTransform: 'uppercase',
       marginBottom: 8
     }
-  }, "Quem \xE9s tu?"), /*#__PURE__*/React.createElement("div", {
+  }, "O teu nome"), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: signupName,
+    onChange: function onChange(e) {
+      setSignupName(e.target.value);
+      setPassErr('');
+    },
+    placeholder: "Ex: Maria, Lucas...",
     style: {
-      display: 'flex',
-      gap: 6,
-      flexWrap: 'wrap'
+      width: '100%',
+      background: T.surface2,
+      border: "1px solid ".concat(T.goldBrd),
+      borderRadius: 14,
+      padding: '13px 16px',
+      color: T.text,
+      fontSize: 14,
+      outline: 'none',
+      boxSizing: 'border-box'
     }
-  }, [{
-    id: 'patricio',
-    l: 'Patricio'
-  }, {
-    id: 'esposa',
-    l: 'Esposa'
-  }, {
-    id: 'lucas',
-    l: 'Lucas'
-  }, {
-    id: 'liam',
-    l: 'Liam'
-  }].map(function (m) {
-    return /*#__PURE__*/React.createElement("button", {
-      key: m.id,
-      onClick: function onClick() {
-        return setSignupMember(m.id);
-      },
-      style: {
-        background: signupMember === m.id ? T.goldDim : T.surface2,
-        border: "1px solid ".concat(signupMember === m.id ? T.gold : T.goldBrd),
-        borderRadius: 10,
-        padding: '7px 12px',
-        color: signupMember === m.id ? T.gold : T.muted,
-        fontSize: 12,
-        fontWeight: 700,
-        cursor: 'pointer'
-      }
-    }, m.l);
-  }))), /*#__PURE__*/React.createElement("p", {
+  })), /*#__PURE__*/React.createElement("p", {
     style: {
       color: T.muted,
       fontSize: 11,
@@ -15094,7 +15084,7 @@ function CarvalhoSuite() {
       lucas: '👦',
       liam: '👦'
     }[u.member_id] || '👤';
-    var uName = u.member_id ? u.member_id.charAt(0).toUpperCase() + u.member_id.slice(1) : u.email || 'Utilizador';
+    var uName = u.display_name || (u.member_id ? u.member_id.charAt(0).toUpperCase() + u.member_id.slice(1) : u.email || 'Utilizador');
     return /*#__PURE__*/React.createElement(Card, {
       key: u.id,
       style: {
@@ -15414,7 +15404,7 @@ function CarvalhoSuite() {
       fontWeight: 700,
       marginBottom: 3
     }
-  }, greeting, ", ", user.name, " ", user.emoji), /*#__PURE__*/React.createElement("h2", {
+  }, greeting, ", ", myDisplayName, " ", myEmoji), /*#__PURE__*/React.createElement("h2", {
     style: {
       fontSize: 19,
       fontWeight: 800,
@@ -15557,7 +15547,7 @@ function CarvalhoSuite() {
       letterSpacing: '0.8px',
       marginBottom: 10
     }
-  }, isAdmin ? 'Todas as apps' : "Apps de ".concat(user.name)), /*#__PURE__*/React.createElement("div", {
+  }, isAdmin ? 'Todas as apps' : "Apps de ".concat(myDisplayName)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',

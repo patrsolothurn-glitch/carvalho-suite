@@ -854,9 +854,14 @@ function HorasProApp(_ref9) {
       desc: 'Buildi - 2ª fase'
     }, {
       id: 'p3',
-      name: 'POP GREN01',
+      name: 'BUDI-1S',
+      color: H.orange,
+      desc: 'Buildi - 1ª fase'
+    }, {
+      id: 'p4',
+      name: 'BUDI-S',
       color: H.green,
-      desc: 'Grenchen - Zona 1'
+      desc: 'Buildi'
     }]),
     _useState30 = _slicedToArray(_useState29, 2),
     projList = _useState30[0],
@@ -1100,7 +1105,7 @@ function HorasProApp(_ref9) {
       return [].concat(_toConsumableArray(p), _toConsumableArray(autoEntries));
     });
   };
-  var projs = ['POP GREN04', 'BUDI-2S', 'POP GREN01', 'PROJ-03'];
+  var projs = ['POP GREN04', 'BUDI-2S', 'BUDI-1S', 'BUDI-S'];
   var calcHoras = function calcHoras(hi, hf) {
     var _hi$split$map = hi.split(':').map(Number),
       _hi$split$map2 = _slicedToArray(_hi$split$map, 2),
@@ -4045,7 +4050,7 @@ function AgendaProApp(_ref13) {
     return d.toISOString().split('T')[0];
   };
   var todayStr = fmt(curDate);
-  var projs = ['BUDI-2S', 'POP GREN04', 'POP GREN01', 'PROJ-03'];
+  var projs = ['BUDI-2S', 'POP GREN04', 'BUDI-1S', 'BUDI-S'];
   var prevDay = function prevDay() {
     var d = new Date(curDate);
     d.setDate(d.getDate() - 1);

@@ -13811,6 +13811,10 @@ function CarvalhoSuite() {
     _useStateProfiles2 = _slicedToArray(_useStateProfiles, 2),
     allProfiles = _useStateProfiles2[0],
     setAllProfiles = _useStateProfiles2[1];
+  var _useStateProfileErr = (0, _react.useState)(''),
+    _useStateProfileErr2 = _slicedToArray(_useStateProfileErr, 2),
+    profileErr = _useStateProfileErr2[0],
+    setProfileErr = _useStateProfileErr2[1];
   var _useStateCheckingAuth = (0, _react.useState)(true),
     _useStateCheckingAuth2 = _slicedToArray(_useStateCheckingAuth, 2),
     checkingAuth = _useStateCheckingAuth2[0],
@@ -13969,8 +13973,13 @@ function CarvalhoSuite() {
       if (!res.error && res.data) {
         setProfile(res.data);
         setUser(res.data.member_id || 'patricio');
+        setProfileErr('');
+      } else if (res.error) {
+        setProfileErr('Erro ao carregar perfil: ' + (res.error.message || JSON.stringify(res.error)));
       }
-    }).catch(function () {});
+    }).catch(function (e) {
+      setProfileErr('Erro ao carregar perfil (excepção): ' + (e && e.message || String(e)));
+    });
   };
   (0, _react.useEffect)(function () {
     if (!window.supabaseClient) {
@@ -15412,7 +15421,23 @@ function CarvalhoSuite() {
       color: T.text,
       textTransform: 'capitalize'
     }
-  }, dateStr), isAdmin && /*#__PURE__*/React.createElement("div", {
+  }, dateStr), !profile && !profileErr && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.muted,
+      fontSize: 11,
+      marginTop: 8
+    }
+  }, "A carregar perfil\u2026"), profileErr && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.red,
+      fontSize: 11,
+      fontWeight: 700,
+      marginTop: 8,
+      background: 'rgba(239,68,68,0.1)',
+      padding: '8px 10px',
+      borderRadius: 8
+    }
+  }, "\u26A0 ", profileErr), isAdmin && /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 10,

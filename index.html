@@ -13779,10 +13779,42 @@ function CarvalhoSuite() {
     _useState178 = _slicedToArray(_useState177, 2),
     screen = _useState178[0],
     setScreen = _useState178[1];
-  var _useState179 = (0, _react.useState)('Pc12345'),
+  var _useState179 = (0, _react.useState)(''),
     _useState180 = _slicedToArray(_useState179, 2),
     pass = _useState180[0],
     setPass = _useState180[1];
+  var _useStateEmail = (0, _react.useState)(''),
+    _useStateEmail2 = _slicedToArray(_useStateEmail, 2),
+    email = _useStateEmail2[0],
+    setEmail = _useStateEmail2[1];
+  var _useStateAuthMode = (0, _react.useState)('login'),
+    _useStateAuthMode2 = _slicedToArray(_useStateAuthMode, 2),
+    authMode = _useStateAuthMode2[0],
+    setAuthMode = _useStateAuthMode2[1];
+  var _useStateAuthMember = (0, _react.useState)('patricio'),
+    _useStateAuthMember2 = _slicedToArray(_useStateAuthMember, 2),
+    signupMember = _useStateAuthMember2[0],
+    setSignupMember = _useStateAuthMember2[1];
+  var _useStateAuthLoading = (0, _react.useState)(false),
+    _useStateAuthLoading2 = _slicedToArray(_useStateAuthLoading, 2),
+    authLoading = _useStateAuthLoading2[0],
+    setAuthLoading = _useStateAuthLoading2[1];
+  var _useStateSession = (0, _react.useState)(null),
+    _useStateSession2 = _slicedToArray(_useStateSession, 2),
+    session = _useStateSession2[0],
+    setSession = _useStateSession2[1];
+  var _useStateProfile = (0, _react.useState)(null),
+    _useStateProfile2 = _slicedToArray(_useStateProfile, 2),
+    profile = _useStateProfile2[0],
+    setProfile = _useStateProfile2[1];
+  var _useStateProfiles = (0, _react.useState)([]),
+    _useStateProfiles2 = _slicedToArray(_useStateProfiles, 2),
+    allProfiles = _useStateProfiles2[0],
+    setAllProfiles = _useStateProfiles2[1];
+  var _useStateCheckingAuth = (0, _react.useState)(true),
+    _useStateCheckingAuth2 = _slicedToArray(_useStateCheckingAuth, 2),
+    checkingAuth = _useStateCheckingAuth2[0],
+    setCheckingAuth = _useStateCheckingAuth2[1];
   var _useState181 = (0, _react.useState)(''),
     _useState182 = _slicedToArray(_useState181, 2),
     passErr = _useState182[0],
@@ -13893,23 +13925,168 @@ function CarvalhoSuite() {
   var user = users.find(function (u) {
     return u.id === activeUser;
   }) || users[0];
-  var isAdmin = activeUser === 'patricio';
+  var isAdmin = !!(profile && profile.is_admin);
+  var myAllowedApps = (profile && profile.allowed_apps) || [];
   var visApps = APPS_DATA.filter(function (a) {
-    return (perms[activeUser] || []).includes(a.id);
+    return myAllowedApps.includes(a.id);
   });
   var totalBadge = visApps.reduce(function (n, a) {
     return n + (a.badge ? parseInt(a.badge) : 0);
   }, 0);
+  var loadAllProfiles = function loadAllProfiles() {
+    if (!window.supabaseClient) return;
+    window.supabaseClient.from('profiles').select('*').then(function (res) {
+      if (!res.error && res.data) setAllProfiles(res.data);
+    }).catch(function () {});
+  };
   var togglePerm = function togglePerm(uid, aid) {
-    return setPerms(function (p) {
-      var c = p[uid] || [];
-      return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, uid, c.includes(aid) ? c.filter(function (x) {
-        return x !== aid;
-      }) : [].concat(_toConsumableArray(c), [aid])));
+    var target = allProfiles.find(function (p) {
+      return p.id === uid;
+    });
+    if (!target) return;
+    var current = target.allowed_apps || [];
+    var next = current.includes(aid) ? current.filter(function (x) {
+      return x !== aid;
+    }) : [].concat(_toConsumableArray(current), [aid]);
+    setAllProfiles(function (ps) {
+      return ps.map(function (p) {
+        return p.id === uid ? _objectSpread(_objectSpread({}, p), {}, {
+          allowed_apps: next
+        }) : p;
+      });
+    });
+    if (window.supabaseClient) {
+      window.supabaseClient.from('profiles').update({
+        allowed_apps: next
+      }).eq('id', uid).then(function () {}).catch(function () {});
+    }
+  };
+  var fetchProfile = function fetchProfile(userId) {
+    if (!window.supabaseClient) return;
+    window.supabaseClient.from('profiles').select('*').eq('id', userId).single().then(function (res) {
+      if (!res.error && res.data) {
+        setProfile(res.data);
+        setUser(res.data.member_id || 'patricio');
+      }
+    }).catch(function () {});
+  };
+  (0, _react.useEffect)(function () {
+    if (!window.supabaseClient) {
+      setCheckingAuth(false);
+      return;
+    }
+    window.supabaseClient.auth.getSession().then(function (res) {
+      var s = res.data && res.data.session;
+      setSession(s || null);
+      if (s && s.user) {
+        fetchProfile(s.user.id);
+        setScreen('hub');
+      }
+      setCheckingAuth(false);
+    });
+    var _sub = window.supabaseClient.auth.onAuthStateChange(function (event, s) {
+      setSession(s || null);
+      if (s && s.user) {
+        fetchProfile(s.user.id);
+      } else {
+        setProfile(null);
+      }
+    });
+    return function () {
+      try {
+        _sub.data.subscription.unsubscribe();
+      } catch (e) {}
+    };
+  }, []);
+  var doLogin = function doLogin() {
+    if (!window.supabaseClient) {
+      setPassErr('Sem ligação ao servidor.');
+      return;
+    }
+    if (!email || !pass) {
+      setPassErr('Preenche o email e a palavra-passe.');
+      return;
+    }
+    setAuthLoading(true);
+    setPassErr('');
+    window.supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: pass
+    }).then(function (res) {
+      setAuthLoading(false);
+      if (res.error) {
+        setPassErr('Email ou palavra-passe incorretos.');
+        return;
+      }
+      if (res.data && res.data.session && res.data.session.user) {
+        fetchProfile(res.data.session.user.id);
+      }
+      setScreen('hub');
+    }).catch(function () {
+      setAuthLoading(false);
+      setPassErr('Erro de ligação. Tenta novamente.');
     });
   };
+  var doSignup = function doSignup() {
+    if (!window.supabaseClient) {
+      setPassErr('Sem ligação ao servidor.');
+      return;
+    }
+    if (!email || !pass) {
+      setPassErr('Preenche o email e a palavra-passe.');
+      return;
+    }
+    if (pass.length < 6) {
+      setPassErr('A palavra-passe precisa de pelo menos 6 caracteres.');
+      return;
+    }
+    setAuthLoading(true);
+    setPassErr('');
+    window.supabaseClient.auth.signUp({
+      email: email,
+      password: pass,
+      options: {
+        data: {
+          member_id: signupMember
+        }
+      }
+    }).then(function (res) {
+      setAuthLoading(false);
+      if (res.error) {
+        setPassErr(res.error.message || 'Não foi possível criar a conta.');
+        return;
+      }
+      if (res.data && res.data.session) {
+        if (res.data.session.user) fetchProfile(res.data.session.user.id);
+        setScreen('hub');
+      } else {
+        setPassErr('Conta criada! Verifica o teu email para confirmar, depois entra.');
+        setAuthMode('login');
+      }
+    }).catch(function () {
+      setAuthLoading(false);
+      setPassErr('Erro de ligação. Tenta novamente.');
+    });
+  };
+  var doLogout = function doLogout() {
+    if (window.supabaseClient) {
+      window.supabaseClient.auth.signOut().catch(function () {});
+    }
+    setSession(null);
+    setProfile(null);
+    setEmail('');
+    setPass('');
+    setScreen('login');
+    setUser('patricio');
+  };
+  (0, _react.useEffect)(function () {
+    if (screen === 'definicoes' && isAdmin) loadAllProfiles();
+  }, [screen, isAdmin]);
   var nav = function nav(label) {
-    if (label === 'Início') setScreen('hub');else if (label === 'Avisos') setScreen('notifs');else if (label === 'Definições') setScreen('definicoes');else if (label === 'Perfil') setScreen('perfil');
+    if (label === 'Início') setScreen('hub');else if (label === 'Avisos') setScreen('notifs');else if (label === 'Definições') {
+      setScreen('definicoes');
+      if (isAdmin) loadAllProfiles();
+    } else if (label === 'Perfil') setScreen('perfil');
   };
 
   // ── APP SCREENS ──
@@ -13940,6 +14117,19 @@ function CarvalhoSuite() {
   }
 
   // ── LOGIN ──
+  if (checkingAuth) return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread(_objectSpread({}, wrap), {}, {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    })
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: T.gold,
+      fontSize: 14,
+      fontWeight: 700
+    }
+  }, "A carregar\u2026"));
   if (screen === 'login') return /*#__PURE__*/React.createElement("div", {
     style: _objectSpread(_objectSpread({}, wrap), {}, {
       display: 'flex',
@@ -13994,6 +14184,81 @@ function CarvalhoSuite() {
       padding: '26px 22px',
       border: "1px solid ".concat(T.goldBrd)
     }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 6,
+      marginBottom: 20,
+      background: T.surface2,
+      borderRadius: 12,
+      padding: 4
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setAuthMode('login');
+      setPassErr('');
+    },
+    style: {
+      flex: 1,
+      background: authMode === 'login' ? T.gold : 'transparent',
+      border: 'none',
+      borderRadius: 9,
+      padding: '9px',
+      color: authMode === 'login' ? T.bg : T.muted,
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "Entrar"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setAuthMode('signup');
+      setPassErr('');
+    },
+    style: {
+      flex: 1,
+      background: authMode === 'signup' ? T.gold : 'transparent',
+      border: 'none',
+      borderRadius: 9,
+      padding: '9px',
+      color: authMode === 'signup' ? T.bg : T.muted,
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "Criar conta")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.muted,
+      fontSize: 11,
+      fontWeight: 700,
+      letterSpacing: '0.8px',
+      textTransform: 'uppercase',
+      marginBottom: 8
+    }
+  }, "Email"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    value: email,
+    onChange: function onChange(e) {
+      setEmail(e.target.value);
+      setPassErr('');
+    },
+    placeholder: "o.teu@email.com",
+    autoCapitalize: "none",
+    style: {
+      width: '100%',
+      background: T.surface2,
+      border: "1px solid ".concat(T.goldBrd),
+      borderRadius: 14,
+      padding: '13px 16px',
+      marginBottom: 14,
+      color: T.text,
+      fontSize: 14,
+      outline: 'none',
+      boxSizing: 'border-box'
+    }
+  }), authMode === 'signup' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 14
+    }
   }, /*#__PURE__*/React.createElement("p", {
     style: {
       color: T.muted,
@@ -14003,17 +14268,42 @@ function CarvalhoSuite() {
       textTransform: 'uppercase',
       marginBottom: 8
     }
-  }, "Email"), /*#__PURE__*/React.createElement("div", {
+  }, "Quem \xE9s tu?"), /*#__PURE__*/React.createElement("div", {
     style: {
-      background: T.surface2,
-      borderRadius: 14,
-      padding: '13px 16px',
-      marginBottom: 14,
-      border: "1px solid ".concat(T.goldBrd),
-      color: T.text,
-      fontSize: 14
+      display: 'flex',
+      gap: 6,
+      flexWrap: 'wrap'
     }
-  }, "patr.carvalho@hotmail.com"), /*#__PURE__*/React.createElement("p", {
+  }, [{
+    id: 'patricio',
+    l: 'Patricio'
+  }, {
+    id: 'esposa',
+    l: 'Esposa'
+  }, {
+    id: 'lucas',
+    l: 'Lucas'
+  }, {
+    id: 'liam',
+    l: 'Liam'
+  }].map(function (m) {
+    return /*#__PURE__*/React.createElement("button", {
+      key: m.id,
+      onClick: function onClick() {
+        return setSignupMember(m.id);
+      },
+      style: {
+        background: signupMember === m.id ? T.goldDim : T.surface2,
+        border: "1px solid ".concat(signupMember === m.id ? T.gold : T.goldBrd),
+        borderRadius: 10,
+        padding: '7px 12px',
+        color: signupMember === m.id ? T.gold : T.muted,
+        fontSize: 12,
+        fontWeight: 700,
+        cursor: 'pointer'
+      }
+    }, m.l);
+  }))), /*#__PURE__*/React.createElement("p", {
     style: {
       color: T.muted,
       fontSize: 11,
@@ -14030,7 +14320,8 @@ function CarvalhoSuite() {
       setPassErr('');
     },
     onKeyDown: function onKeyDown(e) {
-      return e.key === 'Enter' && setScreen('hub');
+      if (e.key !== 'Enter') return;
+      authMode === 'login' ? doLogin() : doSignup();
     },
     placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
     style: {
@@ -14055,12 +14346,14 @@ function CarvalhoSuite() {
   }, "\u26A0 ", passErr), /*#__PURE__*/React.createElement(GoldBtn, {
     style: {
       width: '100%',
-      padding: '15px'
+      padding: '15px',
+      opacity: authLoading ? 0.6 : 1
     },
     onClick: function onClick() {
-      return setScreen('hub');
+      if (authLoading) return;
+      authMode === 'login' ? doLogin() : doSignup();
     }
-  }, "Entrar \u2192")), /*#__PURE__*/React.createElement("p", {
+  }, authLoading ? 'A processar…' : authMode === 'login' ? 'Entrar →' : 'Criar conta →')), /*#__PURE__*/React.createElement("p", {
     style: {
       color: '#2A2A3A',
       fontSize: 12,
@@ -14188,7 +14481,7 @@ function CarvalhoSuite() {
       fontWeight: 800,
       fontSize: 17
     }
-  }, "Defini\xE7\xF5es")), /*#__PURE__*/React.createElement("button", {
+  }, "Defini\xE7\xF5es")), false && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       return setShowAddUser(function (v) {
         return !v;
@@ -14356,7 +14649,7 @@ function CarvalhoSuite() {
     style: {
       padding: '14px 16px'
     }
-  }, users.filter(function (u) {
+  }, [].filter(function (u) {
     return u.id !== 'patricio';
   }).map(function (u) {
     var isEditing = (editUser === null || editUser === void 0 ? void 0 : editUser.id) === u.id;
@@ -14792,9 +15085,16 @@ function CarvalhoSuite() {
       margin: '18px 0 10px',
       paddingLeft: 4
     }
-  }, "\uD83D\uDC65 Utilizadores e acessos"), users.map(function (u) {
-    var userPerms = perms[u.id] || [];
+  }, "\uD83D\uDC65 Utilizadores e acessos"), allProfiles.map(function (u) {
+    var userPerms = u.allowed_apps || [];
     var isExp = expandedUser === u.id;
+    var uEmoji = {
+      patricio: '👨‍💼',
+      esposa: '👩',
+      lucas: '👦',
+      liam: '👦'
+    }[u.member_id] || '👤';
+    var uName = u.member_id ? u.member_id.charAt(0).toUpperCase() + u.member_id.slice(1) : u.email || 'Utilizador';
     return /*#__PURE__*/React.createElement(Card, {
       key: u.id,
       style: {
@@ -14817,8 +15117,8 @@ function CarvalhoSuite() {
         width: 42,
         height: 42,
         borderRadius: 13,
-        background: u.id === 'patricio' ? "".concat(T.gold, "22") : 'rgba(124,58,237,0.15)',
-        border: "2px solid ".concat(u.id === 'patricio' ? T.gold : '#7C3AED', "55"),
+        background: u.is_admin ? "".concat(T.gold, "22") : 'rgba(124,58,237,0.15)',
+        border: "2px solid ".concat(u.is_admin ? T.gold : '#7C3AED', "55"),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
@@ -14827,7 +15127,7 @@ function CarvalhoSuite() {
       style: {
         fontSize: 22
       }
-    }, u.emoji)), /*#__PURE__*/React.createElement("div", {
+    }, uEmoji)), /*#__PURE__*/React.createElement("div", {
       style: {
         flex: 1
       }
@@ -14837,12 +15137,12 @@ function CarvalhoSuite() {
         fontSize: 15,
         color: T.text
       }
-    }, u.name), /*#__PURE__*/React.createElement("p", {
+    }, uName), /*#__PURE__*/React.createElement("p", {
       style: {
         color: T.muted,
         fontSize: 12
       }
-    }, u.role, " \xB7 ", userPerms.length, " app(s)")), /*#__PURE__*/React.createElement("span", {
+    }, u.email, " \xB7 ", userPerms.length, " app(s)")), /*#__PURE__*/React.createElement("span", {
       style: {
         color: T.gold,
         fontSize: 16
@@ -14852,55 +15152,7 @@ function CarvalhoSuite() {
         borderTop: "1px solid ".concat(T.border),
         padding: '12px 16px'
       }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-        marginBottom: 12,
-        padding: '10px 12px',
-        background: T.surface2,
-        borderRadius: 10
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 16
-      }
-    }, "\uD83D\uDD11"), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1
-      }
     }, /*#__PURE__*/React.createElement("p", {
-      style: {
-        color: T.muted,
-        fontSize: 9,
-        fontWeight: 700,
-        textTransform: 'uppercase'
-      }
-    }, "Password"), /*#__PURE__*/React.createElement("p", {
-      style: {
-        color: T.text,
-        fontSize: 14,
-        fontWeight: 700,
-        fontFamily: 'monospace',
-        letterSpacing: '1px'
-      }
-    }, showPwd[u.id] ? u.pwd || 'Pc12345' : '••••••••')), /*#__PURE__*/React.createElement("button", {
-      onClick: function onClick() {
-        return setShowPwd(function (p) {
-          return _objectSpread(_objectSpread({}, p), {}, _defineProperty({}, u.id, !p[u.id]));
-        });
-      },
-      style: {
-        background: T.surface,
-        border: "1px solid ".concat(T.border),
-        borderRadius: 8,
-        padding: '6px 10px',
-        color: T.gold,
-        fontSize: 12,
-        cursor: 'pointer'
-      }
-    }, showPwd[u.id] ? '🙈 Ocultar' : '👁 Ver')), /*#__PURE__*/React.createElement("p", {
       style: {
         color: T.muted,
         fontSize: 9,
@@ -14963,27 +15215,23 @@ function CarvalhoSuite() {
         }
       })));
     }))));
-  }), /*#__PURE__*/React.createElement("button", {
-    onClick: function onClick() {
-      setShowAddUser(true);
-      setScreen('definicoes');
-    },
+  }), allProfiles.length === 0 && /*#__PURE__*/React.createElement("p", {
     style: {
-      width: '100%',
-      background: 'none',
-      border: "1px dashed ".concat(T.gold, "55"),
-      borderRadius: 14,
-      padding: '12px',
-      color: T.gold,
-      fontSize: 14,
-      fontWeight: 700,
-      cursor: 'pointer',
+      color: T.muted,
+      fontSize: 12,
+      textAlign: 'center',
+      padding: '10px'
+    }
+  }, "Ainda ningu\xE9m da fam\xEDlia criou conta."), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.muted,
+      fontSize: 11,
+      textAlign: 'center',
       marginTop: 4
     }
-  }, "\uFF0B Adicionar utilizador")), /*#__PURE__*/React.createElement("button", {
+  }, "Cada pessoa cria a sua conta no ecr\xE3 de login \xB7 tu controlas o acesso aqui")), /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      setScreen('login');
-      setUser('patricio');
+      return doLogout();
     },
     style: {
       width: '100%',
@@ -15215,7 +15463,7 @@ function CarvalhoSuite() {
         marginTop: 2
       }
     }, s.v));
-  }))), isAdmin && /*#__PURE__*/React.createElement("div", {
+  }))), false && isAdmin && /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '14px 16px 0'
     }

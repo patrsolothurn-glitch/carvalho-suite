@@ -23,6 +23,20 @@
   <div id="root"><div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;background:#09090E"><div style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#C9A847,#E8C96C);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#09090E">C</div><p style="color:#C9A847;font-family:system-ui;font-size:16px;font-weight:600">A carregar...</p></div></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    (function () {
+      try {
+        var SUPABASE_URL = 'https://qtynznppkxjmihxiquze.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_mRGjfnvI_5rqD_JCv9T8AQ_n7fzOfnA';
+        if (window.supabase && window.supabase.createClient) {
+          window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+      } catch (e) {
+        console.error('Erro ao iniciar Supabase:', e);
+      }
+    })();
+  </script>
   <script>
   // CommonJS shim for browser
   const require=(mod)=>{if(mod==='react'||mod==='React')return window.React;if(mod==='react-dom'||mod==='ReactDOM')return window.ReactDOM;return {};};
@@ -6063,47 +6077,7 @@ function FamiliaApp(_ref19) {
     _useState102 = _slicedToArray(_useState101, 2),
     selMember = _useState102[0],
     setSelMember = _useState102[1];
-  var _useState103 = (0, _react.useState)({
-      '2026-06-14': [{
-        t: 'Domingo em família',
-        emoji: '🏠',
-        who: 'todos',
-        color: F.coral
-      }],
-      '2026-06-16': [{
-        t: 'Médico Lucas',
-        emoji: '🏥',
-        who: 'lucas',
-        color: F.orange,
-        hora: '10:30'
-      }, {
-        t: 'Reunião escola Liam',
-        emoji: '📚',
-        who: 'liam',
-        color: F.green,
-        hora: '14:00'
-      }],
-      '2026-06-20': [{
-        t: 'Aniversário Esposa 🎂',
-        emoji: '🎂',
-        who: 'todos',
-        color: F.pink,
-        hora: '19:00'
-      }],
-      '2026-06-25': [{
-        t: 'Consulta dentista',
-        emoji: '🦷',
-        who: 'patricio',
-        color: F.gold,
-        hora: '09:00'
-      }],
-      '2026-06-28': [{
-        t: 'Fim de semana Fafe',
-        emoji: '✈️',
-        who: 'todos',
-        color: F.purple
-      }]
-    }),
+  var _useState103 = (0, _react.useState)({}),
     _useState104 = _slicedToArray(_useState103, 2),
     events = _useState104[0],
     setEvents = _useState104[1];
@@ -6206,6 +6180,11 @@ function FamiliaApp(_ref19) {
           famStorageSet('familia_member_photos', JSON.stringify(next));
           return next;
         });
+        if (window.supabaseClient && memberId !== 'todos') {
+          window.supabaseClient.from('members').update({
+            photo_url: resized
+          }).eq('id', memberId).then(function () {}).catch(function () {});
+        }
       });
     };
     reader.readAsDataURL(file);
@@ -6259,6 +6238,66 @@ function FamiliaApp(_ref19) {
     _useState120 = _slicedToArray(_useState119, 2),
     editMemberId = _useState120[0],
     setEditMemberId = _useState120[1];
+  // ── SINCRONIZAÇÃO COM SUPABASE ────────────────────────────────────
+  var loadFamilyEvents = function loadFamilyEvents() {
+    if (!window.supabaseClient) return;
+    window.supabaseClient.from('family_events').select('*').then(function (res) {
+      if (res.error || !res.data) return;
+      var built = {};
+      res.data.forEach(function (row) {
+        var d = row.event_date;
+        if (!built[d]) built[d] = [];
+        built[d].push({
+          id: row.id,
+          t: row.title,
+          emoji: row.emoji || '📅',
+          who: row.member_id || 'todos',
+          color: row.color || F.coral,
+          hora: row.event_time || '',
+          nota: row.description || ''
+        });
+      });
+      setEvents(built);
+    }).catch(function () {});
+  };
+  var loadMemberPhotos = function loadMemberPhotos() {
+    if (!window.supabaseClient) return;
+    window.supabaseClient.from('members').select('id,photo_url').then(function (res) {
+      if (res.error || !res.data) return;
+      var next = {};
+      res.data.forEach(function (row) {
+        if (row.photo_url) next[row.id] = row.photo_url;
+      });
+      setMemberPhotos(function (p) {
+        return _objectSpread(_objectSpread({}, p), next);
+      });
+    }).catch(function () {});
+  };
+  (0, _react.useEffect)(function () {
+    loadFamilyEvents();
+    loadMemberPhotos();
+    if (!window.supabaseClient) return;
+    var channel = window.supabaseClient.channel('family_events_changes').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'family_events'
+    }, function () {
+      loadFamilyEvents();
+    }).subscribe();
+    var channelM = window.supabaseClient.channel('members_changes').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'members'
+    }, function () {
+      loadMemberPhotos();
+    }).subscribe();
+    return function () {
+      try {
+        window.supabaseClient.removeChannel(channel);
+        window.supabaseClient.removeChannel(channelM);
+      } catch (e) {}
+    };
+  }, []);
   var yr = curMonth.getFullYear(),
     mo = curMonth.getMonth();
   var daysInMo = new Date(yr, mo + 1, 0).getDate();
@@ -6320,6 +6359,23 @@ function FamiliaApp(_ref19) {
       });
       return np;
     });
+    if (window.supabaseClient) {
+      var rows = Object.keys(updates).map(function (d) {
+        return {
+          member_id: form.who === 'todos' ? null : form.who,
+          title: ev.t,
+          description: ev.nota || null,
+          event_date: d,
+          event_time: ev.hora || null,
+          emoji: ev.emoji,
+          color: ev.color,
+          created_by: 'patricio'
+        };
+      });
+      window.supabaseClient.from('family_events').insert(rows).then(function () {
+        loadFamilyEvents();
+      }).catch(function () {});
+    }
     setForm({
       titulo: '',
       emoji: '📅',
@@ -7298,6 +7354,9 @@ function FamiliaApp(_ref19) {
       }
     }, "\u270F\uFE0F"), /*#__PURE__*/React.createElement("button", {
       onClick: function onClick() {
+        if (window.supabaseClient && ev.id) {
+          window.supabaseClient.from('family_events').delete().eq('id', ev.id).then(function () {}).catch(function () {});
+        }
         return setEvents(function (p) {
           var d = _objectSpread({}, p);
           d[selDateStr] = (d[selDateStr] || []).filter(function (_, j) {
@@ -7472,6 +7531,15 @@ function FamiliaApp(_ref19) {
         var newColor = ((_members$find = members.find(function (x) {
           return x.id === who;
         })) === null || _members$find === void 0 ? void 0 : _members$find.color) || ev.color;
+        if (window.supabaseClient && ev.id) {
+          window.supabaseClient.from('family_events').update({
+            title: titulo,
+            event_time: hora || null,
+            member_id: who === 'todos' ? null : who,
+            description: nota || null,
+            color: newColor
+          }).eq('id', ev.id).then(function () {}).catch(function () {});
+        }
         setEvents(function (p) {
           var d = _objectSpread({}, p);
           var arr = _toConsumableArray(d[selDateStr] || []);

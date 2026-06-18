@@ -4156,6 +4156,11 @@ function AgendaProApp(_ref13) {
       };
     });
   }();
+  var nextAppt = appts.filter(function (a) {
+    return a.date >= todayStr && a.status !== 'concluido';
+  }).sort(function (a, b) {
+    return a.date.localeCompare(b.date) || a.hi.localeCompare(b.hi);
+  })[0] || null;
   var loadJobs = function loadJobs() {
     if (!window.supabaseClient) return;
     window.supabaseClient.from('agenda_pro_jobs').select('*').then(function (res) {
@@ -4468,7 +4473,97 @@ function AgendaProApp(_ref13) {
       cursor: 'pointer',
       fontSize: 16
     }
-  }, "\u2715"))), /*#__PURE__*/React.createElement("div", {
+  }, "\u2715"))), nextAppt && /*#__PURE__*/React.createElement("div", {
+    onClick: function onClick() {
+      return openForm(nextAppt);
+    },
+    style: {
+      margin: '0 16px 14px',
+      background: "linear-gradient(135deg, ".concat(A.gold, ", ").concat(A.orange, ")"),
+      borderRadius: 20,
+      padding: '18px 18px',
+      cursor: 'pointer',
+      boxShadow: '0 8px 24px rgba(184,150,46,0.35)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 10
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: 'rgba(255,255,255,0.85)',
+      fontSize: 11,
+      fontWeight: 800,
+      textTransform: 'uppercase',
+      letterSpacing: '0.8px'
+    }
+  }, "\u23F1\uFE0F Pr\xF3xima marca\xE7\xE3o"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'rgba(255,255,255,0.25)',
+      borderRadius: 10,
+      padding: '3px 10px',
+      color: '#fff',
+      fontSize: 11,
+      fontWeight: 800
+    }
+  }, nextAppt.proj)), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: '#fff',
+      fontSize: 24,
+      fontWeight: 900,
+      letterSpacing: '-0.5px',
+      marginBottom: 4
+    }
+  }, nextAppt.morada), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: 'rgba(255,255,255,0.95)',
+      fontSize: 15,
+      fontWeight: 700,
+      marginBottom: 14
+    }
+  }, (nextAppt.date === todayStr ? 'Hoje' : new Date(nextAppt.date + 'T12:00:00').toLocaleDateString('pt-PT', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short'
+  })), " \xB7 ", nextAppt.hi, "\u2013", nextAppt.hf), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 14
+    }
+  }, STATUS[nextAppt.status] ? STATUS[nextAppt.status].icon : ''), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: '#fff',
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, STATUS[nextAppt.status] ? STATUS[nextAppt.status].label : nextAppt.status)), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: '#fff',
+      fontSize: 28,
+      fontWeight: 900
+    }
+  }, "CHF ", nextAppt.chf)), nextAppt.nota && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: 'rgba(255,255,255,0.85)',
+      fontSize: 12,
+      marginTop: 10,
+      fontStyle: 'italic'
+    }
+  }, "\uD83D\uDCDD ", nextAppt.nota)), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '10px 16px',
       display: 'flex',

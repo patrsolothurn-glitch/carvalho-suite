@@ -11430,6 +11430,12 @@ function EscolarApp(_ref31) {
       });
       var isAlmoco = !!slot.almoco;
       var isTardeStart = !!slot.tarde && si > 0 && !((_ref33 = mergedSlots[si - 1]) !== null && _ref33 !== void 0 && _ref33.tarde);
+      var toMin = function toMin(t) {
+        var parts = t.split(':').map(Number);
+        return parts[0] * 60 + parts[1];
+      };
+      var slotDurMin = toMin(slot.hf) - toMin(slot.hi);
+      var rowH = isAlmoco ? Math.max(14, Math.min(28, Math.round(slotDurMin * 0.6))) : Math.max(16, Math.min(60, Math.round(slotDurMin * 1.05)));
       return /*#__PURE__*/React.createElement(React.Fragment, {
         key: slot.id
       }, isTardeStart && /*#__PURE__*/React.createElement("div", {
@@ -11467,7 +11473,7 @@ function EscolarApp(_ref31) {
           display: 'grid',
           gridTemplateColumns: '50px repeat(5,1fr)',
           borderBottom: "1px solid ".concat(E.border),
-          minHeight: isAlmoco ? 36 : 52,
+          minHeight: rowH,
           background: isAlmoco && !hasAny ? 'rgba(100,100,100,0.03)' : 'transparent'
         }
       }, /*#__PURE__*/React.createElement("div", {
@@ -11476,7 +11482,8 @@ function EscolarApp(_ref31) {
           background: isAlmoco ? 'rgba(100,100,100,0.06)' : E.surface2,
           borderRight: "1px solid ".concat(E.border),
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: rowH < 30 ? 'row' : 'column',
+          gap: rowH < 30 ? 3 : 0,
           justifyContent: 'center',
           alignItems: 'center'
         }
@@ -11487,7 +11494,7 @@ function EscolarApp(_ref31) {
           color: isAlmoco ? E.muted : E.purple,
           lineHeight: 1.2
         }
-      }, slot.hi), /*#__PURE__*/React.createElement("p", {
+      }, slot.hi), rowH >= 24 && /*#__PURE__*/React.createElement("p", {
         style: {
           fontSize: 7,
           color: E.muted

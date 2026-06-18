@@ -4137,6 +4137,61 @@ function AgendaProApp(_ref13) {
     return acc;
   }, {});
   var sortedDates = Object.keys(grouped).sort();
+  var weeklyChart = function () {
+    var weeks = {};
+    appts.filter(function (a) {
+      return a.status === 'concluido';
+    }).forEach(function (a) {
+      var d = new Date(a.date + 'T12:00:00');
+      var monday = new Date(d);
+      monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+      var key = monday.toISOString().slice(0, 10);
+      weeks[key] = (weeks[key] || 0) + a.chf;
+    });
+    var keys = Object.keys(weeks).sort().slice(-8);
+    return keys.map(function (k) {
+      return {
+        week: k,
+        chf: weeks[k]
+      };
+    });
+  }();
+  var loadJobs = function loadJobs() {
+    if (!window.supabaseClient) return;
+    window.supabaseClient.from('agenda_pro_jobs').select('*').then(function (res) {
+      if (res.error || !res.data) return;
+      setAppts(res.data.map(function (row) {
+        return {
+          id: row.id,
+          date: row.job_date,
+          hi: row.start_time || '',
+          hf: row.end_time || '',
+          proj: row.project || '',
+          morada: row.address || '',
+          monteur: row.monteur || 'Patricio',
+          chf: Number(row.chf) || 0,
+          status: row.status || 'aberto',
+          nota: row.note || ''
+        };
+      }));
+    }).catch(function () {});
+  };
+  (0, _react.useEffect)(function () {
+    loadJobs();
+    if (!window.supabaseClient) return;
+    var channel = window.supabaseClient.channel('agenda_pro_jobs_changes').on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'agenda_pro_jobs'
+    }, function () {
+      loadJobs();
+    }).subscribe();
+    return function () {
+      try {
+        window.supabaseClient.removeChannel(channel);
+      } catch (e) {}
+    };
+  }, []);
   var openForm = function openForm() {
     var appt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     if (appt) {
@@ -4170,14 +4225,45 @@ function AgendaProApp(_ref13) {
           }) : a;
         });
       });
+      if (window.supabaseClient) {
+        window.supabaseClient.from('agenda_pro_jobs').update({
+          job_date: form.date,
+          start_time: form.hi,
+          end_time: form.hf,
+          project: form.proj,
+          address: form.morada,
+          monteur: form.monteur,
+          chf: Number(form.chf),
+          status: form.status,
+          note: form.nota
+        }).eq('id', editId).then(function () {
+          loadJobs();
+        }).catch(function () {});
+      }
       sendNotifTo(form.monteur, "\u270F\uFE0F Marca\xE7\xE3o alterada \u2014 ".concat(form.monteur), "".concat(form.morada, " \xB7 ").concat(form.date, " \xE0s ").concat(form.hi, "\u2013").concat(form.hf));
     } else {
+      var tempId = Date.now();
       setAppts(function (p) {
         return [].concat(_toConsumableArray(p), [_objectSpread(_objectSpread({}, form), {}, {
-          id: Date.now(),
+          id: tempId,
           chf: Number(form.chf)
         })]);
       });
+      if (window.supabaseClient) {
+        window.supabaseClient.from('agenda_pro_jobs').insert({
+          job_date: form.date,
+          start_time: form.hi,
+          end_time: form.hf,
+          project: form.proj,
+          address: form.morada,
+          monteur: form.monteur,
+          chf: Number(form.chf),
+          status: form.status,
+          note: form.nota
+        }).then(function () {
+          loadJobs();
+        }).catch(function () {});
+      }
       sendNotifTo(form.monteur, "\uD83D\uDCCB Nova marca\xE7\xE3o \u2014 ".concat(form.monteur), "".concat(form.morada, " \xB7 ").concat(form.date, " \xE0s ").concat(form.hi, "\u2013").concat(form.hf));
     }
     setShowAdd(false);
@@ -4197,20 +4283,28 @@ function AgendaProApp(_ref13) {
     }
   };
   var changeStatus = function changeStatus(id, status) {
-    return setAppts(function (p) {
+    setAppts(function (p) {
       return p.map(function (a) {
         return a.id === id ? _objectSpread(_objectSpread({}, a), {}, {
           status: status
         }) : a;
       });
     });
+    if (window.supabaseClient) {
+      window.supabaseClient.from('agenda_pro_jobs').update({
+        status: status
+      }).eq('id', id).then(function () {}).catch(function () {});
+    }
   };
   var deleteAppt = function deleteAppt(id) {
-    return setAppts(function (p) {
+    setAppts(function (p) {
       return p.filter(function (a) {
         return a.id !== id;
       });
     });
+    if (window.supabaseClient) {
+      window.supabaseClient.from('agenda_pro_jobs').delete().eq('id', id).then(function () {}).catch(function () {});
+    }
   };
   var ACard = function ACard(_ref14) {
     var children = _ref14.children,
@@ -4730,7 +4824,67 @@ function AgendaProApp(_ref13) {
         marginTop: 3
       }
     }, s.v));
-  })), sharedDias.filter(function (d) {
+  })), weeklyChart.length > 0 && /*#__PURE__*/React.createElement(ACard, {
+    style: {
+      padding: '14px 12px',
+      marginTop: 10
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: A.muted,
+      fontSize: 10,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px',
+      marginBottom: 10
+    }
+  }, "\uD83D\uDCC8 Ganhos por semana (CHF)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      gap: 6,
+      height: 90
+    }
+  }, function () {
+    var maxChf = Math.max.apply(Math, weeklyChart.map(function (w) {
+      return w.chf;
+    }).concat([1]));
+    return weeklyChart.map(function (w) {
+      var d = new Date(w.week + 'T12:00:00');
+      var label = "".concat(d.getDate(), "/").concat(d.getMonth() + 1);
+      var h = Math.max(4, w.chf / maxChf * 70);
+      return /*#__PURE__*/React.createElement("div", {
+        key: w.week,
+        style: {
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 4
+        }
+      }, /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: A.gold,
+          fontSize: 9,
+          fontWeight: 800
+        }
+      }, w.chf), /*#__PURE__*/React.createElement("div", {
+        style: {
+          width: '100%',
+          maxWidth: 26,
+          height: h,
+          borderRadius: 5,
+          background: "linear-gradient(180deg, ".concat(A.gold, ", ").concat(A.orange, ")")
+        }
+      }), /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: A.muted,
+          fontSize: 8,
+          fontWeight: 600
+        }
+      }, label));
+    });
+  }())), sharedDias.filter(function (d) {
     return d.date.startsWith('2026-06');
   }).length > 0 && /*#__PURE__*/React.createElement("div", {
     style: {

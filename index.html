@@ -6337,6 +6337,7 @@ function FamiliaApp(_ref19) {
       dataDE: '',
       dataATE: '',
       hora: '',
+      diaTodo: false,
       nota: ''
     }),
     _useState106 = _slicedToArray(_useState105, 2),
@@ -6632,6 +6633,7 @@ function FamiliaApp(_ref19) {
       dataDE: '',
       dataATE: '',
       hora: '',
+      diaTodo: false,
       nota: ''
     });
     setShowAdd(false);
@@ -7543,7 +7545,7 @@ function FamiliaApp(_ref19) {
         fontSize: 12,
         fontWeight: 700
       }
-    }, (m === null || m === void 0 ? void 0 : m.name) || ev.who), ev.hora && /*#__PURE__*/React.createElement("span", {
+    }, (m === null || m === void 0 ? void 0 : m.name) || ev.who), ev.hora ? /*#__PURE__*/React.createElement("span", {
       style: {
         background: "".concat(ev.color, "18"),
         border: "1px solid ".concat(ev.color, "33"),
@@ -7553,7 +7555,17 @@ function FamiliaApp(_ref19) {
         fontWeight: 800,
         color: ev.color
       }
-    }, "\uD83D\uDD50 ", ev.hora)), ev.nota && /*#__PURE__*/React.createElement("p", {
+    }, "\uD83D\uDD50 ", ev.hora) : /*#__PURE__*/React.createElement("span", {
+      style: {
+        background: "".concat(F.muted, "18"),
+        border: "1px solid ".concat(F.muted, "33"),
+        borderRadius: 6,
+        padding: '1px 8px',
+        fontSize: 11,
+        fontWeight: 800,
+        color: F.muted
+      }
+    }, "\uD83D\uDCC5 Dia todo")), ev.nota && /*#__PURE__*/React.createElement("p", {
       style: {
         color: F.muted,
         fontSize: 11,
@@ -7662,7 +7674,31 @@ function FamiliaApp(_ref19) {
         marginBottom: 10,
         boxSizing: 'border-box'
       }
-    }), /*#__PURE__*/React.createElement("div", {
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "ev-allday-".concat(evKey),
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 7,
+        marginBottom: 10,
+        cursor: 'pointer'
+      }
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "checkbox",
+      id: "ev-allday-".concat(evKey),
+      defaultChecked: !ev.hora,
+      style: {
+        width: 16,
+        height: 16,
+        accentColor: F.coral
+      }
+    }), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: F.text,
+        fontSize: 12,
+        fontWeight: 700
+      }
+    }, "\uD83D\uDCC5 Dia todo (sem hora espec\xEDfica)")), /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'flex',
         gap: 8,
@@ -7774,7 +7810,8 @@ function FamiliaApp(_ref19) {
       onClick: function onClick() {
         var _document$getElementB2, _document$getElementB3, _document$getElementB4, _document$getElementB5, _members$find;
         var titulo = ((_document$getElementB2 = document.getElementById("ev-t-".concat(evKey))) === null || _document$getElementB2 === void 0 ? void 0 : _document$getElementB2.value.trim()) || ev.t;
-        var hora = ((_document$getElementB3 = document.getElementById("ev-h-".concat(evKey))) === null || _document$getElementB3 === void 0 ? void 0 : _document$getElementB3.value) || ev.hora || '';
+        var isAllDay = document.getElementById("ev-allday-".concat(evKey)) ? document.getElementById("ev-allday-".concat(evKey)).checked : false;
+        var hora = isAllDay ? '' : ((_document$getElementB3 = document.getElementById("ev-h-".concat(evKey))) === null || _document$getElementB3 === void 0 ? void 0 : _document$getElementB3.value) || ev.hora || '';
         var who = ((_document$getElementB4 = document.getElementById("ev-w-".concat(evKey))) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.value) || ev.who;
         var nota = ((_document$getElementB5 = document.getElementById("ev-n-".concat(evKey))) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.value.trim()) || '';
         var newColor = ((_members$find = members.find(function (x) {
@@ -8039,13 +8076,19 @@ function FamiliaApp(_ref19) {
             fontSize: 14,
             color: F.text
           }
-        }, ev.t), ev.hora && /*#__PURE__*/React.createElement("span", {
+        }, ev.t), ev.hora ? /*#__PURE__*/React.createElement("span", {
           style: {
             fontSize: 10,
             fontWeight: 700,
             color: ev.color
           }
-        }, "\uD83D\uDD50 ", ev.hora)), /*#__PURE__*/React.createElement("div", {
+        }, "\uD83D\uDD50 ", ev.hora) : /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 10,
+            fontWeight: 700,
+            color: F.muted
+          }
+        }, "\uD83D\uDCC5 Dia todo")), /*#__PURE__*/React.createElement("div", {
           style: {
             display: 'flex',
             alignItems: 'center',
@@ -8148,12 +8191,48 @@ function FamiliaApp(_ref19) {
         cursor: 'pointer'
       }
     }, e);
-  })), [{
+  })), /*#__PURE__*/React.createElement("div", {
+    onClick: function onClick() {
+      return setForm(function (p) {
+        return _objectSpread(_objectSpread({}, p), {}, {
+          diaTodo: !p.diaTodo,
+          hora: !p.diaTodo ? '' : p.hora
+        });
+      });
+    },
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 10,
+      cursor: 'pointer'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 20,
+      height: 20,
+      borderRadius: 6,
+      border: "2px solid ".concat(form.diaTodo ? F.coral : F.border),
+      background: form.diaTodo ? F.coral : 'transparent',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: 900
+    }
+  }, form.diaTodo ? '✓' : ''), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: F.text,
+      fontSize: 13,
+      fontWeight: 700
+    }
+  }, "\uD83D\uDCC5 Dia todo (sem hora espec\xEDfica)")), [{
     l: 'Título',
     k: 'titulo',
     type: 'text',
     ph: 'Ex: Médico Lucas'
-  }, {
+  }, !form.diaTodo && {
     l: 'Hora',
     k: 'hora',
     type: 'time',
@@ -8163,7 +8242,7 @@ function FamiliaApp(_ref19) {
     k: 'nota',
     type: 'text',
     ph: 'Informação adicional (opcional)'
-  }].map(function (f) {
+  }].filter(Boolean).map(function (f) {
     return /*#__PURE__*/React.createElement("div", {
       key: f.k,
       style: {

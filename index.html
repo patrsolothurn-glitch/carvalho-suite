@@ -13811,6 +13811,14 @@ function CarvalhoSuite() {
     _useStateProfiles2 = _slicedToArray(_useStateProfiles, 2),
     allProfiles = _useStateProfiles2[0],
     setAllProfiles = _useStateProfiles2[1];
+  var _useStateInvites = (0, _react.useState)([]),
+    _useStateInvites2 = _slicedToArray(_useStateInvites, 2),
+    pendingInvites = _useStateInvites2[0],
+    setPendingInvites = _useStateInvites2[1];
+  var _useStateNewInviteEmail = (0, _react.useState)(''),
+    _useStateNewInviteEmail2 = _slicedToArray(_useStateNewInviteEmail, 2),
+    newInviteEmail = _useStateNewInviteEmail2[0],
+    setNewInviteEmail = _useStateNewInviteEmail2[1];
   var _useStateProfileErr = (0, _react.useState)(''),
     _useStateProfileErr2 = _slicedToArray(_useStateProfileErr, 2),
     profileErr = _useStateProfileErr2[0],
@@ -13944,6 +13952,53 @@ function CarvalhoSuite() {
     window.supabaseClient.from('profiles').select('*').then(function (res) {
       if (!res.error && res.data) setAllProfiles(res.data);
     }).catch(function () {});
+    window.supabaseClient.from('pending_invites').select('*').then(function (res) {
+      if (!res.error && res.data) setPendingInvites(res.data);
+    }).catch(function () {});
+  };
+  var addInvite = function addInvite() {
+    var email = newInviteEmail.trim().toLowerCase();
+    if (!email || !email.includes('@')) return;
+    if (!window.supabaseClient) return;
+    window.supabaseClient.from('pending_invites').insert({
+      email: email,
+      allowed_apps: []
+    }).then(function () {
+      setNewInviteEmail('');
+      loadAllProfiles();
+    }).catch(function () {});
+  };
+  var removeInvite = function removeInvite(email) {
+    setPendingInvites(function (ps) {
+      return ps.filter(function (p) {
+        return p.email !== email;
+      });
+    });
+    if (window.supabaseClient) {
+      window.supabaseClient.from('pending_invites').delete().eq('email', email).then(function () {}).catch(function () {});
+    }
+  };
+  var toggleInvitePerm = function toggleInvitePerm(email, aid) {
+    var target = pendingInvites.find(function (p) {
+      return p.email === email;
+    });
+    if (!target) return;
+    var current = target.allowed_apps || [];
+    var next = current.includes(aid) ? current.filter(function (x) {
+      return x !== aid;
+    }) : [].concat(_toConsumableArray(current), [aid]);
+    setPendingInvites(function (ps) {
+      return ps.map(function (p) {
+        return p.email === email ? _objectSpread(_objectSpread({}, p), {}, {
+          allowed_apps: next
+        }) : p;
+      });
+    });
+    if (window.supabaseClient) {
+      window.supabaseClient.from('pending_invites').update({
+        allowed_apps: next
+      }).eq('email', email).then(function () {}).catch(function () {});
+    }
   };
   var togglePerm = function togglePerm(uid, aid) {
     var target = allProfiles.find(function (p) {
@@ -15084,7 +15139,187 @@ function CarvalhoSuite() {
       margin: '18px 0 10px',
       paddingLeft: 4
     }
-  }, "\uD83D\uDC65 Utilizadores e acessos"), allProfiles.map(function (u) {
+  }, "\uD83D\uDC65 Utilizadores e acessos"), /*#__PURE__*/React.createElement(Card, {
+    style: {
+      marginBottom: 12,
+      padding: '12px 14px'
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.muted,
+      fontSize: 11,
+      fontWeight: 700,
+      textTransform: 'uppercase',
+      marginBottom: 8
+    }
+  }, "Convidar por email (antes de criarem conta)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    value: newInviteEmail,
+    onChange: function onChange(e) {
+      return setNewInviteEmail(e.target.value);
+    },
+    onKeyDown: function onKeyDown(e) {
+      return e.key === 'Enter' && addInvite();
+    },
+    placeholder: "email@exemplo.com",
+    autoCapitalize: "none",
+    style: {
+      flex: 1,
+      background: T.surface2,
+      border: "1px solid ".concat(T.goldBrd),
+      borderRadius: 10,
+      padding: '9px 12px',
+      color: T.text,
+      fontSize: 13,
+      outline: 'none'
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: addInvite,
+    style: {
+      background: T.gold,
+      border: 'none',
+      borderRadius: 10,
+      padding: '0 16px',
+      color: T.bg,
+      fontSize: 13,
+      fontWeight: 800,
+      cursor: 'pointer'
+    }
+  }, "+"))), pendingInvites.map(function (inv) {
+    var invPerms = inv.allowed_apps || [];
+    var isExp = expandedUser === 'invite_' + inv.email;
+    return /*#__PURE__*/React.createElement(Card, {
+      key: inv.email,
+      style: {
+        marginBottom: 10,
+        overflow: 'hidden',
+        border: "1px dashed ".concat(T.goldBrd)
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      onClick: function onClick() {
+        return setExpandedUser(isExp ? null : 'invite_' + inv.email);
+      },
+      style: {
+        padding: '13px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        cursor: 'pointer'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 42,
+        height: 42,
+        borderRadius: 13,
+        background: 'rgba(255,255,255,0.05)',
+        border: "2px dashed ".concat(T.muted, "55"),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 20
+      }
+    }, "\u2709\uFE0F")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("p", {
+      style: {
+        fontWeight: 800,
+        fontSize: 15,
+        color: T.text
+      }
+    }, inv.email), /*#__PURE__*/React.createElement("p", {
+      style: {
+        color: T.muted,
+        fontSize: 12
+      }
+    }, "Convite pendente \xB7 ", invPerms.length, " app(s)")), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick(e) {
+        e.stopPropagation();
+        removeInvite(inv.email);
+      },
+      style: {
+        background: 'none',
+        border: 'none',
+        color: T.red,
+        fontSize: 18,
+        cursor: 'pointer',
+        padding: 4
+      }
+    }, "\u2715"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: T.muted,
+        fontSize: 18
+      }
+    }, isExp ? '⌄' : '›')), isExp && /*#__PURE__*/React.createElement("div", {
+      style: {
+        borderTop: "1px solid ".concat(T.border),
+        padding: '12px 16px'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 6
+      }
+    }, APPS_DATA.map(function (app) {
+      var hasAccess = invPerms.includes(app.id);
+      return /*#__PURE__*/React.createElement("div", {
+        key: app.id,
+        onClick: function onClick() {
+          return toggleInvitePerm(inv.email, app.id);
+        },
+        style: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '8px 10px',
+          background: T.surface2,
+          borderRadius: 10,
+          cursor: 'pointer'
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 16
+        }
+      }, app.emoji), /*#__PURE__*/React.createElement("span", {
+        style: {
+          flex: 1,
+          fontSize: 13,
+          color: T.text,
+          fontWeight: 600
+        }
+      }, app.name), /*#__PURE__*/React.createElement("div", {
+        style: {
+          width: 38,
+          height: 22,
+          borderRadius: 11,
+          background: hasAccess ? T.gold : T.border,
+          position: 'relative',
+          transition: 'background 0.2s'
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          position: 'absolute',
+          top: 2,
+          left: hasAccess ? 18 : 2,
+          width: 18,
+          height: 18,
+          borderRadius: '50%',
+          background: '#fff',
+          transition: 'left 0.2s'
+        }
+      })));
+    }))));
+  }), allProfiles.map(function (u) {
     var userPerms = u.allowed_apps || [];
     var isExp = expandedUser === u.id;
     var uEmoji = {
@@ -15214,7 +15449,7 @@ function CarvalhoSuite() {
         }
       })));
     }))));
-  }), allProfiles.length === 0 && /*#__PURE__*/React.createElement("p", {
+  }), allProfiles.length === 0 && pendingInvites.length === 0 && /*#__PURE__*/React.createElement("p", {
     style: {
       color: T.muted,
       fontSize: 12,

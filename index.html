@@ -11343,36 +11343,46 @@ function EscolarApp(_ref31) {
     }, t.l);
   })), horView === 'semana' && function () {
     var dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'];
-    // Linhas dinâmicas: base de horários do aluno + qualquer hora real usada nas aulas,
-    // para que uma aula adicionada em qualquer horário apareça sempre na grelha.
     var baseSlots = aluno.slots || SWISS_SLOTS;
-    var boundsSet = new Set();
-    baseSlots.forEach(function (s) {
-      boundsSet.add(s.hi);
-      boundsSet.add(s.hf);
+    var overlaps = function overlaps(a, b) {
+      return a.hi < b.hf && a.hf > b.hi;
+    };
+    var hasAnyBand = function hasAnyBand(band) {
+      return [0, 1, 2, 3, 4].some(function (di) {
+        return (aluno.horario[di] || []).some(function (a) {
+          return overlaps(a, band);
+        });
+      });
+    };
+    var rowHeights = baseSlots.map(function (band) {
+      var any = hasAnyBand(band);
+      if (band.almoco) return any ? 54 : 24;
+      return any ? 54 : 28;
     });
-    [0, 1, 2, 3, 4].forEach(function (di) {
-      (aluno.horario[di] || []).forEach(function (a) {
-        boundsSet.add(a.hi);
-        boundsSet.add(a.hf);
+    var getCell = function getCell(di, bandIdx) {
+      var band = baseSlots[bandIdx];
+      var arrDia = aluno.horario[di] || [];
+      var lesson = arrDia.find(function (a) {
+        return overlaps(a, band);
       });
-    });
-    var bounds = _toConsumableArray(boundsSet).sort();
-    var mergedSlots = [];
-    for (var bi = 0; bi < bounds.length - 1; bi++) {
-      var rHi = bounds[bi];
-      var rHf = bounds[bi + 1];
-      var matchBase = baseSlots.find(function (s) {
-        return s.hi === rHi;
+      if (!lesson) return null;
+      var startedEarlier = baseSlots.slice(0, bandIdx).some(function (b) {
+        return overlaps(lesson, b);
       });
-      mergedSlots.push({
-        id: 'row' + bi,
-        hi: rHi,
-        hf: rHf,
-        almoco: matchBase ? !!matchBase.almoco : rHi >= '11:30' && rHi < '14:00',
-        tarde: matchBase ? !!matchBase.tarde : false
-      });
-    }
+      if (startedEarlier) return {
+        continuation: true
+      };
+      var span = 0;
+      for (var k = bandIdx; k < baseSlots.length; k++) {
+        if (overlaps(lesson, baseSlots[k])) span++;else break;
+      }
+      return {
+        continuation: false,
+        lesson: lesson,
+        span: Math.max(1, span),
+        aulaIdx: arrDia.indexOf(lesson)
+      };
+    };
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
       style: {
         background: E.surface,
@@ -11384,7 +11394,7 @@ function EscolarApp(_ref31) {
     }, /*#__PURE__*/React.createElement("div", {
       style: {
         display: 'grid',
-        gridTemplateColumns: '50px repeat(5,1fr)',
+        gridTemplateColumns: '46px repeat(5,1fr)',
         background: E.surface2,
         borderBottom: "1px solid ".concat(E.border)
       }
@@ -11421,69 +11431,30 @@ function EscolarApp(_ref31) {
           color: E.purple
         }
       }, d));
-    })), mergedSlots.map(function (slot, si) {
-      var _ref33;
-      var hasAny = [0, 1, 2, 3, 4].some(function (di) {
-        return (aluno.horario[di] || []).some(function (a) {
-          return a.hi <= slot.hi && a.hf > slot.hi;
-        });
-      });
-      var isAlmoco = !!slot.almoco;
-      var isTardeStart = !!slot.tarde && si > 0 && !((_ref33 = mergedSlots[si - 1]) !== null && _ref33 !== void 0 && _ref33.tarde);
-      var toMin = function toMin(t) {
-        var parts = t.split(':').map(Number);
-        return parts[0] * 60 + parts[1];
-      };
-      var slotDurMin = toMin(slot.hf) - toMin(slot.hi);
-      var rowH = isAlmoco ? Math.max(14, Math.min(28, Math.round(slotDurMin * 0.6))) : Math.max(16, Math.min(60, Math.round(slotDurMin * 1.05)));
-      return /*#__PURE__*/React.createElement(React.Fragment, {
-        key: slot.id
-      }, isTardeStart && /*#__PURE__*/React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'grid',
+        gridTemplateColumns: '46px repeat(5,1fr)',
+        gridTemplateRows: rowHeights.map(function (h) {
+          return h + 'px';
+        }).join(' ')
+      }
+    }, baseSlots.map(function (band, bandIdx) {
+      var isTardeStart = !!band.tarde && bandIdx > 0 && !baseSlots[bandIdx - 1].tarde;
+      var rowNum = bandIdx + 1;
+      var rh = rowHeights[bandIdx];
+      var timeCell = /*#__PURE__*/React.createElement("div", {
+        key: 'time-' + bandIdx,
         style: {
-          display: 'grid',
-          gridTemplateColumns: '50px repeat(5,1fr)',
-          background: 'rgba(124,58,237,0.05)',
-          borderTop: "2px dashed ".concat(E.purple, "33"),
-          borderBottom: "1px solid ".concat(E.border)
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          padding: '3px',
-          textAlign: 'center',
-          fontSize: 8,
-          color: E.muted
-        }
-      }, "\uD83C\uDF7D"), [0, 1, 2, 3, 4].map(function (di) {
-        return /*#__PURE__*/React.createElement("div", {
-          key: di,
-          style: {
-            borderLeft: "1px solid ".concat(E.border),
-            padding: '3px',
-            textAlign: 'center'
-          }
-        }, /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 7,
-            color: 'rgba(150,150,150,0.5)',
-            fontWeight: 600
-          }
-        }, "Almo\xE7o"));
-      })), /*#__PURE__*/React.createElement("div", {
-        style: {
-          display: 'grid',
-          gridTemplateColumns: '50px repeat(5,1fr)',
-          borderBottom: "1px solid ".concat(E.border),
-          minHeight: rowH,
-          background: isAlmoco && !hasAny ? 'rgba(100,100,100,0.03)' : 'transparent'
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          padding: '3px',
-          background: isAlmoco ? 'rgba(100,100,100,0.06)' : E.surface2,
+          gridRow: rowNum,
+          gridColumn: 1,
+          padding: '2px',
+          background: band.almoco ? 'rgba(100,100,100,0.06)' : E.surface2,
           borderRight: "1px solid ".concat(E.border),
+          borderTop: isTardeStart ? "2px dashed ".concat(E.purple, "55") : "1px solid ".concat(E.border),
           display: 'flex',
-          flexDirection: rowH < 30 ? 'row' : 'column',
-          gap: rowH < 30 ? 3 : 0,
+          flexDirection: rh < 36 ? 'row' : 'column',
+          gap: rh < 36 ? 3 : 0,
           justifyContent: 'center',
           alignItems: 'center'
         }
@@ -11491,57 +11462,76 @@ function EscolarApp(_ref31) {
         style: {
           fontSize: 8,
           fontWeight: 800,
-          color: isAlmoco ? E.muted : E.purple,
+          color: band.almoco ? E.muted : E.purple,
           lineHeight: 1.2
         }
-      }, slot.hi), rowH >= 24 && /*#__PURE__*/React.createElement("p", {
+      }, band.almoco ? '🍽' : band.hi), rh >= 36 && !band.almoco && /*#__PURE__*/React.createElement("p", {
         style: {
           fontSize: 7,
           color: E.muted
         }
-      }, "\u2192", slot.hf)), [0, 1, 2, 3, 4].map(function (di) {
-        var arrDia = aluno.horario[di] || [];
-        var aulaIdx = isAlmoco ? arrDia.findIndex(function (a) {
-          return a.hi >= '11:45' && a.hi < '13:45';
-        }) : arrDia.findIndex(function (a) {
-          return a.hi <= slot.hi && a.hf > slot.hi;
-        });
-        var aula = aulaIdx >= 0 ? arrDia[aulaIdx] : null;
-        var disc = aula ? getDisc(aula.discId) : null;
-        var isFirst = aula && (isAlmoco ? true : aula.hi === slot.hi);
-        var isMiddle = !isAlmoco && aula && aula.hi < slot.hi;
+      }, "\u2192", band.hf));
+      var dayCells = [0, 1, 2, 3, 4].map(function (di) {
+        var info = getCell(di, bandIdx);
+        if (info && info.continuation) return null;
+        var onClick = function onClick() {
+          setHorView('dia');
+          setDayIdx(di);
+          if (info && info.lesson) {
+            setShowAddAula(false);
+            setEditAula("".concat(alunoKey, "-").concat(di, "-").concat(info.aulaIdx));
+          } else {
+            var _aluno$disciplinas$2;
+            setEditAula(null);
+            setNovaAula({
+              discId: ((_aluno$disciplinas$2 = aluno.disciplinas[0]) === null || _aluno$disciplinas$2 === void 0 ? void 0 : _aluno$disciplinas$2.id) || 1,
+              hi: band.hi,
+              hf: band.hf,
+              sala: '',
+              livre: false
+            });
+            setShowAddAula(true);
+          }
+        };
+        var cellStyle = {
+          gridRow: info ? "".concat(rowNum, " / span ").concat(info.span) : rowNum,
+          gridColumn: di + 2,
+          borderLeft: "1px solid ".concat(E.border),
+          borderTop: isTardeStart ? "2px dashed ".concat(E.purple, "33") : 'none',
+          padding: 2,
+          cursor: 'pointer',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          background: band.almoco && !info ? 'rgba(80,80,80,0.04)' : 'transparent'
+        };
+        if (!info) {
+          return /*#__PURE__*/React.createElement("div", {
+            key: di,
+            onClick: onClick,
+            style: cellStyle
+          }, band.almoco ? /*#__PURE__*/React.createElement("p", {
+            style: {
+              fontSize: 7,
+              color: 'rgba(150,150,150,0.5)',
+              fontWeight: 600,
+              textAlign: 'center'
+            }
+          }, "Almo\xE7o") : /*#__PURE__*/React.createElement("p", {
+            style: {
+              fontSize: 10,
+              textAlign: 'center',
+              color: 'rgba(150,150,150,0.25)'
+            }
+          }, "\uFF0B"));
+        }
+        var disc = getDisc(info.lesson.discId);
         return /*#__PURE__*/React.createElement("div", {
           key: di,
-          onClick: function onClick() {
-            setHorView('dia');
-            setDayIdx(di);
-            if (aula) {
-              setShowAddAula(false);
-              setEditAula("".concat(alunoKey, "-").concat(di, "-").concat(aulaIdx));
-            } else {
-              var _aluno$disciplinas$2;
-              setEditAula(null);
-              setNovaAula({
-                discId: ((_aluno$disciplinas$2 = aluno.disciplinas[0]) === null || _aluno$disciplinas$2 === void 0 ? void 0 : _aluno$disciplinas$2.id) || 1,
-                hi: slot.hi,
-                hf: slot.hf,
-                sala: '',
-                livre: false
-              });
-              setShowAddAula(true);
-            }
-          },
-          style: {
-            borderLeft: "1px solid ".concat(E.border),
-            padding: isFirst ? '2px' : 0,
-            background: isMiddle && disc ? "".concat(disc.cor, "28") : isAlmoco && !aula ? 'rgba(80,80,80,0.04)' : 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            overflow: 'hidden'
-          }
-        }, isFirst && disc && /*#__PURE__*/React.createElement("div", {
+          onClick: onClick,
+          style: cellStyle
+        }, /*#__PURE__*/React.createElement("div", {
           style: {
             borderRadius: 6,
             background: disc.cor,
@@ -11550,7 +11540,7 @@ function EscolarApp(_ref31) {
             flexDirection: 'column',
             justifyContent: 'center',
             padding: '4px 6px',
-            height: 'calc(100% - 4px)',
+            height: '100%',
             boxSizing: 'border-box'
           }
         }, /*#__PURE__*/React.createElement("p", {
@@ -11568,29 +11558,12 @@ function EscolarApp(_ref31) {
             lineHeight: 1.1,
             marginTop: 1
           }
-        }, "S.", aula.sala)), isMiddle && disc && /*#__PURE__*/React.createElement("div", {
-          style: {
-            background: disc.cor,
-            opacity: 0.5,
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }
-        }, /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 8,
-            color: '#fff'
-          }
-        }, "\u2195")), !aula && /*#__PURE__*/React.createElement("p", {
-          style: {
-            fontSize: 10,
-            textAlign: 'center',
-            color: 'rgba(150,150,150,0.25)'
-          }
-        }, "\uFF0B"));
-      })));
-    })), /*#__PURE__*/React.createElement("p", {
+        }, "S.", info.lesson.sala)));
+      }).filter(Boolean);
+      return /*#__PURE__*/React.createElement(React.Fragment, {
+        key: 'band-' + bandIdx
+      }, timeCell, dayCells);
+    }))), /*#__PURE__*/React.createElement("p", {
       style: {
         color: E.muted,
         fontSize: 10,
@@ -11598,7 +11571,8 @@ function EscolarApp(_ref31) {
         marginBottom: 10
       }
     }, "Toca numa aula para editar \xB7 toca num espa\xE7o vazio para adicionar"));
-  }(), horView === 'dia' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }(), horView === 'dia' &&
+ /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: 5,

@@ -14052,6 +14052,10 @@ function CarvalhoSuite() {
     });
     var _sub = window.supabaseClient.auth.onAuthStateChange(function (event, s) {
       setSession(s || null);
+      if (event === 'PASSWORD_RECOVERY') {
+        setScreen('nova_password');
+        return;
+      }
       if (s && s.user) {
         fetchProfile(s.user.id);
       } else {
@@ -14138,6 +14142,63 @@ function CarvalhoSuite() {
       setPassErr('Erro de ligação. Tenta novamente.');
     });
   };
+  var _useStateResetMsg = (0, _react.useState)(''),
+    _useStateResetMsg2 = _slicedToArray(_useStateResetMsg, 2),
+    resetMsg = _useStateResetMsg2[0],
+    setResetMsg = _useStateResetMsg2[1];
+  var _useStateNewPass = (0, _react.useState)(''),
+    _useStateNewPass2 = _slicedToArray(_useStateNewPass, 2),
+    newPassValue = _useStateNewPass2[0],
+    setNewPassValue = _useStateNewPass2[1];
+  var doSetNewPassword = function doSetNewPassword() {
+    if (!window.supabaseClient) return;
+    if (!newPassValue || newPassValue.length < 6) {
+      setPassErr('A palavra-passe precisa de pelo menos 6 caracteres.');
+      return;
+    }
+    setAuthLoading(true);
+    setPassErr('');
+    window.supabaseClient.auth.updateUser({
+      password: newPassValue
+    }).then(function (res) {
+      setAuthLoading(false);
+      if (res.error) {
+        setPassErr(res.error.message || 'Não foi possível guardar.');
+        return;
+      }
+      setNewPassValue('');
+      setScreen('hub');
+    }).catch(function () {
+      setAuthLoading(false);
+      setPassErr('Erro de ligação. Tenta novamente.');
+    });
+  };
+  var doResetPassword = function doResetPassword() {
+    if (!window.supabaseClient) {
+      setPassErr('Sem ligação ao servidor.');
+      return;
+    }
+    if (!email) {
+      setPassErr('Escreve o teu email primeiro.');
+      return;
+    }
+    setAuthLoading(true);
+    setPassErr('');
+    setResetMsg('');
+    window.supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://patrsolothurn-glitch.github.io/carvalho-suite/'
+    }).then(function (res) {
+      setAuthLoading(false);
+      if (res.error) {
+        setPassErr(res.error.message || 'Não foi possível enviar o email.');
+      } else {
+        setResetMsg('Enviámos um link para o teu email. Abre-o e define uma nova password.');
+      }
+    }).catch(function () {
+      setAuthLoading(false);
+      setPassErr('Erro de ligação. Tenta novamente.');
+    });
+  };
   var doLogout = function doLogout() {
     if (window.supabaseClient) {
       window.supabaseClient.auth.signOut().catch(function () {});
@@ -14200,6 +14261,77 @@ function CarvalhoSuite() {
       fontWeight: 700
     }
   }, "A carregar\u2026"));
+  if (screen === 'nova_password') return /*#__PURE__*/React.createElement("div", {
+    style: _objectSpread(_objectSpread({}, wrap), {}, {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '32px 24px'
+    })
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '100%',
+      maxWidth: 360,
+      background: T.surface,
+      borderRadius: 24,
+      padding: '26px 22px',
+      border: "1px solid ".concat(T.goldBrd)
+    }
+  }, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 19,
+      fontWeight: 800,
+      color: T.text,
+      marginBottom: 6
+    }
+  }, "Define a nova password"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.muted,
+      fontSize: 13,
+      marginBottom: 18
+    }
+  }, "Escolhe uma password nova para a tua conta."), /*#__PURE__*/React.createElement("input", {
+    type: "password",
+    value: newPassValue,
+    onChange: function onChange(e) {
+      setNewPassValue(e.target.value);
+      setPassErr('');
+    },
+    onKeyDown: function onKeyDown(e) {
+      return e.key === 'Enter' && doSetNewPassword();
+    },
+    placeholder: "Nova password",
+    style: {
+      width: '100%',
+      background: T.surface2,
+      border: "1px solid ".concat(passErr ? T.red : T.goldBrd),
+      borderRadius: 14,
+      padding: '13px 16px',
+      color: T.text,
+      fontSize: 15,
+      outline: 'none',
+      marginBottom: passErr ? 8 : 18,
+      boxSizing: 'border-box'
+    }
+  }), passErr && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: T.red,
+      fontSize: 12,
+      fontWeight: 600,
+      marginBottom: 14
+    }
+  }, "\u26A0 ", passErr), /*#__PURE__*/React.createElement(GoldBtn, {
+    style: {
+      width: '100%',
+      padding: '15px',
+      opacity: authLoading ? 0.6 : 1
+    },
+    onClick: function onClick() {
+      if (authLoading) return;
+      doSetNewPassword();
+    }
+  }, authLoading ? 'A guardar…' : 'Guardar password →')));
   if (screen === 'login') return /*#__PURE__*/React.createElement("div", {
     style: _objectSpread(_objectSpread({}, wrap), {}, {
       display: 'flex',
@@ -14407,7 +14539,30 @@ function CarvalhoSuite() {
       if (authLoading) return;
       authMode === 'login' ? doLogin() : doSignup();
     }
-  }, authLoading ? 'A processar…' : authMode === 'login' ? 'Entrar →' : 'Criar conta →')), /*#__PURE__*/React.createElement("p", {
+  }, authLoading ? 'A processar…' : authMode === 'login' ? 'Entrar →' : 'Criar conta →'), authMode === 'login' && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return doResetPassword();
+    },
+    style: {
+      width: '100%',
+      background: 'none',
+      border: 'none',
+      color: T.gold,
+      fontSize: 12,
+      fontWeight: 700,
+      cursor: 'pointer',
+      marginTop: 12,
+      padding: 4
+    }
+  }, "Esqueci-me da password"), resetMsg && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: '#4ADE80',
+      fontSize: 12,
+      fontWeight: 600,
+      marginTop: 10,
+      textAlign: 'center'
+    }
+  }, "\u2713 ", resetMsg)), /*#__PURE__*/React.createElement("p", {
     style: {
       color: '#2A2A3A',
       fontSize: 12,
